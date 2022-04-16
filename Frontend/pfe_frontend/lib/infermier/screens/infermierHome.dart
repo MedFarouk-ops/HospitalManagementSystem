@@ -10,8 +10,26 @@ class InfermierHome extends StatefulWidget {
 class _InfermierHomeState extends State<InfermierHome> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(),
+        elevation: 0,
+        backgroundColor: Colors.lightBlue,
+      ),
+      body: RefreshIndicator(onRefresh: () async{
+        },
+        child : Column(
+          crossAxisAlignment : CrossAxisAlignment.stretch,
+          children : [
+            Padding(
+              padding:const EdgeInsets.only(top : 10, bottom: 10) ,
+              child: Text(' ***** APP INFERMIER ***** '
+              , textAlign: TextAlign.center
+              ,style: TextStyle(color:Colors.black , fontSize: 25),),
+              ),
+          ],
+        )
+      ),
     );
   }
 }

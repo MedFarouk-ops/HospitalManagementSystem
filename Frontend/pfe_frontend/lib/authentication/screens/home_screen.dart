@@ -1,9 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:pfe_frontend/admin/screens/adminHome.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:pfe_frontend/docteur/screens/docteurHome.dart';
+import 'package:pfe_frontend/infermier/screens/infermierHome.dart';
+import 'package:pfe_frontend/patient/screens/patientHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,6 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
     _authuser = widget.user;
     _checkAuth();
 
+    if( _authuser!.role == "1" ){
+      _navigateToAdmin();
+    } 
+    else if( _authuser!.role == "2" ){
+      _navigateToPatient();
+    }
+    else if( _authuser!.role == "3" ){
+      _navigateToDoctor();
+    }
+    else if( _authuser!.role == "4" ){
+      _navigateToNurse();
+    }
+
   }
   _checkAuth() async {
     s_prefs = await SharedPreferences.getInstance();
@@ -33,6 +50,42 @@ class _HomeScreenState extends State<HomeScreen> {
       _isAuth = s_prefs.getBool("isAuthenticated");
     });
   }
+
+  _navigateToAdmin(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const AdminHome()
+        )
+    );
+  }
+
+  _navigateToDoctor(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const DocteurHome()
+        )
+    );
+  }
+
+  _navigateToNurse(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const InfermierHome()
+        )
+    );
+  }
+  _navigateToPatient(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const PatientHome()
+        )
+    );
+  }
+  
 
   @override
   Widget build(BuildContext context) {
