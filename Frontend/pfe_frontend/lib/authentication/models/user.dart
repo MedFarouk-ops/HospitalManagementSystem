@@ -7,21 +7,12 @@ class Token{
     required this.refreshToken,
   });
 
-
-
   Map<String , dynamic> toJson() => {
             'accessToken' : accessToken,
             'refreshToken' : refreshToken,
   };
 
 }
-
-
-
-
-
-
-
 
 class User{
   final String username;

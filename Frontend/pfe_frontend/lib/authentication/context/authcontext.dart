@@ -66,10 +66,8 @@ class AuthContext {
     print(user.role);
     return User.fromJson(jsonDecode(response.body));
   } else {
-    // If the server did not return a 201 CREATED response,
-    // then throw an exception.
-    return user;
-  }
+      return user;
+    }
   }
  
 

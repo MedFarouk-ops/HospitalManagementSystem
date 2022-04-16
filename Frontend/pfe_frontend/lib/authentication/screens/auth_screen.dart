@@ -33,6 +33,8 @@ class _AuthScreenState extends State<AuthScreen> {
     super.initState();
     _checkAuth();
   }
+
+  
   
   
   @override
