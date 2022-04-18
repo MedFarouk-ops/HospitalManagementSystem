@@ -33,8 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _checkAuth();
 
-    
-
   }
 
   @override
@@ -96,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
         )
     );
   }
-  // void navigateHpme(User ){
+  // void navigateHome(User ){
   //   Navigator.of(context)
   //   .push(
   //     MaterialPageRoute(
@@ -107,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 @override
   Widget build(BuildContext context) {
-    if(_isAuth){
+    if((_isAuth)&(_user != null)){
       return Scaffold(
       appBar: AppBar(
         title: Center(),

@@ -14,23 +14,23 @@ class AuthContext {
 
     List<String> authTokens = [];
     User user = User(email: "", first_name: "", last_name: "", address: "", age: "", genre: "", role: "", username: "", tokens: Token(accessToken: '' , refreshToken: ''));
-
   Future<User> SignIn({required String email , required String password}) async {
-  late http.Response response;
-  print('aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    SharedPreferences s_prefs = await SharedPreferences.getInstance();
+    late http.Response response;
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
-  if (kIsWeb) {
-      response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/auth/login/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'email': email,
-        'password' : password
-      }),
-    );
-  } else if(Platform.isAndroid) {
+    if (kIsWeb) {
+        response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/auth/login/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password' : password
+        }),
+      );
+    } else if(Platform.isAndroid) {
     response = await http.post(
       Uri.parse('http://10.0.2.2:8000/auth/login/'),
       headers: <String, String>{
@@ -64,11 +64,12 @@ class AuthContext {
     print(user.last_name);
     print(user.genre);
     print(user.role);
+    
+    s_prefs.setStringList("authTokens", authTokens);
     return User.fromJson(jsonDecode(response.body));
   } else {
       return user;
     }
   }
- 
 
 }
