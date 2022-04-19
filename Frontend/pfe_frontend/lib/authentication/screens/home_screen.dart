@@ -5,15 +5,15 @@ import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:pfe_frontend/docteur/screens/docteurHome.dart';
 import 'package:pfe_frontend/infermier/screens/infermierHome.dart';
 import 'package:pfe_frontend/patient/screens/patientHome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
-  final User user;
 
-  const HomeScreen({ Key? key , required User this.user }) : super(key: key);
+  const HomeScreen({ Key? key }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -27,19 +27,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState(){
     super.initState();
-    _authuser = widget.user;
+    _initializeUser();
     _checkAuth();
-
-    if( _authuser!.role == "1" ){
+    
+    if( _authuser!.role == 1 ){
       _navigateToAdmin();
     } 
-    else if( _authuser!.role == "2" ){
+    else if( _authuser!.role == 2 ){
       _navigateToPatient();
     }
-    else if( _authuser!.role == "3" ){
+    else if( _authuser!.role == 3 ){
       _navigateToDoctor();
     }
-    else if( _authuser!.role == "4" ){
+    else if( _authuser!.role == 4 ){
       _navigateToNurse();
     }
 
@@ -49,6 +49,27 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _isAuth = s_prefs.getBool("isAuthenticated");
     });
+  }
+
+   _initializeUser() async {
+    s_prefs = await SharedPreferences.getInstance();
+    if(s_prefs.getBool("isAuthenticated") == true){
+      List<String> authtokens = s_prefs.getStringList("authTokens");
+      Map<String, dynamic> payload = Jwt.parseJwt(authtokens[0]);
+      setState(() {
+      _authuser = User(
+        email: payload['email'] ,
+        first_name: payload['nom'],
+        last_name: payload['prenom'], 
+        address: payload['address'], 
+        age: payload['age'], 
+        genre: payload['genre'], 
+        role: payload['role'], 
+        username: payload['username']
+        );
+      });
+
+    }
   }
 
   _navigateToAdmin(){
@@ -89,28 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-      appBar: AppBar(
-        title: Center(),
-        elevation: 0,
-        backgroundColor: Colors.lightBlue,
-      ),
-      body: RefreshIndicator(onRefresh: () async{
-        },
-        child : Column(
-          crossAxisAlignment : CrossAxisAlignment.stretch,
-          children : [
-            Padding(
-              padding:const EdgeInsets.only(top : 10, bottom: 10) ,
-              child: Text(' Logged in successfully ' +_authuser!.first_name +" connected : "+ _isAuth.toString()
-              , textAlign: TextAlign.center
-              ,style: TextStyle(color:Colors.black),),
-              ),
-          ],
-        )
-      ),
-
-     
-    );
+   return Container();
    }
 }

@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isAuth = false ;
   bool isAuthenticated = false ;
   bool _isLoading = false ;
-  late User _user;
+  User? _user;
 
   @override
   void initState() {
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                Navigator.of(context)
                   .pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => HomeScreen(user: authuser,)
+                      builder: (context) => HomeScreen()
                       )
                   );
                }
@@ -105,30 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 @override
   Widget build(BuildContext context) {
-    if((_isAuth)&(_user != null)){
-      return Scaffold(
-      appBar: AppBar(
-        title: Center(),
-        elevation: 0,
-        backgroundColor: Colors.lightBlue,
-      ),
-      body: RefreshIndicator(onRefresh: () async{
-        },
-        child : Column(
-          crossAxisAlignment : CrossAxisAlignment.stretch,
-          children : [
-            Padding(
-              padding:const EdgeInsets.only(top : 10, bottom: 10) ,
-              child: Text(" user is logged in !! "
-              , textAlign: TextAlign.center
-              ,style: TextStyle(color:Colors.black),),
-              ),
-          ],
-        ),
-      ),
-      );
-    }
-    else{
+    
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -194,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   GestureDetector(
                   onTap: navigateToSignup,
                   child : Container(
-                    child: Text("Sign up" + _isAuth.toString(), 
+                    child: Text("Sign up", 
                     style: TextStyle(
                       fontWeight: FontWeight.bold
                        ),),
@@ -212,4 +189,3 @@ class _LoginScreenState extends State<LoginScreen> {
     ) ;
     }
   }
-}

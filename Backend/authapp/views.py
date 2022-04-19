@@ -21,6 +21,32 @@ from .utils import Util
 from django.shortcuts import redirect
 from django.http import HttpResponsePermanentRedirect
 import os
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] =  user.username
+        token['nom'] = user.first_name
+        token['prenom'] = user.last_name
+        token['email'] = user.email
+        token['address'] = user.address
+        token['genre'] = user.genre
+        token['age'] = user.age
+        token['role'] = user.role
+        # ...   
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
+
 
 
 class CustomRedirect(HttpResponsePermanentRedirect):

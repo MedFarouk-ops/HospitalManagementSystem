@@ -1,18 +1,5 @@
-class Token{
-  final String accessToken ; 
-  final String refreshToken ; 
 
-  const Token({
-    required this.accessToken , 
-    required this.refreshToken,
-  });
-
-  Map<String , dynamic> toJson() => {
-            'accessToken' : accessToken,
-            'refreshToken' : refreshToken,
-  };
-
-}
+import 'package:pfe_frontend/authentication/models/token.dart';
 
 class User{
   final String username;
@@ -23,7 +10,6 @@ class User{
   final String age; 
   final genre ; 
   final role ; 
-  final Token tokens ; 
 
   const User({
     required this.email , 
@@ -34,7 +20,6 @@ class User{
     required this.genre,
     required this.role,    
     required this.username,
-    required this.tokens,
   });
 
   Map<String , dynamic> toJson() => {
@@ -46,21 +31,17 @@ class User{
             'age' : age,
             'genre' : genre,
             'role' : role,
-            'tokens' : tokens
   };
 
  factory User.fromJson(Map<String, dynamic> json) {
     return User(
       username: json['username'],
-      first_name : json['first_name'],
-      last_name : json['last_name'],
+      first_name : json['nom'],
+      last_name : json['prenom'],
       address : json['address'],
       age : json['age'],
       genre : json['genre'],
       role : json['role'],
-      tokens: Token(
-        accessToken: json['tokens']['access'].toString(),
-        refreshToken: json['tokens']['refresh'].toString()),
       email: json['email'],
     );
   }
