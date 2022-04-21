@@ -68,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if(s_prefs.getBool("isAuthenticated") == true){
       List<String> authtokens = s_prefs.getStringList("authTokens");
       Map<String, dynamic> payload = Jwt.parseJwt(authtokens[0]);
+      print(authtokens);
       _user = User(
         email: payload['email'] ,
         first_name: payload['nom'],

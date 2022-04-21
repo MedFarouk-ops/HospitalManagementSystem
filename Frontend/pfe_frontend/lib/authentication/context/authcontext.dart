@@ -52,7 +52,7 @@ class AuthContext {
     Token token =  Token.fromJson(jsonDecode(response.body));
 
     Map<String, dynamic> payload = Jwt.parseJwt(token.accessToken);
-
+    // make user from token data :   
     user = User(
       email: payload['email'] ,
       first_name: payload['nom'],
@@ -62,15 +62,10 @@ class AuthContext {
       genre: payload['genre'], 
       role: payload['role'], 
       username: payload['username'],);
-    
-    // user = User.fromJson(jsonDecode(response.body));
+    // print user data to check everythink work correctly : 
+
     authTokens.add(token.accessToken);
     authTokens.add(token.refreshToken);
-    // print("access token : ");
-    // print(authTokens[0]);
-    // print("refresh token : ");
-    // print(authTokens[1]);
-    // print("user details : ");
     print(user.username);
     print(user.address);
     print(user.age);
@@ -81,8 +76,75 @@ class AuthContext {
     print(user.role);
     s_prefs.setStringList("authTokens", authTokens);
     return user;
-  } else {
+    } else {
       return user;
     }
   }
+
+
+    // sign up user 
+    Future<User> signUpUser({
+      required String email,required String password,
+      required String username,required String first_name,
+      required String last_name,required String address,
+      required String age,required String role,
+      required String genre,
+    }) async { 
+      String res = "some error occured";
+      late http.Response response;
+      print('registering ......');
+
+      if (kIsWeb) {
+          response = await http.post(
+          Uri.parse('http://127.0.0.1:8000/auth/register/'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'email': email,
+            'username' : username , 
+            'first_name' : first_name , 
+            'last_name' : last_name,
+            'address' : address , 
+            'age' : age , 
+            'role' : role ,
+            'genre' : genre , 
+            'password' : password
+          }),
+        );
+      } else if(Platform.isAndroid) {
+      response = await http.post(
+        Uri.parse('http://10.0.2.2:8000/auth/register/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'username' : username , 
+          'first_name' : first_name , 
+          'last_name' : last_name,
+          'address' : address , 
+          'age' : age , 
+          'role' : role ,
+          'genre' : genre , 
+          'password' : password
+        }),
+      );
+    } 
+  
+    if (response.statusCode == 201) {
+    // If the server did return a 201 CREATED response,
+      print("user registred successfully ");
+      User? authuser = await AuthContext().SignIn(
+                email: email,
+                password: password,
+                );
+      return authuser;
+    } else {
+       return user;
+    }
+
+   }
+      
+
 }

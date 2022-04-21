@@ -29,20 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _initializeUser();
     _checkAuth();
-    
-    if( _authuser!.role == 1 ){
-      _navigateToAdmin();
-    } 
-    else if( _authuser!.role == 2 ){
-      _navigateToPatient();
-    }
-    else if( _authuser!.role == 3 ){
-      _navigateToDoctor();
-    }
-    else if( _authuser!.role == 4 ){
-      _navigateToNurse();
-    }
-
   }
   _checkAuth() async {
     s_prefs = await SharedPreferences.getInstance();
@@ -68,6 +54,19 @@ class _HomeScreenState extends State<HomeScreen> {
         username: payload['username']
         );
       });
+            
+      if( _authuser!.role == 1 ){
+        _navigateToAdmin();
+      } 
+      else if( _authuser!.role == 2 ){
+        _navigateToPatient();
+      }
+      else if( _authuser!.role == 3 ){
+        _navigateToDoctor();
+      }
+      else if( _authuser!.role == 4 ){
+        _navigateToNurse();
+      }
 
     }
   }
