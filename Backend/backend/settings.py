@@ -94,10 +94,22 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+    
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'PFE_DB',
+        'CLIENT': {
+            'host': 'mongodb+srv://medfarouk55:xbox121254@cluster0.6wlcu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+            'authMechanism' : 'SCRAM-SHA-1'
+        }
     }
 }
 
@@ -172,6 +184,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1']
-
 
 

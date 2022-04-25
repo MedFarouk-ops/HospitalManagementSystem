@@ -23,8 +23,11 @@ from django.http import HttpResponsePermanentRedirect
 import os
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.views.decorators.csrf import csrf_exempt
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -105,6 +108,7 @@ class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
+        
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

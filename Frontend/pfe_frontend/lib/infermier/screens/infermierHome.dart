@@ -11,11 +11,7 @@ class _InfermierHomeState extends State<InfermierHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(),
-        elevation: 0,
-        backgroundColor: Colors.lightBlue,
-      ),
+     
       body: RefreshIndicator(onRefresh: () async{
         },
         child : Column(

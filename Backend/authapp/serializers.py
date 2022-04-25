@@ -30,7 +30,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         age = attrs.get('age', '')
         role = attrs.get('role', '')
         departement = attrs.get('departement', '')
-        password = attrs.get('email', '')
+        password = attrs.get('password', '')
         if not username.isalnum():
             raise serializers.ValidationError(
                 self.default_error_messages)
