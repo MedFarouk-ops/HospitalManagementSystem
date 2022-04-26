@@ -36,8 +36,8 @@ class User{
  factory User.fromJson(Map<String, dynamic> json) {
     return User(
       username: json['username'],
-      first_name : json['nom'],
-      last_name : json['prenom'],
+      first_name : json['first_name'],
+      last_name : json['last_name'],
       address : json['address'],
       age : json['age'],
       genre : json['genre'],
@@ -45,6 +45,5 @@ class User{
       email: json['email'],
     );
   }
-  
  
 }

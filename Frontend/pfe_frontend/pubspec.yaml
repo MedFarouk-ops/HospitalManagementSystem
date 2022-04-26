@@ -41,6 +41,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   shared_preferences: ^0.5.12+4
   jwt_decode: ^0.3.1
+  flutter_svg: ^1.0.3
+  data_table_2: ^2.2.1
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +71,8 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
