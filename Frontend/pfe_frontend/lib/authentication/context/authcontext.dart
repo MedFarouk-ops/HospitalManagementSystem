@@ -21,7 +21,7 @@ class AuthContext {
       SharedPreferences s_prefs = await SharedPreferences.getInstance();
       late http.Response response;
       print('aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-
+      // si l'application est lancée dans le web ( navigateur ) : 
       if (kIsWeb) {
           response = await http.post(
           Uri.parse('http://127.0.0.1:8000/auth/token/'),
@@ -33,7 +33,10 @@ class AuthContext {
             'password' : password
           }),
         );
-      } else if(Platform.isAndroid) {
+      } 
+      // si l'application est lancée sur mobile ( android )
+      
+      else if(Platform.isAndroid) {
       response = await http.post(
         Uri.parse('http://10.0.2.2:8000/auth/token/'),
         headers: <String, String>{

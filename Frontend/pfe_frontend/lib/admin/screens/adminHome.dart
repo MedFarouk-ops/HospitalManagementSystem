@@ -60,10 +60,6 @@ class _AdminHomeState extends State<AdminHome> {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: thirdAdminColor,
-      appBar: AppBar(
-        title: Text("Admin Panel"),
-        backgroundColor: thirdAdminColor,
-      ),
       body: SafeArea(
         child: Container(
           height: height,

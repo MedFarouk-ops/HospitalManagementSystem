@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:pfe_frontend/admin/screens/Common/user_show.dart';
+import 'dart:io' show Platform;
 import 'package:pfe_frontend/authentication/models/user.dart';
 
 class PatientListScreen extends StatefulWidget {
@@ -29,12 +32,33 @@ class _PatientListScreenState extends State<PatientListScreen> {
   _retrievePatient() async {
     patients = [];
     // recuperer les patients avec une requete get // 
-    List response = json.decode((await client.get(Uri.parse("http://10.0.2.2:8000/adminapp/patients/"))).body);
-    response.forEach((element) {
-      patients.add(User.fromJson(element));
-    });
+
+
+    List response ; 
+    
+    // si l'application est lancée dans le web ( navigateur ) : 
+
+    if (kIsWeb) {
+      response = json.decode((await client.get(Uri.parse("http://127.0.0.1:8000/adminapp/patients/"))).body);
+      response.forEach((element) {
+        patients.add(User.fromJson(element));
+      });
     setState(() {});
+    }
+
+    // si l'application est lancée sur mobile ( android )
+
+    else if(Platform.isAndroid) {
+      response = json.decode((await client.get(Uri.parse("http://10.0.2.2:8000/adminapp/patients/"))).body);
+      response.forEach((element) {
+        patients.add(User.fromJson(element));
+      });
+      setState(() {});
+    }
+    
   }
+
+
   // **************************************** //
 
   @override
@@ -50,6 +74,14 @@ class _PatientListScreenState extends State<PatientListScreen> {
               leading: CircleAvatar(backgroundImage: AssetImage("assets/images/user.png"),),
               title: Text(patients[index].first_name),
               subtitle: Text(patients[index].email),
+              onTap: () {
+                 Navigator.of(context)
+                  .push(
+                    MaterialPageRoute(
+                      builder: (context) => UserShow(user: patients[index],)
+                      )
+                  );
+              },
             ),
           );
         },

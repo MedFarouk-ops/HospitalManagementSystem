@@ -23,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Client client = http.Client();
   late SharedPreferences s_prefs;
-  ModalRoute<dynamic>? _route;
   User? _authuser;
   bool _isAuth = false ;
   @override
@@ -108,23 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _route?.removeScopedWillPopCallback(_onWillPop);
-    _route = ModalRoute.of(context);
-    _route?.addScopedWillPopCallback(_onWillPop);
-  }
-
-  @override
-  void dispose() {
-    _route?.removeScopedWillPopCallback(_onWillPop);
-    super.dispose();
-  }
-  
-  Future<bool> _onWillPop() => Future.value(false);
-
 
   @override
   Widget build(BuildContext context) {
