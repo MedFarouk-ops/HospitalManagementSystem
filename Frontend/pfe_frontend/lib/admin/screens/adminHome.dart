@@ -13,6 +13,8 @@ class AdminHome extends StatefulWidget {
 class _AdminHomeState extends State<AdminHome> {
 
 
+ // redirection de l'utilisateur : 
+
   _navigateToPatientList(){
     Navigator.of(context)
     .push(
@@ -29,13 +31,38 @@ class _AdminHomeState extends State<AdminHome> {
         )
     );
   }
+  // *********************************************//
+
+  // empêcher l'utilisateur de revenir en arriere : 
+
+  ModalRoute<dynamic>? _route;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _route?.removeScopedWillPopCallback(_onWillPop);
+    _route = ModalRoute.of(context);
+    _route?.addScopedWillPopCallback(_onWillPop);
+  }
+
+  @override
+  void dispose() {
+    _route?.removeScopedWillPopCallback(_onWillPop);
+    super.dispose();
+  }
+  
+  Future<bool> _onWillPop() => Future.value(false);
+
+  // ************************************************ // 
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: thirdAdminColor,
       appBar: AppBar(
         title: Text("Admin Panel"),
+        backgroundColor: thirdAdminColor,
       ),
       body: SafeArea(
         child: Container(

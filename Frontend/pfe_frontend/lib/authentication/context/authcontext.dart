@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe_frontend/authentication/models/token.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
+import 'package:pfe_frontend/authentication/models/user.dart' as userModel;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
 import 'package:jwt_decode/jwt_decode.dart';
@@ -146,5 +147,24 @@ class AuthContext {
 
    }
       
+
+
+  Future<userModel.User> getUserDetails() async {
+    SharedPreferences s_prefs = await SharedPreferences.getInstance();
+    s_prefs = await SharedPreferences.getInstance();
+    List<String> authtokens = s_prefs.getStringList("authTokens");
+    Map<String, dynamic> payload = Jwt.parseJwt(authtokens[0]);  
+    User? currentUser  = User(
+        email: payload['email'] ,
+        first_name: payload['nom'],
+        last_name: payload['prenom'], 
+        address: payload['address'], 
+        age: payload['age'], 
+        genre: payload['genre'], 
+        role: payload['role'], 
+        username: payload['username']
+        );
+    return currentUser;
+  }
 
 }

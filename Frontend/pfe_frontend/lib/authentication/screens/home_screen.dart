@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:pfe_frontend/admin/mobile_screen_layout.dart';
 import 'package:pfe_frontend/admin/screens/adminHome.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
@@ -22,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Client client = http.Client();
   late SharedPreferences s_prefs;
+  ModalRoute<dynamic>? _route;
   User? _authuser;
   bool _isAuth = false ;
   @override
@@ -75,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => const AdminHome()
+        builder: (context) => const AdminMobileScreenLayout()
         )
     );
   }
@@ -106,6 +108,23 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _route?.removeScopedWillPopCallback(_onWillPop);
+    _route = ModalRoute.of(context);
+    _route?.addScopedWillPopCallback(_onWillPop);
+  }
+
+  @override
+  void dispose() {
+    _route?.removeScopedWillPopCallback(_onWillPop);
+    super.dispose();
+  }
+  
+  Future<bool> _onWillPop() => Future.value(false);
+
 
   @override
   Widget build(BuildContext context) {

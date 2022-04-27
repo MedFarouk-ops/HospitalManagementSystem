@@ -13,6 +13,7 @@ class PatientListScreen extends StatefulWidget {
 }
 
 class _PatientListScreenState extends State<PatientListScreen> {
+  
   Client client = http.Client();
   
   List<User> patients = [];
@@ -23,14 +24,18 @@ class _PatientListScreenState extends State<PatientListScreen> {
     _retrievePatient();
   }
 
+  // enregistrer les patient dans une liste : 
+
   _retrievePatient() async {
     patients = [];
+    // recuperer les patients avec une requete get // 
     List response = json.decode((await client.get(Uri.parse("http://10.0.2.2:8000/adminapp/patients/"))).body);
     response.forEach((element) {
       patients.add(User.fromJson(element));
     });
     setState(() {});
   }
+  // **************************************** //
 
   @override
   Widget build(BuildContext context) {
