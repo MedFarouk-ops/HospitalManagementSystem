@@ -70,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Map<String, dynamic> payload = Jwt.parseJwt(authtokens[0]);
       print(authtokens);
       _user = User(
+        id: payload['user_id'],
         email: payload['email'] ,
         first_name: payload['nom'],
         last_name: payload['prenom'], 

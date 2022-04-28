@@ -2,6 +2,7 @@
 import 'package:pfe_frontend/authentication/models/token.dart';
 
 class User{
+  final int id;
   final String username;
   final String email;
   final String first_name ;
@@ -12,6 +13,7 @@ class User{
   final role ; 
 
   const User({
+    required this.id,
     required this.email , 
     required this.first_name,
     required this.last_name,
@@ -35,6 +37,7 @@ class User{
 
  factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      id : json['id'],
       username: json['username'],
       first_name : json['first_name'],
       last_name : json['last_name'],

@@ -17,8 +17,22 @@ class UserShow extends StatefulWidget {
 
 class _UserShowState extends State<UserShow> {
 
-  String? genre;
+  String genre = "";
   String? role;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  _setGenreAndRole(){
+    if(widget.user.genre == 11){
+      genre = "homme";
+    }else{
+      genre = "femme";
+    }
+  }
 
 
 
@@ -37,7 +51,15 @@ class _UserShowState extends State<UserShow> {
           const SizedBox(height: 24),
           buildName(widget.user),
           const SizedBox(height: 24),
-          Center(child: buildUpgradeButton()),
+          Center(
+            child:Wrap(
+            children: [
+              buildUpgradeButton(),
+              buildDeleteButton()
+            ],
+          ),
+          ),
+          // Center(child: buildUpgradeButton()),
           const SizedBox(height: 48),
           buildAbout(widget.user),
         ],
@@ -63,6 +85,13 @@ class _UserShowState extends State<UserShow> {
         text: 'Modifier',
         onClicked: () {},
       );
+
+  Widget buildDeleteButton() => ButtonWidget(
+        text: 'Supprimer',
+        onClicked: () {},
+      );
+  
+  
 
   Widget buildAbout(User user) => Container(
         padding: EdgeInsets.symmetric(horizontal: 48),
@@ -104,8 +133,11 @@ class _UserShowState extends State<UserShow> {
               user.address,
               style: TextStyle(fontSize: 16, height: 1.4),
             ),
-            
-
+            const SizedBox(height: 16),
+            Text( "genre : " + 
+              genre,
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
           ],
         ),
       );

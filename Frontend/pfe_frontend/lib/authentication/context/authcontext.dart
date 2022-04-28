@@ -16,11 +16,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class AuthContext {
 
     List<String> authTokens = [];
-    User user = User(email: "", first_name: "", last_name: "", address: "", age: "", genre: "", role: "", username: "");
+    User user = User(id:0 ,email: "", first_name: "", last_name: "", address: "", age: "", genre: "", role: "", username: "");
     Future<User> SignIn({required String email , required String password}) async {
+     // initialisation de stockage local : 
       SharedPreferences s_prefs = await SharedPreferences.getInstance();
       late http.Response response;
-      print('aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+      print('********************************************************');
       // si l'application est lancée dans le web ( navigateur ) : 
       if (kIsWeb) {
           response = await http.post(
@@ -50,14 +51,17 @@ class AuthContext {
     } 
   
     if (response.statusCode == 200) {
-    // If the server did return a 201 CREATED response,
+    // If the server did return a 200 response,
     // then parse the JSON.
+    
     print("loggeeddd onnn");
+
     Token token =  Token.fromJson(jsonDecode(response.body));
 
     Map<String, dynamic> payload = Jwt.parseJwt(token.accessToken);
     // make user from token data :   
     user = User(
+      id : payload['user_id'],
       email: payload['email'] ,
       first_name: payload['nom'],
       last_name: payload['prenom'], 
@@ -158,6 +162,7 @@ class AuthContext {
     List<String> authtokens = s_prefs.getStringList("authTokens");
     Map<String, dynamic> payload = Jwt.parseJwt(authtokens[0]);  
     User? currentUser  = User(
+        id: payload['user_id'],
         email: payload['email'] ,
         first_name: payload['nom'],
         last_name: payload['prenom'], 

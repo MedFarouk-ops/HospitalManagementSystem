@@ -27,6 +27,7 @@ def getNurses(request):
 
 
 
+# get user by id :
 
 @api_view([('GET')])
 def getUser(request , pk):
@@ -58,6 +59,8 @@ def getUser(request , pk):
 #     if serializer.is_valid():
 #         serializer.save()
 #     return Response(serializer.data)
+
+# delete user by id :
 
 @api_view([('DELETE')])
 def deleteUser(request , pk):

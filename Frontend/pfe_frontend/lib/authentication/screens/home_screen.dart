@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Map<String, dynamic> payload = Jwt.parseJwt(authtokens[0]);
       setState(() {
       _authuser = User(
+        id: payload['user_id'],
         email: payload['email'] ,
         first_name: payload['nom'],
         last_name: payload['prenom'], 
