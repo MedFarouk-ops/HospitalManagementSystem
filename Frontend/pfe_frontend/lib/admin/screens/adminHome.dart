@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/admin/screens/DoctorScreens/doctor_list.dart';
 import 'package:pfe_frontend/admin/screens/PatientScreens/patient_list.dart';
+import 'package:pfe_frontend/admin/utils/userListScroller.dart';
+import 'package:pfe_frontend/admin/widget/reservations_list.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 
 class AdminHome extends StatefulWidget {
@@ -14,7 +16,7 @@ class _AdminHomeState extends State<AdminHome> {
 
 
  // redirection de l'utilisateur : 
-
+ 
   _navigateToPatientList(){
     Navigator.of(context)
     .push(
@@ -55,9 +57,13 @@ class _AdminHomeState extends State<AdminHome> {
 
   // ************************************************ // 
 
+
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final Size size = MediaQuery.of(context).size;
+    final double categoryHeight = size.height*0.30;
     return Scaffold(
       backgroundColor: thirdAdminColor,
       body: SafeArea(
@@ -66,134 +72,36 @@ class _AdminHomeState extends State<AdminHome> {
           child: Stack(
             children: <Widget>[
               Positioned(
-                top: -MediaQuery.of(context).size.height * .15,
-                right: -MediaQuery.of(context).size.width * .4,
+                top: -MediaQuery.of(context).size.height * .05,
+                right: -MediaQuery.of(context).size.width * .1,
                 child: Container(),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 0),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: height * .2),
                   Column( children: [
-                  InkWell(
-                onTap: _navigateToPatientList,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                  ),
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
+                    AnimatedOpacity(
+                      duration: const Duration(milliseconds: 200),
+                      opacity: 1,
+                      child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: size.width,
+                          alignment: Alignment.topCenter,
+                          height: categoryHeight,
+                          child: UserListScroller()),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        offset: Offset(
-                          2,
-                          4,
-                        ),
-                        blurRadius: 8,
-                        spreadRadius: 2,
+                    ReservationList(),
+                      ],
                       ),
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: const Text(
-                    'Liste de Patient ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    ),
-                  ),
+                      ]
+                    )
+                  )
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: _navigateToDoctorList,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                  ),
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        offset: Offset(
-                          2,
-                          4,
-                        ),
-                        blurRadius: 8,
-                        spreadRadius: 2,
-                      ),
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: const Text(
-                    'Liste de Docteurs ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                onTap: _navigateToPatientList,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                  ),
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        offset: Offset(
-                          2,
-                          4,
-                        ),
-                        blurRadius: 8,
-                        spreadRadius: 2,
-                      ),
-                    ],
-                    color: Colors.white,
-                  ),
-                  child: const Text(
-                    'Liste de Infermier ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    ),
-                  ),
-                ),
-              ),
-             ],
-            ),
-            ]
-          )
-        )
-      )
-     ]
+     ],
     ))));
   }
 }

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:pfe_frontend/admin/screens/Common/user_show.dart';
 import 'dart:io' show Platform;
 import 'package:pfe_frontend/authentication/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PatientListScreen extends StatefulWidget {
   const PatientListScreen({ Key? key }) : super(key: key);
@@ -30,14 +31,11 @@ class _PatientListScreenState extends State<PatientListScreen> {
   // enregistrer les patient dans une liste : 
 
   _retrievePatient() async {
-    patients = [];
+    // patients = [];
     // recuperer les patients avec une requete get // 
-
-
     List response ; 
-    
-    // si l'application est lancée dans le web ( navigateur ) : 
 
+    // si l'application est lancée dans le web ( navigateur ) : 
     if (kIsWeb) {
       response = json.decode((await client.get(Uri.parse("http://127.0.0.1:8000/adminapp/patients/"))).body);
       response.forEach((element) {
@@ -55,11 +53,20 @@ class _PatientListScreenState extends State<PatientListScreen> {
       });
       setState(() {});
     }
-    
+    _initialsePatientNumber();
   }
 
+  // ************************************************************************************************************************* //
+  // ************************************************************************************************************************* //
 
-  // **************************************** //
+    _initialsePatientNumber() async {
+      final prefs = await SharedPreferences.getInstance(); 
+      prefs.setInt("NumberOfpatients", patients.length);
+    }
+
+  // ************************************************************************************************************************* //
+  // ************************************************************************************************************************* //
+
 
   @override
   Widget build(BuildContext context) {

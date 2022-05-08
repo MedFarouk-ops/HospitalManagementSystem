@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:pfe_frontend/admin/mobile_screen_layout.dart';
+import 'package:pfe_frontend/admin/responsive/mobile_screen_layout.dart';
 import 'package:pfe_frontend/admin/screens/adminHome.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';

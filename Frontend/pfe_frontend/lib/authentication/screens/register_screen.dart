@@ -3,6 +3,7 @@ import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/screens/home_screen.dart';
 import 'package:pfe_frontend/authentication/screens/login_screen.dart';
+import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/authentication/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,12 +25,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController  _lastnameField= TextEditingController();
   TextEditingController  _addressField= TextEditingController();
   TextEditingController  _ageField= TextEditingController();
-  TextEditingController  _roleField= TextEditingController();
   TextEditingController  _genreField= TextEditingController();
   bool _isLoading = false ;
   User? _user;
   late SharedPreferences s_prefs;
 
+//*************************************************************************************************************************************** */
 
   @override
   void dispose() {
@@ -41,13 +42,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _lastnameField.dispose();
     _addressField.dispose();
     _ageField.dispose();
-    _roleField.dispose();
     _genreField.dispose();
   }
+  
+//*************************************************************************************************************************************** */
 
   void setStateIfMounted(f) {
   if (mounted) setState(f);
   }
+//*************************************************************************************************************************************** */
 
   void signUpUser() async {
             setStateIfMounted(() {
@@ -62,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 first_name: _firstnameField.text,
                 genre: _genreField.text,
                 last_name: _lastnameField.text,
-                role: _roleField.text,
+                role: "2",
                 );
             _user = authuser ;
             setStateIfMounted(() {
@@ -85,6 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 }
             }
     }
+//*************************************************************************************************************************************** */
   
 
    @override
@@ -391,52 +395,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "role",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                TextField(
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                  textAlign: TextAlign.start,
-                                  obscureText: false,
-                                  controller: _roleField,
-                                  decoration: InputDecoration(
-                                    hintText: "role",
-                                    suffixIcon: Icon(
-                                      Icons.text_snippet_outlined,
-                                      color: Colors.black54,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        15,
-                                      ),
-                                    ),
-                                    fillColor: Color(
-                                      0xfff3f3f4,
-                                    ),
-                                    filled: true,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                              vertical: 10,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
                                   "Genre",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -594,31 +552,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 20,
                       ),
                       InkWell(
-                     onTap: signUpUser,
-                     child : Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15,
-                        ),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(
-                              15,
-                            ),
+                      onTap: signUpUser,
+                      child : Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 15,
                           ),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: Colors.grey.shade200,
-                              offset: Offset(
-                                2,
-                                4,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(
+                                15,
                               ),
-                              blurRadius: 5,
-                              spreadRadius: 2,
                             ),
-                          ],
-                          gradient: LinearGradient(
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                color: Colors.grey.shade200,
+                                offset: Offset(
+                                  2,
+                                  4,
+                                ),
+                                blurRadius: 5,
+                                spreadRadius: 2,
+                              ),
+                            ],
+                            gradient: LinearGradient(
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
                             colors: const [
@@ -627,14 +585,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ],
                           ),
                         ),
-                        child: Text(
+                        child: Container(
+                            child: _isLoading ? Center(child: CircularProgressIndicator(
+                              color: primaryColor,
+                            ),)
+                      : Text(
                           'Register Now',
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,
                           ),
                         ),
-                      ),),
+                      ),),),
                       SizedBox(
                         height: 30,
                       ),

@@ -12,7 +12,8 @@ const secondaryColor = Colors.grey;
 // Admin dashboard colors : 
 const primaryAdminColor = Color(0xFF2697FF);
 const secondaryAdminColor = Color(0xFF2A2D3E);
-const thirdAdminColor = Color.fromARGB(88, 158, 158, 158);
+const thirdAdminColor = Color.fromARGB(120, 113, 113, 113);
+const fourthAdminColor = Color.fromARGB(255, 24, 90, 131);
 const bgColor = Color(0xFF212332);
 
 const defaultPadding = 16.0;
