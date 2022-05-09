@@ -26,14 +26,12 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
   @override
   void initState(){
     super.initState();
-    _retrievePatient();
-    _initialseDoctorsNumber();
+    _retrieveDoctors();
   }
 //*************************************************************************************************************************************** */
 //*************************************************************************************************************************************** */
 
-  _retrievePatient() async {
-    doctors = [];
+  _retrieveDoctors() async {
     List response ;
     // si l'application est lancée dans le web ( navigateur ) : 
     if (kIsWeb) {
@@ -51,6 +49,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
       });
       setState(() {});
     }
+    _initialseDoctorsNumber();
   }
 //*************************************************************************************************************************************** */
 //*************************************************************************************************************************************** */

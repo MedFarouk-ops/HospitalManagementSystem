@@ -51,14 +51,14 @@ def getUser(request , pk):
 #     return Response(serializer.data)
 
 
-# @api_view([('PUT')])
-# def updatePatient(request , pk) : 
-#     data = request.data
-#     patient = Patient.objects.get(id = pk)
-#     serializer = PatientSerializer(patient , data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#     return Response(serializer.data)
+@api_view([('PUT')])
+def updateUser(request , pk) : 
+    data = request.data
+    user = User.objects.get(id = pk)
+    serializer = UserSerializer(user , data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
 
 # delete user by id :
 

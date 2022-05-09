@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:pfe_frontend/admin/responsive/mobile_screen_layout.dart';
 import 'package:pfe_frontend/admin/screens/DoctorScreens/doctor_list.dart';
 import 'package:pfe_frontend/admin/screens/PatientScreens/patient_list.dart';
+import 'package:pfe_frontend/admin/screens/adminHome.dart';
 import 'package:pfe_frontend/admin/widget/appbar_widget.dart';
 import 'package:pfe_frontend/admin/widget/button_widget.dart';
 import 'package:pfe_frontend/admin/widget/numbers_widget.dart';
@@ -107,19 +109,19 @@ class _UserShowState extends State<UserShow> {
    showCupertinoDialog(
      context: context,
      builder: (context) {
-       return CupertinoAlertDialog(
-         title: Text("Delete User"),
-         content: Text("Are you sure you want to delete this user?"),
+       return AlertDialog(
+         title: Text("Supprimer Utilisateur"),
+         content: Text("Êtes-vous sûr de vouloir supprimer cet utilisateur?"),
          actions: [
            CupertinoDialogAction(
-               child: Text("YES"),
+               child: Text("Oui"),
                onPressed: ()
                {
                  _deleteUser(widget.user.id);
                }
            ),
            CupertinoDialogAction(
-             child: Text("NO"),
+             child: Text("Non"),
              onPressed: (){
                Navigator.of(context).pop();
              }
@@ -133,25 +135,16 @@ class _UserShowState extends State<UserShow> {
   void _deleteUser(int id){
     String deleteUrl = "http://10.0.2.2:8000/adminapp/users/delete/"+id.toString()+"/";
     client.delete(Uri.parse(deleteUrl));
-    _returnToUserList();
+    _returnToDashboard();
   }
 
-  _returnToUserList(){
-    if(widget.user.role == 2){
+  _returnToDashboard(){
       Navigator.of(context)
       .push(
         MaterialPageRoute(
-          builder: (context) => const PatientListScreen()
+          builder: (context) => const AdminMobileScreenLayout()
           )
       );
-    }else if(widget.user.role == 3) {
-      Navigator.of(context)
-      .push(
-        MaterialPageRoute(
-          builder: (context) => const DoctorListScreen()
-          )
-      );
-    }
   }
   
 

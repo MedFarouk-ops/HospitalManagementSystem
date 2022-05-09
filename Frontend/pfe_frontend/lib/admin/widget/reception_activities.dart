@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 
-class ReservationList extends StatefulWidget {
-  const ReservationList({ Key? key }) : super(key: key);
+
+class ReceptionActivityList extends StatefulWidget {
+  const ReceptionActivityList({ Key? key }) : super(key: key);
 
   @override
-  State<ReservationList> createState() => _ReservationListState();
+  State<ReceptionActivityList> createState() => _ReceptionActivityListState();
 }
 
-class _ReservationListState extends State<ReservationList> {
+class _ReceptionActivityListState extends State<ReceptionActivityList> {
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-      decoration: BoxDecoration(color : primaryColor , borderRadius: BorderRadius.all(Radius.circular(8.0)) ),
+      decoration: BoxDecoration(color : activityWidgetColor , borderRadius: BorderRadius.all(Radius.circular(8.0)) ),
       padding: const EdgeInsets.symmetric(
         vertical: 10
       ),
@@ -34,7 +35,7 @@ class _ReservationListState extends State<ReservationList> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text( "Reservations Recentes : " , style: TextStyle(fontWeight: FontWeight.bold,),)
+                      Text( "Activités Recentes : " , style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),)
                     ],
                   ),
                  ),
@@ -43,23 +44,24 @@ class _ReservationListState extends State<ReservationList> {
                   showDialog(
                     context: context, builder: (context) => Dialog(
                       child: ListView(
-                        padding: const EdgeInsets.symmetric(vertical:16 ),
+                        padding: const EdgeInsets.symmetric(vertical:16 ,),
                         shrinkWrap: true,
                         children: [
-                          "Voir tous les reservations",
+                          "Voir tous les activités",
                         ].map((e) => InkWell(
                           onTap: () {},
                           child: Container(
+                            color: activityWidgetColor,
                             padding: const EdgeInsets.symmetric(
-                              vertical: 12,horizontal: 16
+                              vertical: 40,horizontal: 40
                             ),
-                            child: Text(e),
+                            child: Text(e  , style: TextStyle(color: Colors.white)),
                           ),
                         )).toList(),
                         ),
                       ),
                     );
-                }, icon: Icon(Icons.more_vert),),
+                }, icon: Icon(Icons.more_vert ,color: Color.fromARGB(255, 0, 0, 0)),),
               ],
               ),
           ),
@@ -69,35 +71,25 @@ class _ReservationListState extends State<ReservationList> {
           child: FittedBox(
             child:DataTable(
           columns: [
-            DataColumn(label: Text("Patient")),
-            DataColumn(label: Text("Docteur")),
-            DataColumn(label: Text("Date")),
-            DataColumn(label: Text("heure")),
+            DataColumn(label:  Text( "Nom" , style: TextStyle(color: Colors.white),)),
+            DataColumn(label:  Text( "Activités : " , style: TextStyle(color: Colors.white),)),
+            DataColumn(label:  Text( "Heure" , style: TextStyle(color: Colors.white),)),
           ],
           rows: [
             DataRow(cells: [
-              DataCell(Text('Patient1')),
-              DataCell(Text('Doctor1')),
-              DataCell(Text('"28/02/2022"')),
-              DataCell(Text('"16:00"')),
+              DataCell(Text('Reception1' , style: TextStyle(color: Colors.white),)),
+              DataCell(Text('supprimer un patient' , style: TextStyle(color: Colors.white),)),
+              DataCell(Text('16:00' , style: TextStyle(color: Colors.white),)),
             ]),
             DataRow(cells: [
-              DataCell(Text('Patient2')),
-              DataCell(Text('Doctor2')),
-              DataCell(Text('"28/02/2022"')),
-              DataCell(Text('"16:00"')),
+              DataCell(Text('Reception2', style: TextStyle(color: Colors.white),)),
+              DataCell(Text('ajouter un patient', style: TextStyle(color: Colors.white),)),
+              DataCell(Text('16:00' , style: TextStyle(color: Colors.white),)),
             ]),DataRow(cells: [
-              DataCell(Text('Patient3')),
-              DataCell(Text('Doctor3')),
-              DataCell(Text('"28/02/2022"')),
-              DataCell(Text('"16:00"')),
+              DataCell(Text('Reception1' , style: TextStyle(color: Colors.white),)),
+              DataCell(Text('annuler une reservations', style: TextStyle(color: Colors.white),)),
+              DataCell(Text('16:00' , style: TextStyle(color: Colors.white),)),
             ]),
-            DataRow(cells: [
-              DataCell(Text('Patient4')),
-              DataCell(Text('Doctor4')),
-              DataCell(Text('"28/02/2022"')),
-              DataCell(Text('"16:00"')),
-            ])
           ],),
           ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pfe_frontend/admin/screens/DoctorScreens/doctor_list.dart';
 import 'package:pfe_frontend/admin/screens/PatientScreens/patient_list.dart';
 import 'package:pfe_frontend/admin/utils/userListScroller.dart';
+import 'package:pfe_frontend/admin/widget/reception_activities.dart';
 import 'package:pfe_frontend/admin/widget/reservations_list.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 
@@ -95,6 +96,9 @@ class _AdminHomeState extends State<AdminHome> {
                           child: UserListScroller()),
                     ),
                     ReservationList(),
+                    const SizedBox(height: 16),
+                    ReceptionActivityList(),
+                    const SizedBox(height: 16),
                       ],
                       ),
                       ]
