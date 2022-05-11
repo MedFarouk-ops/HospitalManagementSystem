@@ -128,7 +128,7 @@ class _CreateUserState extends State<CreateUser> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "UserName",
+                                  "Nom d'utilisateur",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -145,7 +145,7 @@ class _CreateUserState extends State<CreateUser> {
                                   obscureText: false,
                                   controller: _usernameField,
                                   decoration: InputDecoration(
-                                    hintText: "username",
+                                    hintText: "Nom d'utilisateur",
                                     suffixIcon: Icon(
                                       Icons.person,
                                       color: Colors.black54,
@@ -217,7 +217,7 @@ class _CreateUserState extends State<CreateUser> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "First name",
+                                  "Nom",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -234,7 +234,7 @@ class _CreateUserState extends State<CreateUser> {
                                   obscureText: false,
                                   controller: _firstnameField,
                                   decoration: InputDecoration(
-                                    hintText: "first name",
+                                    hintText: "Nom",
                                     suffixIcon: Icon(
                                       Icons.text_snippet_outlined,
                                       color: Colors.black54,
@@ -262,7 +262,7 @@ class _CreateUserState extends State<CreateUser> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "Last name",
+                                  "Prenom",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -279,7 +279,7 @@ class _CreateUserState extends State<CreateUser> {
                                   obscureText: false,
                                   controller: _lastnameField,
                                   decoration: InputDecoration(
-                                    hintText: "last name",
+                                    hintText: "prenom",
                                     suffixIcon: Icon(
                                       Icons.text_snippet_outlined,
                                       color: Colors.black54,
@@ -515,7 +515,7 @@ class _CreateUserState extends State<CreateUser> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "Password",
+                                  "Mot de passe",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -532,7 +532,7 @@ class _CreateUserState extends State<CreateUser> {
                                   obscureText: true,
                                   controller: _passwordField,
                                   decoration: InputDecoration(
-                                    hintText: "password",
+                                    hintText: "Mot de passe",
                                     suffixIcon: Icon(
                                       Icons.visibility,
                                       color: Colors.black54,
@@ -559,7 +559,7 @@ class _CreateUserState extends State<CreateUser> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "Confirm Password",
+                                  "Confirmer mot de passe",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -575,7 +575,7 @@ class _CreateUserState extends State<CreateUser> {
                                   textAlign: TextAlign.start,
                                   obscureText: true,
                                   decoration: InputDecoration(
-                                    hintText: "password",
+                                    hintText: "Mot de passe",
                                     suffixIcon: Icon(
                                       Icons.visibility,
                                       color: Colors.black54,
@@ -638,7 +638,7 @@ class _CreateUserState extends State<CreateUser> {
                               color: primaryColor,
                             ),)
                       : Text(
-                          'Create User',
+                          'Enregistrer',
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,

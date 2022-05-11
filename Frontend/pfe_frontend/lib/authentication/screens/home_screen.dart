@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:pfe_frontend/accueil/Screens/AccueilHome.dart';
 import 'package:pfe_frontend/admin/responsive/mobile_screen_layout.dart';
 import 'package:pfe_frontend/admin/screens/adminHome.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
@@ -69,6 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
       else if( _authuser!.role == 4 ){
         _navigateToNurse();
       }
+      else if( _authuser!.role == 5 ){
+        _navigateToAccueil();
+      }
 
     }
   }
@@ -104,6 +108,15 @@ class _HomeScreenState extends State<HomeScreen> {
     .push(
       MaterialPageRoute(
         builder: (context) => const PatientHome()
+        )
+    );
+  }
+
+  _navigateToAccueil(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const AccueilHome()
         )
     );
   }

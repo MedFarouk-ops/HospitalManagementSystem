@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:pfe_frontend/authentication/models/token.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/models/user.dart' as userModel;
+import 'package:pfe_frontend/authentication/screens/auth_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
 import 'package:jwt_decode/jwt_decode.dart';
@@ -19,7 +20,7 @@ class AuthContext {
 
     User user = User(id:0 ,email: "", first_name: "", last_name: "", address: "", age: "", genre: "", role: "", username: "");
 
-//*************************************************************************************************************************************** */
+//******************************************************S*I*G*N******I*N******U*S*E*R********************************************************************** */
 
     Future<User> SignIn({required String email , required String password}) async {
      // initialisation de stockage local : 
@@ -81,6 +82,7 @@ class AuthContext {
                     print(user.last_name);
                     print(user.genre);
                     print(user.role);
+                    print("----------------------------------------------------------------");
                     // save token to local storage :
                     s_prefs.setStringList("authTokens", authTokens);
                         return user;
@@ -90,7 +92,7 @@ class AuthContext {
                     }
     }
 
-//*************************************************************************************************************************************** */
+//*******************************************************R*E*G*I*S*T*E*R***********U*S*E*R********************************************************************** */
 
     // sign up user 
 
@@ -156,7 +158,7 @@ class AuthContext {
     }
    }
 
-//*************************************************************************************************************************************** */
+//********************************************************G*E*T******U*S*E*R******D*E*T*A*I*L*S********************************************************************** */
 
 
   // get current logged in user details :
@@ -180,7 +182,24 @@ class AuthContext {
     return currentUser;
   }
 
-//*************************************************************************************************************************************** */
+//******************************************************L*O*G*O*U*T******U*S*E*R*******F*U*N*C*T*I*O*N***************************************************************** */
+
+// logout user function :
+  logoutUser(context) async {
+    SharedPreferences s_prefs = await SharedPreferences.getInstance();
+    s_prefs.remove("authTokens");
+    s_prefs.setBool("isAuthenticated", false);
+    Navigator.of(context)
+                  .pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => AuthScreen()
+                      )
+                  );
+  }
+
+
+
+//**********************************************************C*R*E*A*T*E*****U*S*E*R********A*D*M*I*N********************************************************************* */
 
   // create user function for admin dashborad : 
 
@@ -242,6 +261,50 @@ class AuthContext {
        return res;
     }
    }
+
+//***************************************************R*E*F*R*E*S*H*******T*O*K*E*N******************************************************************* */
+
+    updateToken() async {
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+
+            late http.Response response;
+              if (kIsWeb) {
+                    response = await http.post(
+                    Uri.parse('http://127.0.0.1:8000/auth/token/refresh'),
+                    headers: <String, String>{
+                            'Content-Type': 'application/json; charset=UTF-8',
+                    },
+                    body: jsonEncode(<String, String>{
+                            'refresh': authTokens[1],
+                    }),
+                    );
+                    } 
+                    // si l'application est lancée sur mobile ( android )
+                    else if(Platform.isAndroid) {
+                    response = await http.post(
+                    Uri.parse('http://10.0.2.2:8000/auth/token/refresh'),
+                      headers: <String, String>{
+                          'Content-Type': 'application/json; charset=UTF-8',
+                      },
+                      body: jsonEncode(<String, String>{
+                          'refresh': authTokens[1],
+                        }),
+                    );
+                    }
+
+                    Token token =  Token.fromJson(jsonDecode(response.body));
+
+                    if (response.statusCode == 200) {
+                      
+                      s_prefs.setStringList("authTokens", authTokens);
+
+                    }
+
+
+
+
+
+                }
 
 //*************************************************************************************************************************************** */
 

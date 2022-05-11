@@ -1,23 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pfe_frontend/admin/utils/dimensions.dart';
-import 'package:pfe_frontend/authentication/utils/colors.dart';
-import 'package:provider/provider.dart';
+import 'package:pfe_frontend/accueil/utils/constants.dart';
 
-
-
-class AdminMobileScreenLayout extends StatefulWidget {
-  const AdminMobileScreenLayout({ Key? key }) : super(key: key);
+class AccueilMobileScreenLayout extends StatefulWidget {
+  const AccueilMobileScreenLayout({ Key? key }) : super(key: key);
 
   @override
-  State<AdminMobileScreenLayout> createState() => _AdminMobileScreenLayoutState();
+  State<AccueilMobileScreenLayout> createState() => _AccueilMobileScreenLayoutState();
 }
 
-class _AdminMobileScreenLayoutState extends State<AdminMobileScreenLayout> {
-
+class _AccueilMobileScreenLayoutState extends State<AccueilMobileScreenLayout> {
   @override
   Widget build(BuildContext context) {
-     return DefaultTabController(
+    return DefaultTabController(
          length: 3,
          child: Scaffold(
           appBar:  PreferredSize(
@@ -28,13 +22,12 @@ class _AdminMobileScreenLayoutState extends State<AdminMobileScreenLayout> {
              bottom: TabBar(
                tabs: [
                  Tab(text: "Accueil",),
-                 Tab(text: "Creer",),
                  Tab(text: "Profile",),
                ]
                ),
            ),),
            body: TabBarView(
-             children: adminHomeScreenItems,
+             children: accueilScreenItems,
            ),
          ),
         );

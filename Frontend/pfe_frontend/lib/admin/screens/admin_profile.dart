@@ -139,7 +139,9 @@ class _AdminProfileState extends State<AdminProfile> {
       
     Widget buildLogoutButton() => ButtonWidget(
         text: 'Logout',
-        onClicked: () {},
+        onClicked: () {
+          AuthContext().logoutUser(context);
+        },
       );
   
 
