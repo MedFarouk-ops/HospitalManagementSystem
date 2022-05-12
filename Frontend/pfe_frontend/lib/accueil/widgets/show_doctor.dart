@@ -2,95 +2,54 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:jwt_decode/jwt_decode.dart';
+import 'package:pfe_frontend/admin/responsive/mobile_screen_layout.dart';
 import 'package:pfe_frontend/admin/screens/DoctorScreens/doctor_list.dart';
 import 'package:pfe_frontend/admin/screens/PatientScreens/patient_list.dart';
+import 'package:pfe_frontend/admin/screens/adminHome.dart';
 import 'package:pfe_frontend/admin/widget/appbar_widget.dart';
 import 'package:pfe_frontend/admin/widget/button_widget.dart';
+import 'package:pfe_frontend/admin/widget/numbers_widget.dart';
 import 'package:pfe_frontend/admin/widget/profile_widget.dart';
-import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pfe_frontend/authentication/utils/colors.dart';
 
-class AdminProfile extends StatefulWidget {
-  const AdminProfile({ Key? key }) : super(key: key);
+class PublicDoctorShow extends StatefulWidget {
+  final User user;
+
+  const PublicDoctorShow({ Key? key , required this.user}) : super(key: key);
 
   @override
-  State<AdminProfile> createState() => _AdminProfileState();
+  State<PublicDoctorShow> createState() => _PublicDoctorShowState();
 }
 
-class _AdminProfileState extends State<AdminProfile> {
-  /******************************************************************************************************************************* */
-  /******************************************************************************************************************************* */
-  User user = User(
-     id:0 ,
-     email: "",
-     first_name: "", 
-     last_name: "", 
-     address: "", 
-     age: "", 
-     genre: "", 
-     role: "", 
-     username: "");
+class _PublicDoctorShowState extends State<PublicDoctorShow> {
 
   String genre = "";
   String? role;
   Client client = http.Client();
-  /******************************************************************************************************************************* */
-  /******************************************************************************************************************************* */
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _initializeUser();
+    _setGenreAndRole();
   }
 
   _setGenreAndRole(){
-    if(user.genre == 11){
+    if(widget.user.genre == 11){
       genre = "homme";
     }else{
       genre = "femme";
     }
-  }  
+  }
 
-   _initializeUser() async {
-        user = await AuthContext().getUserDetails();
-        print(user.genre);
-        _setGenreAndRole();
-        setState(() {});
-    }
 
-     // *********************************************//
 
-    // empêcher l'utilisateur de revenir en arriere : 
-
-    ModalRoute<dynamic>? _route;
-
-    @override
-    void didChangeDependencies() {
-      super.didChangeDependencies();
-      _route?.removeScopedWillPopCallback(_onWillPop);
-      _route = ModalRoute.of(context);
-      _route?.addScopedWillPopCallback(_onWillPop);
-    }
-
-    @override
-    void dispose() {
-      _route?.removeScopedWillPopCallback(_onWillPop);
-      super.dispose();
-    }
-    
-    Future<bool> _onWillPop() => Future.value(false);
-
-    // ************************************************ // 
-
-    
-  
   @override
   Widget build(BuildContext context) {
-       return Scaffold(
+
+    return Scaffold(
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
@@ -100,19 +59,19 @@ class _AdminProfileState extends State<AdminProfile> {
             onClicked: () async {},
           ),
           const SizedBox(height: 24),
-          buildName(user),
+          buildName(widget.user),
           const SizedBox(height: 24),
           Center(
             child:Wrap(
             children: [
+              buildCallButton(),
               buildUpgradeButton(),
-              buildLogoutButton()
             ],
           ),
           ),
           // Center(child: buildUpgradeButton()),
           const SizedBox(height: 48),
-          buildAbout(user),
+          buildAbout(widget.user),
         ],
       ),
     );
@@ -136,13 +95,21 @@ class _AdminProfileState extends State<AdminProfile> {
         text: 'Modifier',
         onClicked: () {},
       );
-      
-    Widget buildLogoutButton() => ButtonWidget(
-        text: 'Logout',
-        onClicked: () {
-          AuthContext().logoutUser(context);
-        },
+
+
+  Widget buildCallButton() => ButtonWidget(
+        text: 'Appeler',
+        onClicked: () {},
       );
+
+  _returnToDashboard(){
+      Navigator.of(context)
+      .push(
+        MaterialPageRoute(
+          builder: (context) => const AdminMobileScreenLayout()
+          )
+      );
+  }
   
 
   Widget buildAbout(User user) => Container(
@@ -150,6 +117,16 @@ class _AdminProfileState extends State<AdminProfile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Horaire :',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Text( "Heures de travail : 4:30 PM - 8:30 PM",
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
+            const SizedBox(height: 16),
+
             Text(
               'Information :',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:pfe_frontend/accueil/Responsive/mobile_responsive_screen.dart';
 import 'package:pfe_frontend/accueil/Screens/AccueilHome.dart';
 import 'package:pfe_frontend/admin/responsive/mobile_screen_layout.dart';
 import 'package:pfe_frontend/admin/screens/adminHome.dart';
@@ -116,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => const AccueilHome()
+        builder: (context) => const AccueilMobileScreenLayout()
         )
     );
   }

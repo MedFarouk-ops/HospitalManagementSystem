@@ -9,10 +9,35 @@ class AccueilMobileScreenLayout extends StatefulWidget {
 }
 
 class _AccueilMobileScreenLayoutState extends State<AccueilMobileScreenLayout> {
+
+  // *********************************************//
+
+  // empêcher l'utilisateur de revenir en arriere : 
+
+  ModalRoute<dynamic>? _route;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _route?.removeScopedWillPopCallback(_onWillPop);
+    _route = ModalRoute.of(context);
+    _route?.addScopedWillPopCallback(_onWillPop);
+  }
+
+  @override
+  void dispose() {
+    _route?.removeScopedWillPopCallback(_onWillPop);
+    super.dispose();
+  }
+  
+  Future<bool> _onWillPop() => Future.value(false);
+
+  // ************************************************ // 
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-         length: 3,
+         length: 2,
          child: Scaffold(
           appBar:  PreferredSize(
           preferredSize: Size.fromHeight(50.0), // here the desired height

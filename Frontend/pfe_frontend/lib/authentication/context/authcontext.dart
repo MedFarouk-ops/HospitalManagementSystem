@@ -20,6 +20,8 @@ class AuthContext {
 
     User user = User(id:0 ,email: "", first_name: "", last_name: "", address: "", age: "", genre: "", role: "", username: "");
 
+    // final loading = useState(true);
+    
 //******************************************************S*I*G*N******I*N******U*S*E*R********************************************************************** */
 
     Future<User> SignIn({required String email , required String password}) async {
@@ -43,7 +45,8 @@ class AuthContext {
                       // si l'application est lancée sur mobile ( android )
                       
                       else if(Platform.isAndroid) {
-                      response = await http.post(
+                      try {
+                        response = await http.post(
                         Uri.parse('http://10.0.2.2:8000/auth/token/'),
                         headers: <String, String>{
                           'Content-Type': 'application/json; charset=UTF-8',
@@ -52,7 +55,10 @@ class AuthContext {
                           'email': email,
                           'password' : password
                         }),
-                      );
+                      );}
+                      catch (error) {
+                          print("Exception has occured");
+                      }
                     } 
                     if (response.statusCode == 200) {
                     // If the server did return a 200 response,
@@ -264,7 +270,8 @@ class AuthContext {
 
 //***************************************************R*E*F*R*E*S*H*******T*O*K*E*N******************************************************************* */
 
-    updateToken() async {
+    updateToken(context) async {
+      print("update token called ");
             SharedPreferences s_prefs = await SharedPreferences.getInstance();
 
             late http.Response response;
@@ -292,21 +299,18 @@ class AuthContext {
                     );
                     }
 
-                    Token token =  Token.fromJson(jsonDecode(response.body));
-
+                    Token newtoken =  Token.fromJson(jsonDecode(response.body));
+                    
                     if (response.statusCode == 200) {
-                      
-                      s_prefs.setStringList("authTokens", authTokens);
-
+                      authTokens[0] = newtoken.accessToken; 
+                      s_prefs.setStringList("authTokgens", authTokens);
+                    }else{
+                      logoutUser(context);
                     }
-
-
-
-
-
                 }
 
 //*************************************************************************************************************************************** */
-
+                // Refresh token every 5 minute //
+                
 
 }

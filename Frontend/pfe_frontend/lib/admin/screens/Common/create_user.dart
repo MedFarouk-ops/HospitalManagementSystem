@@ -480,33 +480,6 @@ class _CreateUserState extends State<CreateUser> {
                             ),
                           ),
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                           Container(
                             margin: EdgeInsets.symmetric(
                               vertical: 10,

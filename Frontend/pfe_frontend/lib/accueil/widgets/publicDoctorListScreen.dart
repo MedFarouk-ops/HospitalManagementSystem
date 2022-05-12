@@ -4,36 +4,37 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:pfe_frontend/accueil/widgets/show_doctor.dart';
+import 'package:pfe_frontend/accueil/widgets/show_user.dart';
 import 'package:pfe_frontend/admin/screens/Common/user_show.dart';
 import 'dart:io' show Platform;
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-class DoctorListScreen extends StatefulWidget {
-  const DoctorListScreen({ Key? key }) : super(key: key);
+
+class PublicDoctorListScreen extends StatefulWidget {
+  const PublicDoctorListScreen({ Key? key }) : super(key: key);
 
   @override
-  State<DoctorListScreen> createState() => _DoctorListScreenState();
+  State<PublicDoctorListScreen> createState() => _PublicDoctorListScreenState();
 }
 
-class _DoctorListScreenState extends State<DoctorListScreen> {
+class _PublicDoctorListScreenState extends State<PublicDoctorListScreen> {
 
   Client client = http.Client();
   
-  List<User> doctors = [];
+  List<User> doctorList = [];
   
+  void setStateIfMounted(f) {
+    if (mounted) setState(f);
+  }
+
   @override
   void initState(){
     super.initState();
     _retrieveDoctors();
   }
-
-  void setStateIfMounted(f) {
-    if (mounted) setState(f);
-  }
-
-
 //*************************************************************************************************************************************** */
 //*************************************************************************************************************************************** */
 
@@ -43,17 +44,18 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
     if (kIsWeb) {
       response = json.decode((await client.get(Uri.parse("http://127.0.0.1:8000/adminapp/doctors/"))).body);
       response.forEach((element) {
-        doctors.add(User.fromJson(element));
+        doctorList.add(User.fromJson(element));
       });
-      setStateIfMounted(() {});
+    setStateIfMounted(() {});
     }
     // si l'application est lancée sur mobile ( android )
     else if(Platform.isAndroid) {
       response = json.decode((await client.get(Uri.parse("http://10.0.2.2:8000/adminapp/doctors/"))).body);
       response.forEach((element) {
-        doctors.add(User.fromJson(element));
+        doctorList.add(User.fromJson(element));
       });
-       setStateIfMounted(() {});
+    setStateIfMounted(() {});
+
     }
     _initialseDoctorsNumber();
   }
@@ -62,7 +64,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
 
     _initialseDoctorsNumber() async {
       final prefs = await SharedPreferences.getInstance(); 
-      prefs.setInt("NumberOfdoctors", doctors.length);
+      prefs.setInt("NumberOfdoctors", doctorList.length);
     }
 
 //*************************************************************************************************************************************** */
@@ -80,20 +82,20 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
           return Card(
             child: ListTile(
               leading: CircleAvatar(backgroundImage: AssetImage("assets/images/user.png"),),
-              title: Text( doctors[index].first_name ),
-              subtitle: Text(doctors[index].email),
+              title: Text( doctorList[index].first_name ),
+              subtitle: Text(doctorList[index].email),
               onTap: () {
                  Navigator.of(context)
                   .push(
                     MaterialPageRoute(
-                      builder: (context) => UserShow(user: doctors[index],)
+                      builder: (context) => PublicDoctorShow(user: doctorList[index],)
                       )
                   );
               },
             ),
           );
         },
-        itemCount: doctors.length,
+        itemCount: doctorList.length,
         shrinkWrap: true,
         padding: EdgeInsets.all(5),
         scrollDirection: Axis.vertical,
