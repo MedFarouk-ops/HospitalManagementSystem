@@ -25,8 +25,6 @@ def getNurses(request):
     serializer = UserSerializer(users , many = True)
     return Response(serializer.data)
 
-
-
 # get user by id :
 
 @api_view([('GET')])

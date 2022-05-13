@@ -39,7 +39,7 @@ class _UserProfileState extends State<UserProfile> {
      username: "");
 
   String genre = "";
-  String? role;
+  String role ="";
   Client client = http.Client();
   /******************************************************************************************************************************* */
   /******************************************************************************************************************************* */
@@ -58,6 +58,41 @@ class _UserProfileState extends State<UserProfile> {
     }else{
       genre = "femme";
     }
+
+  switch(user.role) { 
+   case 1: { 
+      role = "Admin" ; 
+   } 
+   break; 
+  
+   case 2: { 
+      role = "Patient" ;
+   } 
+   break; 
+   case 3: { 
+      role = "Docteur" ;
+   } 
+   break; 
+   case 4: { 
+      role = "Infermier" ; 
+   } 
+   break; 
+   case 5: { 
+      role = "Accueil";
+   } 
+   break; 
+      
+   default: { 
+      role = "PATIENT" ;
+   }
+   break; 
+} 
+
+
+
+
+
+
   }  
 
    _initializeUser() async {
@@ -143,7 +178,7 @@ class _UserProfileState extends State<UserProfile> {
       );
       
     Widget buildLogoutButton() => ButtonWidget(
-        text: 'Logout',
+        text: 'Deconnecter',
         onClicked: () {
           AuthContext().logoutUser(context);
         },
@@ -151,10 +186,21 @@ class _UserProfileState extends State<UserProfile> {
   
 
   Widget buildAbout(User user) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
+        padding: EdgeInsets.symmetric(horizontal: 70),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [Text(
+              'Role :   ' + role,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            const SizedBox(height: 16),
+            ],),
+            Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             Text(
               'Information :',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -194,7 +240,7 @@ class _UserProfileState extends State<UserProfile> {
             Text( "genre : " + 
               genre,
               style: TextStyle(fontSize: 16, height: 1.4),
-            ),
+            ),],),
           ],
         ),
       );

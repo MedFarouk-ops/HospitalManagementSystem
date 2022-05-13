@@ -43,6 +43,7 @@ dependencies:
   jwt_decode: ^0.3.1
   flutter_svg: ^1.0.3
   data_table_2: ^2.2.1
+  syncfusion_flutter_calendar: ^20.1.55
 
 dev_dependencies:
   flutter_test:

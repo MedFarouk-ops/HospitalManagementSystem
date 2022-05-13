@@ -48,8 +48,10 @@ class _AccueilHomeState extends State<AccueilHome> {
                           height: categoryHeight,
                           child: AccueilUserListScroller()),
                     ),
-                    ReservationList(),
-                    const SizedBox(height: 16),
+                    
+                      ReservationList(),
+                    
+                      const SizedBox(height: 16),
                       ],
                       ),
                       ]

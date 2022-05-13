@@ -34,6 +34,30 @@ class _AuthScreenState extends State<AuthScreen> {
     _checkAuth();
   }
 
+  // *********************************************//
+
+  // empêcher l'utilisateur de revenir en arriere : 
+
+  ModalRoute<dynamic>? _route;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _route?.removeScopedWillPopCallback(_onWillPop);
+    _route = ModalRoute.of(context);
+    _route?.addScopedWillPopCallback(_onWillPop);
+  }
+
+  @override
+  void dispose() {
+    _route?.removeScopedWillPopCallback(_onWillPop);
+    super.dispose();
+  }
+  
+  Future<bool> _onWillPop() => Future.value(false);
+
+  // ************************************************ // 
+
   
   
   

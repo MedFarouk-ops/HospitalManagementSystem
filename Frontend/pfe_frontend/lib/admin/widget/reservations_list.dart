@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pfe_frontend/accueil/Screens/Reservations/Reservation_layout.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 
 class ReservationList extends StatefulWidget {
@@ -9,6 +10,20 @@ class ReservationList extends StatefulWidget {
 }
 
 class _ReservationListState extends State<ReservationList> {
+  
+  
+  _navigateToReservations(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const ReservationLayout()
+        )
+    );
+  }
+
+  
+  
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,7 +63,9 @@ class _ReservationListState extends State<ReservationList> {
                         children: [
                           "Voir tous les reservations",
                         ].map((e) => InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            _navigateToReservations();
+                          },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 12,horizontal: 16
