@@ -65,11 +65,11 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
      if(_isAuth){
       return Scaffold(
-      appBar: AppBar(
-        title: Center(),
-        elevation: 0,
-        backgroundColor: Colors.lightBlue,
-      ),
+      // appBar: AppBar(
+      //   title: Center(),
+      //   elevation: 0,
+      //   backgroundColor: Colors.lightBlue,
+      // ),
       body: RefreshIndicator(onRefresh: () async{
         },
         child : Column(

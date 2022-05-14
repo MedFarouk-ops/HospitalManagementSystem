@@ -12,6 +12,7 @@ import 'package:pfe_frontend/admin/widget/numbers_widget.dart';
 import 'package:pfe_frontend/admin/widget/profile_widget.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PublicUserShow extends StatefulWidget {
   final User user;
@@ -63,6 +64,7 @@ class _PublicUserShowState extends State<PublicUserShow> {
           Center(
             child:Wrap(
             children: [
+              buildCallButton(),
               buildUpgradeButton(),
             ],
           ),
@@ -93,6 +95,12 @@ class _PublicUserShowState extends State<PublicUserShow> {
         text: 'Modifier',
         onClicked: () {},
       );
+      
+  Widget buildCallButton() => ButtonWidget(
+        text: 'Appeler',
+        onClicked:  () => launch("tel://55706653"),
+      );
+
 
   _returnToDashboard(){
       Navigator.of(context)

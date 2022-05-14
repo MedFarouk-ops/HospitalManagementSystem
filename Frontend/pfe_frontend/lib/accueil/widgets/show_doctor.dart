@@ -12,6 +12,7 @@ import 'package:pfe_frontend/admin/widget/numbers_widget.dart';
 import 'package:pfe_frontend/admin/widget/profile_widget.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PublicDoctorShow extends StatefulWidget {
   final User user;
@@ -99,7 +100,7 @@ class _PublicDoctorShowState extends State<PublicDoctorShow> {
 
   Widget buildCallButton() => ButtonWidget(
         text: 'Appeler',
-        onClicked: () {},
+        onClicked: () => launch("tel://55706653"),
       );
 
   _returnToDashboard(){

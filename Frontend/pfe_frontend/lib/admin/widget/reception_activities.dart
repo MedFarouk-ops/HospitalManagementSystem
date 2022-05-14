@@ -51,11 +51,10 @@ class _ReceptionActivityListState extends State<ReceptionActivityList> {
                         ].map((e) => InkWell(
                           onTap: () {},
                           child: Container(
-                            color: activityWidgetColor,
                             padding: const EdgeInsets.symmetric(
-                              vertical: 40,horizontal: 40
+                              vertical: 4,horizontal: 16
                             ),
-                            child: Text(e  , style: TextStyle(color: Colors.white)),
+                            child: Text(e  , style: TextStyle(color: Color.fromARGB(255, 0, 0, 0))),
                           ),
                         )).toList(),
                         ),

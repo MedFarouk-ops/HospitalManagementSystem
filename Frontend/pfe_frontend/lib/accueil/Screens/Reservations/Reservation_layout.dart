@@ -13,8 +13,20 @@ class _ReservationLayoutState extends State<ReservationLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SfCalendar(
-        view : CalendarView.week
+        view : CalendarView.month
       ),
     );
   }
 }
+
+// List<Appointment> getAppointments(){
+//   List<Appointment> reservations = <Appointment> [];
+//   final DateTime today = DateTime.now();
+//   return reservations ; 
+// }
+
+// class ReservationsDataSource extends CalendarDataSource{
+//   ReservationsDataSource(List<Appointment> source){
+//     appointments = source ;
+//   }
+// }
