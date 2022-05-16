@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe_frontend/admin/screens/Common/user_show.dart';
+import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'dart:io' show Platform;
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,7 +43,7 @@ class _PatientListScreenState extends State<PatientListScreen> {
 
     // si l'application est lancée dans le web ( navigateur ) : 
     if (kIsWeb) {
-      response = json.decode((await client.get(Uri.parse("http://127.0.0.1:8000/adminapp/patients/"))).body);
+      response = json.decode((await client.get(Uri.parse("${serverUrl}/adminapp/patients/"))).body);
       response.forEach((element) {
         patients.add(User.fromJson(element));
       });
@@ -52,7 +53,7 @@ class _PatientListScreenState extends State<PatientListScreen> {
     // si l'application est lancée sur mobile ( android )
 
     else if(Platform.isAndroid) {
-      response = json.decode((await client.get(Uri.parse("http://10.0.2.2:8000/adminapp/patients/"))).body);
+      response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/adminapp/patients/"))).body);
       response.forEach((element) {
         patients.add(User.fromJson(element));
       });

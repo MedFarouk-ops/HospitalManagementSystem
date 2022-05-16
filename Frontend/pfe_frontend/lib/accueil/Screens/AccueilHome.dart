@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/accueil/utils/accueilUserListScroller.dart';
+import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/utils/userListScroller.dart';
 import 'package:pfe_frontend/admin/widget/reservations_list.dart';
+import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class AccueilHome extends StatefulWidget {
   const AccueilHome({ Key? key }) : super(key: key);
@@ -12,12 +16,57 @@ class AccueilHome extends StatefulWidget {
 }
 
 class _AccueilHomeState extends State<AccueilHome> {
+  
+  
+    int? _numberOfDoctor;
+    int? _numberOfPatient;
+    List<User> _patientList = [];
+    List<User> _doctorList = [];
+
+  
+    void setStateIfMounted(f) {
+      if (mounted) setState(f);
+    }
+    
+
+    _setUsers() async {
+      _patientList = await ApiMethods().getPatients();
+      _doctorList = await ApiMethods().getDoctors();
+      final prefs = await SharedPreferences.getInstance(); 
+      prefs.setInt("NumberOfpatients", _patientList.length);
+      prefs.setInt("NumberOfdoctors", _doctorList.length);
+      setStateIfMounted(() {});
+    }
+
+    setUserNumber() async {
+      final prefs = await SharedPreferences.getInstance(); 
+      _numberOfPatient = prefs.getInt("NumberOfpatients");
+      _numberOfDoctor = prefs.getInt("NumberOfdoctors");
+    }
+
+    @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      _setUsers();
+      setUserNumber();
+    }
+
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight = size.height*0.30;
+    
+    
+    if(_numberOfPatient == 0){
+          return const Scaffold( body : Center(
+            child : CircularProgressIndicator()
+      ),);
+    }
+
+
     return Scaffold(
       backgroundColor: thirdAdminColor,
       body: SafeArea(
@@ -46,7 +95,12 @@ class _AccueilHomeState extends State<AccueilHome> {
                           width: size.width,
                           alignment: Alignment.topCenter,
                           height: categoryHeight,
-                          child: AccueilUserListScroller()),
+                          child: AccueilUserListScroller(
+                            doctorList: _doctorList,
+                            numberOfDoctor: _numberOfDoctor ?? 0,
+                            numberOfPatient: _numberOfPatient ?? 0,
+                            patientList: _patientList,
+                            )),
                     ),
                       ReservationList(),
                       const SizedBox(height: 16),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/accueil/Screens/Reservations/creer_reservation.dart';
+import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/accueil/utils/internet_widgets.dart';
+import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class ReservationLayout extends StatefulWidget {
@@ -12,15 +14,37 @@ class ReservationLayout extends StatefulWidget {
 
 class _ReservationLayoutState extends State<ReservationLayout> {
 
+    List<User> _patients = [];
+    List<User> _docteurs = [];
+
+    void setStateIfMounted(f) {
+      if (mounted) setState(f);
+    }
+
+    _setUsers() async {
+      _patients = await ApiMethods().getPatients();
+      _docteurs = await ApiMethods().getDoctors();
+      setStateIfMounted(() {});
+    }
+
+
+
+    @override
+    void initState(){
+      super.initState();
+      _setUsers();
+    }
 
   _navigateToCreateRes(){
       Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => const CreateReservation()
+        builder: (context) => CreateReservation(docteurslist: _docteurs,patientslist: _patients,)
+
         // builder: (context) => const FormTestWidget()
         )
     );
+          setStateIfMounted(() {});
   }
 
 
@@ -30,6 +54,12 @@ class _ReservationLayoutState extends State<ReservationLayout> {
   Widget build(BuildContext context) {
     final ButtonStyle style =
         ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
+    if(_docteurs.isEmpty){
+          return const Scaffold( body : Center(
+            child : CircularProgressIndicator()
+      ),);
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -53,7 +83,7 @@ class _ReservationLayoutState extends State<ReservationLayout> {
                 },
                 child: const Text('Creer une nouvelle reservations'),
               ),
-      ],)      
+      ],) ,
     );
   }
 }

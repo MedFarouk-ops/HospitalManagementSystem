@@ -1,7 +1,9 @@
 import "package:flutter/material.dart";
+import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/accueil/widgets/publicDoctorListScreen.dart';
 import 'package:pfe_frontend/accueil/widgets/publicPatientListScreen.dart';
 import 'package:pfe_frontend/admin/utils/StatefulWrapper.dart';
+import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +11,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class AccueilUserListScroller extends StatefulWidget {
-  const AccueilUserListScroller({ Key? key }) : super(key: key);
+    final int numberOfDoctor;
+    final int numberOfPatient;
+    final List<User> patientList;
+    final List<User> doctorList;
+  const AccueilUserListScroller({ Key? key , 
+  required this.numberOfDoctor ,
+  required this.numberOfPatient ,
+  required this.patientList,
+  required this.doctorList,
+  }) : super(key: key);
 
   @override
   State<AccueilUserListScroller> createState() => _AccueilUserListScrollerState();
@@ -17,49 +28,34 @@ class AccueilUserListScroller extends StatefulWidget {
 
 class _AccueilUserListScrollerState extends State<AccueilUserListScroller> {
 
-  int? numberOfDoctor;
-  int? numberOfPatient;
     
   // redirection de l'utilisateur : 
   _navigateToPatientList(){
-    print(numberOfPatient);
+    print(widget.numberOfPatient);
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => const PublicPatientListScreen()
+        builder: (context) => PublicPatientListScreen(patientList:widget.patientList ,)
         )
     );
   }
   _navigateToDoctorList(){
-    print(numberOfDoctor);
+    print(widget.numberOfDoctor);
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => const PublicDoctorListScreen()
+        builder: (context) => PublicDoctorListScreen(doctorList: widget.doctorList,)
         )
     );
-  }
-  // ************************************************************************************************************************* //
-  // ************************************************************************************************************************* //
-    _initialiseNumberOfUser() async {
-            final prefs = await SharedPreferences.getInstance(); 
-            numberOfPatient = prefs.getInt("NumberOfpatients");
-            numberOfDoctor = prefs.getInt("NumberOfdoctors");
-            setState(() {});
-    }
-  // ************************************************************************************************************************* //
-  // ************************************************************************************************************************* //
-@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _initialiseNumberOfUser();
   }
 
 
   @override
   Widget build(BuildContext context) {
     final double categoryHeight = MediaQuery.of(context).size.height * 0.30 - 50;
+
+ 
+
     return Container(
       child:  SingleChildScrollView(
       physics: BouncingScrollPhysics(),
@@ -91,7 +87,7 @@ class _AccueilUserListScrollerState extends State<AccueilUserListScroller> {
                         height: 40,
                       ),
                       Text(
-                        "${numberOfPatient} patients",
+                        "${widget.numberOfPatient} patients",
                         style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 255, 254, 254)),
                       ),
                     ],
@@ -119,7 +115,7 @@ class _AccueilUserListScrollerState extends State<AccueilUserListScroller> {
                           height: 40,
                         ),
                         Text(
-                          " ${numberOfDoctor}  docteurs",
+                          " ${widget.numberOfDoctor}  docteurs",
                           style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 255, 255, 255)),
                         ),
                       ],

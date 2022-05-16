@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/authentication/models/token.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/models/user.dart' as userModel;
@@ -32,7 +33,7 @@ class AuthContext {
                       // si l'application est lancée dans le web ( navigateur ) : 
                       if (kIsWeb) {
                           response = await http.post(
-                          Uri.parse('http://127.0.0.1:8000/auth/token/'),
+                          Uri.parse('${serverUrl}/auth/token/'),
                           headers: <String, String>{
                             'Content-Type': 'application/json; charset=UTF-8',
                           },
@@ -47,7 +48,7 @@ class AuthContext {
                       else if(Platform.isAndroid) {
                       try {
                         response = await http.post(
-                        Uri.parse('http://10.0.2.2:8000/auth/token/'),
+                        Uri.parse('${mobileServerUrl}/auth/token/'),
                         headers: <String, String>{
                           'Content-Type': 'application/json; charset=UTF-8',
                         },
@@ -115,7 +116,7 @@ class AuthContext {
 
       if (kIsWeb) {
           response = await http.post(
-          Uri.parse('http://127.0.0.1:8000/auth/register/'),
+          Uri.parse('${serverUrl}/auth/register/'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -133,7 +134,7 @@ class AuthContext {
         );
       } else if(Platform.isAndroid) {
       response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/auth/register/'),
+        Uri.parse('${mobileServerUrl}/auth/register/'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -222,7 +223,7 @@ class AuthContext {
 
       if (kIsWeb) {
           response = await http.post(
-          Uri.parse('http://127.0.0.1:8000/auth/register/'),
+          Uri.parse('${serverUrl}/auth/register/'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -240,7 +241,7 @@ class AuthContext {
         );
       } else if(Platform.isAndroid) {
       response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/auth/register/'),
+        Uri.parse('${mobileServerUrl}/auth/register/'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -277,7 +278,7 @@ class AuthContext {
             late http.Response response;
               if (kIsWeb) {
                     response = await http.post(
-                    Uri.parse('http://127.0.0.1:8000/auth/token/refresh'),
+                    Uri.parse('${serverUrl}/auth/token/refresh'),
                     headers: <String, String>{
                             'Content-Type': 'application/json; charset=UTF-8',
                     },
@@ -289,7 +290,7 @@ class AuthContext {
                     // si l'application est lancée sur mobile ( android )
                     else if(Platform.isAndroid) {
                     response = await http.post(
-                    Uri.parse('http://10.0.2.2:8000/auth/token/refresh'),
+                    Uri.parse('${mobileServerUrl}/auth/token/refresh'),
                       headers: <String, String>{
                           'Content-Type': 'application/json; charset=UTF-8',
                       },

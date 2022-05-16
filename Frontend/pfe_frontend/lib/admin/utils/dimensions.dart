@@ -9,3 +9,6 @@ const adminHomeScreenItems = [
           CreateUser(),
           UserProfile(),
 ];
+
+const String serverUrl = "http://127.0.0.1:8000" ; 
+const String mobileServerUrl = "http://10.0.2.2:8000" ; 
