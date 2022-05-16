@@ -34,21 +34,6 @@ def getUser(request , pk):
     return Response(serializer1.data)
 
 
-# @api_view([('POST')])
-# def createPatient(request) : 
-#     data = request.data
-#     patient = Patient.objects.create(
-#         nom = data['nom'],
-#         email = data['email'],
-#         prenom = data['prenom'],
-#         adresse = data['adresse'],
-#         poids = data['poids'],
-#     )
-#     serializer = PatientSerializer(patient , many=False)
-#     database.child('patients').push(serializer.data)
-#     return Response(serializer.data)
-
-
 @api_view([('PUT')])
 def updateUser(request , pk) : 
     data = request.data

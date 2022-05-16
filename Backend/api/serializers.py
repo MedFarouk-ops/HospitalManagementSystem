@@ -1,9 +1,7 @@
-from rest_framework import serializers
-
 from api.models import Reservation
+from rest_framework.serializers import ModelSerializer
 
-class ReservationSerializer(serializers.ModelSerializer):
-
-    class Meta:
+class ReservationSerializer(ModelSerializer):
+    class Meta : 
         model = Reservation
-        fields = ['date','startTime','endTime','patient','docteur','disponible',]
+        fields = '__all__'
