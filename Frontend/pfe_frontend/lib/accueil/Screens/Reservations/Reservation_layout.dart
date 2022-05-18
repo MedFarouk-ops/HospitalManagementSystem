@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pfe_frontend/accueil/Screens/Reservations/all_reservations_list.dart';
 import 'package:pfe_frontend/accueil/Screens/Reservations/creer_reservation.dart';
+import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/accueil/utils/internet_widgets.dart';
+import 'package:pfe_frontend/admin/widget/reservations_list.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -27,12 +30,22 @@ class _ReservationLayoutState extends State<ReservationLayout> {
       setStateIfMounted(() {});
     }
 
+     List<Reservation> reservationsList = [];
+
+
+    _getReservationList() async {
+    reservationsList = await ApiMethods().getReservationList();
+    setStateIfMounted(() {});
+  }
+
+
 
 
     @override
     void initState(){
       super.initState();
       _setUsers();
+      _getReservationList();
     }
 
   _navigateToCreateRes(){
@@ -72,16 +85,17 @@ class _ReservationLayoutState extends State<ReservationLayout> {
              Text("Tous les reservations :",maxLines: 20, style: TextStyle(fontSize: 16.0 ,fontWeight:FontWeight.bold,color: Colors.black) , ),
 
              const SizedBox(height: 30),
-             SfCalendar(
-                view : CalendarView.month,allowAppointmentResize: true,
-              ),
+            //  SfCalendar(
+            //     view : CalendarView.month,allowAppointmentResize: true,
+            //   ),
+              AllReservationList(reservations: reservationsList),
               const SizedBox(height: 30),
               ElevatedButton(
                 style: style,
                 onPressed: () {
                   _navigateToCreateRes();
                 },
-                child: const Text('Creer une nouvelle reservations'),
+                child: const Text('Ajouter une nouvelle reservations'),
               ),
       ],) ,
     );

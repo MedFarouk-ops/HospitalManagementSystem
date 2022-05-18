@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/accueil/Screens/Reservations/Reservation_layout.dart';
 import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/accueil/utils/api_methods.dart';
+import 'package:http/http.dart' as http;
+import 'package:pfe_frontend/admin/utils/dimensions.dart';
+import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 
 class ReservationList extends StatefulWidget {
   final List<Reservation> reservations;
-  final List<UserFullNames> names ;
-  const ReservationList({ Key? key , required this.reservations ,required this.names }) : super(key: key);
+  const ReservationList({ Key? key , required this.reservations  }) : super(key: key);
 
   @override
   State<ReservationList> createState() => _ReservationListState();
@@ -20,10 +24,20 @@ class _ReservationListState extends State<ReservationList> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => const ReservationLayout()
+        builder: (context) =>  ReservationLayout()
         )
     );
   }
+
+ 
+
+  
+  Future<String?> _getUsername(int id) async {
+      String? keyValue;
+      keyValue =  await ApiMethods().getUserFullNameById(id);
+      return keyValue;  
+  }
+
   
   @override
   Widget build(BuildContext context) {
@@ -94,14 +108,94 @@ class _ReservationListState extends State<ReservationList> {
             DataColumn(label: Text("heure fin")),
           ] ,
           rows: [
-            if((!widget.reservations.isEmpty)&&(!widget.names.isEmpty))
+            
+            if(!(widget.reservations.isEmpty)&&(widget.reservations.length >=4))
               for( var i = 0 ; i < 4; i++ ) 
                DataRow(cells: [
-                DataCell(Text(widget.names[i].patientfullname)),
-                DataCell(Text(widget.names[i].doctorfullname)),
+                DataCell(
+                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}")) ,
+                                builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                  if (snapshot.hasData) {
+                                      if (snapshot.data!.statusCode != 200) {
+                                        return Text('Failed to load the data!');
+                                      } else {
+                                        return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name );
+                                      }
+                                    } else if (snapshot.hasError) {
+                                      return Text('Failed to make a request!');
+                                    } else {
+                                      return Text('Loading');
+                                    }
+                                },
+                  )
+                  
+                  ),
+                DataCell(
+                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].docteur_id}")) ,
+                                builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                  if (snapshot.hasData) {
+                                      if (snapshot.data!.statusCode != 200) {
+                                        return Text('Failed to load the data!');
+                                      } else {
+                                        return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name , );
+                                      }
+                                    } else if (snapshot.hasError) {
+                                      return Text('Failed to make a request!');
+                                    } else {
+                                      return Text('Loading');
+                                    }
+                                },
+                  )
+              
+                ),
                 DataCell(Text(widget.reservations[i].dateRendezvous)),
                 DataCell(Text(widget.reservations[i].startTime.substring(0,5))),
+                DataCell(Text(widget.reservations[i].endTime.substring(0,5))),
+              ]),
+
+
+              if(!(widget.reservations.isEmpty)&&(widget.reservations.length <4))
+              for( var i = 0 ; i <widget.reservations.length ; i++ ) 
+               DataRow(cells: [
+                DataCell(
+                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}")) ,
+                                builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                  if (snapshot.hasData) {
+                                      if (snapshot.data!.statusCode != 200) {
+                                        return Text('Failed to load the data!');
+                                      } else {
+                                        return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name );
+                                      }
+                                    } else if (snapshot.hasError) {
+                                      return Text('Failed to make a request!');
+                                    } else {
+                                      return Text('Loading');
+                                    }
+                                },
+                  )
+                  
+                  ),
+                DataCell(
+                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].docteur_id}")) ,
+                                builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                  if (snapshot.hasData) {
+                                      if (snapshot.data!.statusCode != 200) {
+                                        return Text('Failed to load the data!');
+                                      } else {
+                                        return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name );
+                                      }
+                                    } else if (snapshot.hasError) {
+                                      return Text('Failed to make a request!');
+                                    } else {
+                                      return Text('Loading');
+                                    }
+                                },
+                  )
+              
+                ),
+                DataCell(Text(widget.reservations[i].dateRendezvous)),
                 DataCell(Text(widget.reservations[i].startTime.substring(0,5))),
+                DataCell(Text(widget.reservations[i].endTime.substring(0,5))),
               ]),
             
           ],),

@@ -16,7 +16,6 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
-    List<UserFullNames> names = [];
 
 
 
@@ -119,7 +118,7 @@ class _AdminHomeState extends State<AdminHome> {
                           height: categoryHeight,
                           child: UserListScroller()),
                     ),
-                    ReservationList(reservations: reservations , names: []),
+                    ReservationList(reservations: reservations),
                     const SizedBox(height: 16),
                     ReceptionActivityList(),
                     const SizedBox(height: 16),

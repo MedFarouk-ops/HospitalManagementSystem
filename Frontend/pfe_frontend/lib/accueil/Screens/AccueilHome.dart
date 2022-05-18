@@ -24,7 +24,6 @@ class _AccueilHomeState extends State<AccueilHome> {
     List<User> _patientList = [];
     List<User> _doctorList = [];
     List<Reservation> reservations = [];
-    List<UserFullNames> names = [];
 
 
 
@@ -36,18 +35,6 @@ class _AccueilHomeState extends State<AccueilHome> {
     _getReservationList() async {
     reservations = await ApiMethods().getReservationList();
     setStateIfMounted(() {});
-  }
-   _setReservationToShow() async {
-    if(!reservations.isEmpty){
-      for(var i = 0 ; i < reservations.length ; i++){
-        String doctorname = await ApiMethods().getUserFullNameById(reservations[i].docteur_id); 
-        String patientname = await ApiMethods().getUserFullNameById(reservations[i].patient_id); 
-        names.add(
-          new UserFullNames(doctorfullname:doctorname , patientfullname: patientname )
-        );
-        print(names[i].doctorfullname);
-    }
-    }
   }
 
     
@@ -74,7 +61,6 @@ class _AccueilHomeState extends State<AccueilHome> {
       _setUsers();
       _setUserNumber();
       _getReservationList();
-      _setReservationToShow();
     }
 
 
@@ -127,7 +113,7 @@ class _AccueilHomeState extends State<AccueilHome> {
                             patientList: _patientList,
                             )),
                     ),
-                      ReservationList(reservations: reservations , names: names),
+                      ReservationList(reservations: reservations ),
                       const SizedBox(height: 16),
                       ],
                     ),
