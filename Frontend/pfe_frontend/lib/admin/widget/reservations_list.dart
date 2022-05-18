@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/accueil/Screens/Reservations/Reservation_layout.dart';
+import 'package:pfe_frontend/accueil/models/reservation.dart';
+import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 
 class ReservationList extends StatefulWidget {
-  const ReservationList({ Key? key }) : super(key: key);
+  final List<Reservation> reservations;
+  final List<UserFullNames> names ;
+  const ReservationList({ Key? key , required this.reservations ,required this.names }) : super(key: key);
 
   @override
   State<ReservationList> createState() => _ReservationListState();
@@ -20,9 +24,6 @@ class _ReservationListState extends State<ReservationList> {
         )
     );
   }
-
-  
-  
   
   @override
   Widget build(BuildContext context) {
@@ -89,32 +90,20 @@ class _ReservationListState extends State<ReservationList> {
             DataColumn(label: Text("Patient")),
             DataColumn(label: Text("Docteur")),
             DataColumn(label: Text("Date")),
-            DataColumn(label: Text("heure")),
-          ],
+            DataColumn(label: Text("heure debut")),
+            DataColumn(label: Text("heure fin")),
+          ] ,
           rows: [
-            DataRow(cells: [
-              DataCell(Text('Patient1')),
-              DataCell(Text('Doctor1')),
-              DataCell(Text('"28/02/2022"')),
-              DataCell(Text('"16:00"')),
-            ]),
-            DataRow(cells: [
-              DataCell(Text('Patient2')),
-              DataCell(Text('Doctor2')),
-              DataCell(Text('"28/02/2022"')),
-              DataCell(Text('"16:00"')),
-            ]),DataRow(cells: [
-              DataCell(Text('Patient3')),
-              DataCell(Text('Doctor3')),
-              DataCell(Text('"28/02/2022"')),
-              DataCell(Text('"16:00"')),
-            ]),
-            DataRow(cells: [
-              DataCell(Text('Patient4')),
-              DataCell(Text('Doctor4')),
-              DataCell(Text('"28/02/2022"')),
-              DataCell(Text('"16:00"')),
-            ])
+            if((!widget.reservations.isEmpty)&&(!widget.names.isEmpty))
+              for( var i = 0 ; i < 4; i++ ) 
+               DataRow(cells: [
+                DataCell(Text(widget.names[i].patientfullname)),
+                DataCell(Text(widget.names[i].doctorfullname)),
+                DataCell(Text(widget.reservations[i].dateRendezvous)),
+                DataCell(Text(widget.reservations[i].startTime.substring(0,5))),
+                DataCell(Text(widget.reservations[i].startTime.substring(0,5))),
+              ]),
+            
           ],),
           ),
           ),

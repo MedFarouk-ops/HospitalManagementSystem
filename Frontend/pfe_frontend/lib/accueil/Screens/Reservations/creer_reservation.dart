@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'dart:io' show Platform;
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
+import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:pfe_frontend/authentication/utils/utils.dart';
 
 class CreateReservation extends StatefulWidget {
   
@@ -22,6 +25,45 @@ class CreateReservation extends StatefulWidget {
 }
 
 class _CreateReservationState extends State<CreateReservation> {
+    bool _isLoading = false ;
+
+    void setStateIfMounted(f) {
+    if (mounted) setState(f);
+    }
+     void creerReservations() async {
+          setStateIfMounted(() {
+              _isLoading = true;
+            });
+          _setIds();
+          String result = await ApiMethods().createReservation(dateRendezvous: dateRendezvous,
+                                         starttime: starttimeCtl.text,
+                                         endtime: endtimeCtl.text,
+                                         patient_id: _patient_id,
+                                         docteur_id: _docteur_id,);
+           setStateIfMounted(() {
+              _isLoading = false;
+          });
+          if(result != "success"){
+              showSnackBar("une erreur est survenue , veuillez réessayer !", context);
+          }
+          else{
+              showSnackBar("reservation creer avec success !", context);
+          }
+          
+    }
+
+
+
+  TimeOfDay stringToTimeOfDay(String tod) {
+    final format = DateFormat.jm(); //"6:00 AM"
+    return TimeOfDay.fromDateTime(format.parse(tod));
+  }
+
+  _setIds(){
+    _patient_id = widget.patientslist[widget.patientslist.indexWhere((p) => p.first_name + " " + p.last_name == patient_full_name)].getUserId();
+    _docteur_id = widget.docteurslist[widget.docteurslist.indexWhere((d) => d.first_name + " " + d.last_name == doctor_full_name)].getUserId();
+  }
+
 
   Client client = http.Client();
   
@@ -37,12 +79,15 @@ class _CreateReservationState extends State<CreateReservation> {
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
-  DateTime? dateRendezvous;
-  TimeOfDay? startTime;
-  TimeOfDay? endTime ;
-  int? patient_id;
-  int? docteur_id;
+  DateTime dateRendezvous = DateTime.now();
+  TimeOfDay startTime = TimeOfDay(hour: 15, minute: 0);
+  TimeOfDay endTime = TimeOfDay(hour: 15, minute: 0);
+  int _patient_id = 0;
+  int _docteur_id = 0;
   bool? disponible; 
+
+  String? patient_full_name = "";
+  String? doctor_full_name = "";
 
 
   @override
@@ -157,8 +202,13 @@ class _CreateReservationState extends State<CreateReservation> {
                   contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
                   border: OutlineInputBorder(),
                 ),
-                onChanged: print,
                 selectedItem: "-",
+                onChanged:(String? data) {
+                    setState(() {
+                    patient_full_name = data;
+                    }
+                  );
+                },
                 popupProps: PopupProps.bottomSheet(
                   searchFieldProps: TextFieldProps(
                     padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -207,7 +257,12 @@ class _CreateReservationState extends State<CreateReservation> {
                   contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
                   border: OutlineInputBorder(),
                 ),
-                onChanged: print,
+                onChanged: (String? data) {
+                    setState(() {
+                    doctor_full_name = data;
+                    }
+                  );
+                },
                 selectedItem: "-",
                 popupProps: PopupProps.bottomSheet(
                   searchFieldProps: TextFieldProps(
@@ -251,21 +306,22 @@ class _CreateReservationState extends State<CreateReservation> {
               ),
               Divider(),
 
-
-
-
-
             Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                          );
+                        print(_patient_id);
+                        print(_docteur_id);
+                        creerReservations();
+
                         }
                       },
-                    child: const Text('Enregistrer'),
+                    child:  Container(
+                            child: _isLoading ? Center(child: CircularProgressIndicator(
+                              color: primaryColor,
+                            ),)
+                      : const Text('Enregistrer'),),
                     ),
                   ),
             ],

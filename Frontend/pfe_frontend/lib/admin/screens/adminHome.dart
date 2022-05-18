@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pfe_frontend/accueil/models/reservation.dart';
+import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/screens/DoctorScreens/doctor_list.dart';
 import 'package:pfe_frontend/admin/screens/PatientScreens/patient_list.dart';
 import 'package:pfe_frontend/admin/utils/userListScroller.dart';
@@ -14,6 +16,8 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
+    List<UserFullNames> names = [];
+
 
 
  // redirection de l'utilisateur : 
@@ -57,6 +61,26 @@ class _AdminHomeState extends State<AdminHome> {
   Future<bool> _onWillPop() => Future.value(false);
 
   // ************************************************ // 
+  
+
+  List<Reservation> reservations = [];
+
+  void setStateIfMounted(f) {
+      if (mounted) setState(f);
+    }
+     
+    _getReservationList() async {
+    reservations = await ApiMethods().getReservationList();
+    setStateIfMounted(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+      _getReservationList();
+
+  }
 
 
 
@@ -95,7 +119,7 @@ class _AdminHomeState extends State<AdminHome> {
                           height: categoryHeight,
                           child: UserListScroller()),
                     ),
-                    ReservationList(),
+                    ReservationList(reservations: reservations , names: []),
                     const SizedBox(height: 16),
                     ReceptionActivityList(),
                     const SizedBox(height: 16),

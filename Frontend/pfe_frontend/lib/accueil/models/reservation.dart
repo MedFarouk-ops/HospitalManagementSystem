@@ -3,9 +3,9 @@ import 'package:pfe_frontend/authentication/models/user.dart';
 
 class Reservation{
   final int id;
-  final DateTime dateRendezvous;
-  final TimeOfDay startTime;
-  final TimeOfDay endTime ;
+  final String dateRendezvous;
+  final String startTime;
+  final String endTime ;
   final int patient_id;
   final int docteur_id;
   final bool disponible; 
@@ -32,7 +32,7 @@ class Reservation{
  factory Reservation.fromJson(Map<String, dynamic> json) {
     return Reservation(
       id : json['id'],
-      dateRendezvous: json['dateRendezvous'],
+      dateRendezvous : json['date'],
       startTime : json['startTime'],
       endTime : json['endTime'],
       patient_id : json['patient'],
@@ -41,4 +41,13 @@ class Reservation{
     );
   }
  
+}
+
+class UserFullNames{
+  final String patientfullname;
+  final String doctorfullname;
+  const UserFullNames({
+    required this.patientfullname,
+    required this.doctorfullname,
+  });
 }

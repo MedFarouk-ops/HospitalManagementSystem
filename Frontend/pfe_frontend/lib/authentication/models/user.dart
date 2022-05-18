@@ -25,6 +25,7 @@ class User{
   });
 
   Map<String , dynamic> toJson() => {
+            'id':id,
             'username' : username,
             'email' : email,
             'first_name' : first_name,
@@ -47,6 +48,10 @@ class User{
       role : json['role'],
       email: json['email'],
     );
+  }
+
+  int getUserId(){
+    return this.id;
   }
  
 }

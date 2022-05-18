@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/accueil/utils/accueilUserListScroller.dart';
 import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/utils/userListScroller.dart';
@@ -17,16 +18,38 @@ class AccueilHome extends StatefulWidget {
 
 class _AccueilHomeState extends State<AccueilHome> {
   
-  
+
     int? _numberOfDoctor;
     int? _numberOfPatient;
     List<User> _patientList = [];
     List<User> _doctorList = [];
+    List<Reservation> reservations = [];
+    List<UserFullNames> names = [];
+
+
 
   
     void setStateIfMounted(f) {
       if (mounted) setState(f);
     }
+     
+    _getReservationList() async {
+    reservations = await ApiMethods().getReservationList();
+    setStateIfMounted(() {});
+  }
+   _setReservationToShow() async {
+    if(!reservations.isEmpty){
+      for(var i = 0 ; i < reservations.length ; i++){
+        String doctorname = await ApiMethods().getUserFullNameById(reservations[i].docteur_id); 
+        String patientname = await ApiMethods().getUserFullNameById(reservations[i].patient_id); 
+        names.add(
+          new UserFullNames(doctorfullname:doctorname , patientfullname: patientname )
+        );
+        print(names[i].doctorfullname);
+    }
+    }
+  }
+
     
 
     _setUsers() async {
@@ -38,7 +61,7 @@ class _AccueilHomeState extends State<AccueilHome> {
       setStateIfMounted(() {});
     }
 
-    setUserNumber() async {
+    _setUserNumber() async {
       final prefs = await SharedPreferences.getInstance(); 
       _numberOfPatient = prefs.getInt("NumberOfpatients");
       _numberOfDoctor = prefs.getInt("NumberOfdoctors");
@@ -49,7 +72,9 @@ class _AccueilHomeState extends State<AccueilHome> {
       // TODO: implement initState
       super.initState();
       _setUsers();
-      setUserNumber();
+      _setUserNumber();
+      _getReservationList();
+      _setReservationToShow();
     }
 
 
@@ -60,7 +85,7 @@ class _AccueilHomeState extends State<AccueilHome> {
     final double categoryHeight = size.height*0.30;
     
     
-    if(_numberOfPatient == 0){
+    if(reservations.isEmpty){
           return const Scaffold( body : Center(
             child : CircularProgressIndicator()
       ),);
@@ -102,7 +127,7 @@ class _AccueilHomeState extends State<AccueilHome> {
                             patientList: _patientList,
                             )),
                     ),
-                      ReservationList(),
+                      ReservationList(reservations: reservations , names: names),
                       const SizedBox(height: 16),
                       ],
                     ),

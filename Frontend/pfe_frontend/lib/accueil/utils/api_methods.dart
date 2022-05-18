@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart' ;
 import 'dart:io' show Platform;
@@ -6,38 +7,11 @@ import 'dart:io' show Platform;
 
 
 import 'package:flutter/foundation.dart';
+import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 
 class ApiMethods {
-
-      // static Future<HttpRequest> postFormData(String url, Map<String, String> data,
-      //     {bool? withCredentials,
-      //     String? responseType,
-      //     Map<String, String>? requestHeaders,
-      //     void onProgress(ProgressEvent e)?}) {
-      //   var parts = [];
-      //   data.forEach((key, value) {
-      //     parts.add('${Uri.encodeQueryComponent(key)}='
-      //         '${Uri.encodeQueryComponent(value)}');
-      //   });
-      //   var formData = parts.join('&');
-
-      //   if (requestHeaders == null) {
-      //     requestHeaders = <String, String>{};
-      //   }
-      //   requestHeaders.putIfAbsent('Content-Type',
-      //       () => 'application/x-www-form-urlencoded; charset=UTF-8');
-
-      //   return HttpRequest.request(url,
-      //       method: 'POST',
-      //       withCredentials: withCredentials,
-      //       responseType: responseType,
-      //       requestHeaders: requestHeaders,
-      //       sendData: formData,
-      //       onProgress: onProgress);
-      // }
-
 
       Future<List<User>> getDoctors() async {
         List response ;
@@ -82,4 +56,121 @@ class ApiMethods {
         }
           return patientList ;
         }
+
+        /******************************************************************************************************************* */
+
+
+         Future<String> createReservation({
+            required DateTime dateRendezvous,required String starttime,
+            required String endtime , required int patient_id,
+            required int docteur_id,
+          }) async { 
+            String res = "some error occured";
+            late http.Response response;
+            print('creation en cours ......');
+
+            if (kIsWeb) {
+                response = await http.post(Uri.parse("$serverUrl/api/reservations/create/") , body: {
+                "date" : dateRendezvous.toString().substring(0,9),
+                "startTime" :starttime,
+                "endTime" :endtime, 
+                "description" :  ' no description for now',
+                "patient" : patient_id.toString(),
+                "docteur" : docteur_id.toString() , 
+                "disponible" : "True"
+              }); 
+
+            } else if(Platform.isAndroid) {
+            response = await http.post(Uri.parse("$mobileServerUrl/api/reservations/create/") , body: {
+                "date" : dateRendezvous.toString().substring(0,9),
+                "startTime" :starttime,
+                "endTime" :endtime, 
+                "description" :  ' no description for now',
+                "patient" : patient_id.toString(),
+                "docteur" : docteur_id.toString() , 
+                "disponible" : "True"
+              }); 
+          } 
+        
+          if (response.statusCode == 200) {
+          // If the server did return a 201 CREATED response,
+              res = "success" ; 
+              return res;
+          } 
+          else { 
+            print("erreur .............");
+            return res;
+          }
+        }
+        /******************************************************************************************************************* */
+
+        Future<List<Reservation>> getReservationList() async {
+            List response ;
+            List<Reservation> reservationsList = [];
+            Client client = http.Client();
+            // si l'application est lancée dans le web ( navigateur ) : 
+            if (kIsWeb) {
+              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/reservations/"))).body);
+              response.forEach((element) {
+                reservationsList.add(Reservation.fromJson(element));
+              });
+            }
+            // si l'application est lancée sur mobile ( android )
+            else if(Platform.isAndroid) {
+              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/reservations/"))).body);
+              response.forEach((element) {
+                reservationsList.add(Reservation.fromJson(element));
+              });        
+          }
+          return reservationsList ;
+        }
+
+       /******************************************************************************************************************* */
+      
+      Future<User> getUserById(int id) async {
+        List response ;
+        List<User> users = [];
+        Client client = http.Client();
+        // si l'application est lancée dans le web ( navigateur ) : 
+        if (kIsWeb) {
+          response = json.decode((await client.get(Uri.parse("${serverUrl}/adminapp/users/$id"))).body);
+          response.forEach((element) {
+          users.add(User.fromJson(element));
+            });
+          }
+          // si l'application est lancée sur mobile ( android )
+
+          else if(Platform.isAndroid) {
+            response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/adminapp/users/$id"))).body);
+            response.forEach((element) {
+              users.add(User.fromJson(element));
+            });
+          }
+          return users[0];
+      }
+
+
+    Future<String> getUserFullNameById(int id) async {
+        List response ;
+        User user;
+        Client client = http.Client();
+        // si l'application est lancée dans le web ( navigateur ) : 
+        // if (kIsWeb) {
+        //   response = json.decode((await client.get(Uri.parse("${serverUrl}/adminapp/users/$id"))).body);
+        //   response.forEach((element) {
+        //   users.add(User.fromJson(element));
+        //     });
+        //   }
+          // si l'application est lancée sur mobile ( android )
+
+          // else
+          //  if(Platform.isAndroid) {
+             user = User.fromJson(json.decode((await client.get(Uri.parse("http://10.0.2.2:8000/adminapp/users/$id"))).body));
+
+          // }
+          String fullname = user.first_name + " " + user.last_name ;
+          return fullname;
+      }
+
+
 } 
