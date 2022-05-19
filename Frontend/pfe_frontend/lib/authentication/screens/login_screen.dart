@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailField = TextEditingController();
   TextEditingController _passwordField = TextEditingController();
   late SharedPreferences s_prefs;
-  bool _isAuth = false ;
+  bool? _isAuth = false ;
   bool isAuthenticated = false ;
   bool _isLoading = false ;
   User? _user;

@@ -14,7 +14,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   late SharedPreferences s_prefs;
-  bool _isAuth = false ;
+  bool? _isAuth = false ;
 
   
   _checkAuth() async {
@@ -63,29 +63,6 @@ class _AuthScreenState extends State<AuthScreen> {
   
   @override
   Widget build(BuildContext context) {
-     if(_isAuth){
-      return Scaffold(
-      // appBar: AppBar(
-      //   title: Center(),
-      //   elevation: 0,
-      //   backgroundColor: Colors.lightBlue,
-      // ),
-      body: RefreshIndicator(onRefresh: () async{
-        },
-        child : Column(
-          crossAxisAlignment : CrossAxisAlignment.stretch,
-          children : [
-            Padding(
-              padding:const EdgeInsets.only(top : 10, bottom: 10) ,
-              child: Text(" user is logged in !! "
-              , textAlign: TextAlign.center
-              ,style: TextStyle(color:Colors.black),),
-              ),
-          ],
-        )
-      ),
-      );
-    }
      return Scaffold(
       appBar: AppBar(
         title: Center(),

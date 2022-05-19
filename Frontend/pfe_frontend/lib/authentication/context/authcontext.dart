@@ -173,8 +173,8 @@ class AuthContext {
   Future<userModel.User> getUserDetails() async {
     SharedPreferences s_prefs = await SharedPreferences.getInstance();
     s_prefs = await SharedPreferences.getInstance();
-    List<String> authtokens = s_prefs.getStringList("authTokens");
-    Map<String, dynamic> payload = Jwt.parseJwt(authtokens[0]);  
+    List<String>? authtokens = s_prefs.getStringList("authTokens");
+    Map<String, dynamic> payload = Jwt.parseJwt(authtokens![0]);  
     User? currentUser  = User(
         id: payload['user_id'],
         email: payload['email'] ,

@@ -49,9 +49,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   late SharedPreferences s_prefs;
-  bool _isAuth = false ;
+  bool? _isAuth = false ;
   User? _user ; 
-
+  List<String>? authtokens;
   
   _checkAuth() async {
     s_prefs = await SharedPreferences.getInstance();
@@ -66,8 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
   _initializeUser() async {
     s_prefs = await SharedPreferences.getInstance();
     if(s_prefs.getBool("isAuthenticated") == true){
-      List<String> authtokens = s_prefs.getStringList("authTokens");
-      Map<String, dynamic> payload = Jwt.parseJwt(authtokens[0]);
+      authtokens = s_prefs.getStringList("authTokens");
+      Map<String, dynamic> payload = Jwt.parseJwt(authtokens![0]);
       print(authtokens);
       _user = User(
         id: payload['user_id'],
@@ -95,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
   
   @override
   Widget build(BuildContext context) {
-    if(_isAuth){
+    if(_isAuth ?? !(authtokens!.isEmpty) ){
       return Scaffold(
       body: HomeScreen() ,
     );

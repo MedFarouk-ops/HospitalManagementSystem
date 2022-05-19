@@ -18,7 +18,7 @@ class Ordonnance{
     required this.docteur_id,
     required this.created,
     required this.updated,
-  });
+  }); 
 
   Map<String , dynamic> toJson() => {
             'description' : description,
@@ -42,7 +42,7 @@ class Ordonnance{
 }
 
 
-class Radio{
+class RadioData{
   final int id;
   final String description;
   final String donnees;
@@ -51,7 +51,7 @@ class Radio{
   final String updated;
   final String created;
 
-  const Radio({
+  const RadioData({
     required this.id,
     required this.description , 
     required this.donnees,
@@ -68,8 +68,8 @@ class Radio{
             'docteur' : docteur_id,
   };
 
- factory Radio.fromJson(Map<String, dynamic> json) {
-    return Radio(
+ factory RadioData.fromJson(Map<String, dynamic> json) {
+    return RadioData(
       id : json['id'],
       description : json['description'],
       donnees : json['donnee'],
@@ -81,8 +81,6 @@ class Radio{
   }
   
 }
-
-
 
 
 class Analyse{

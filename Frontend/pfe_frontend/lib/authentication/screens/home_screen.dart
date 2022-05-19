@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Client client = http.Client();
   late SharedPreferences s_prefs;
   User? _authuser;
-  bool _isAuth = false ;
+  bool? _isAuth = false ;
   @override
   void initState(){
     super.initState();
@@ -43,8 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
    _initializeUser() async {
     s_prefs = await SharedPreferences.getInstance();
     if(s_prefs.getBool("isAuthenticated") == true){
-      List<String> authtokens = s_prefs.getStringList("authTokens");
-      Map<String, dynamic> payload = Jwt.parseJwt(authtokens[0]);
+      List<String>? authtokens = s_prefs.getStringList("authTokens");
+      Map<String, dynamic> payload = Jwt.parseJwt(authtokens![0]);
       setState(() {
       _authuser = User(
         id: payload['user_id'],
