@@ -9,7 +9,8 @@ urlpatterns = [
     path('reservations/create/',views.createReservation),
     path('reservations/delete/<str:pk>/',views.deleteReserevation),
     path('reservations/update/<str:pk>/',views.updateReservation),
-    path('reservations/<int:pk>/',views.getUser),
+    path('reservations/<int:pk>/',views.getReservationById),
+    path('reservations/doctor/<int:pk>/',views.getReservationByDoctorId),
 
 
     # route api de la ordonnance : 
@@ -17,7 +18,7 @@ urlpatterns = [
     path('ordonnances/create/',views.createOrdonnance),
     path('ordonnances/delete/<str:pk>/',views.deleteOrdonnance),
     path('ordonnances/update/<str:pk>/',views.updateOrdonnace),
-    path('ordonnances/<int:pk>/',views.getUser),
+    path('ordonnances/<int:pk>/',views.getOrdonnanceById),
 
 
 
@@ -27,7 +28,7 @@ urlpatterns = [
     path('radios/create/',views.createRadio),
     path('radios/delete/<str:pk>/',views.deleteRadio),
     path('radios/update/<str:pk>/',views.updateRadio),
-    path('radios/<int:pk>/',views.getUser),
+    path('radios/<int:pk>/',views.getRadioById),
 
 
 
@@ -36,7 +37,15 @@ urlpatterns = [
     path('analyses/create/',views.createAnalyses),
     path('analyses/delete/<str:pk>/',views.deleteAnalyse),
     path('analyses/update/<str:pk>/',views.updateAnalyse),
-    path('analyses/<int:pk>/',views.getUser),
+    path('analyses/<int:pk>/',views.getAnalyseById),
+
+
+    # route api de consultaions : 
+    # path('consultations/',views.getAnalyses),
+    # path('consultations/create/',views.createAnalyses),
+    # path('consultations/delete/<str:pk>/',views.deleteAnalyse),
+    # path('consultations/update/<str:pk>/',views.updateAnalyse),
+    # path('consultations/<int:pk>/',views.getUser),
 
 
 ]

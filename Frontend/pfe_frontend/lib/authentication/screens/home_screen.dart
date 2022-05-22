@@ -9,6 +9,7 @@ import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:jwt_decode/jwt_decode.dart';
+import 'package:pfe_frontend/docteur/responsive/mobile_layout_screen.dart';
 import 'package:pfe_frontend/docteur/screens/docteurHome.dart';
 import 'package:pfe_frontend/infermier/screens/infermierHome.dart';
 import 'package:pfe_frontend/patient/screens/patientHome.dart';
@@ -91,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => const DocteurHome()
+        builder: (context) => const DoctorMobileResponiveLayout()
         )
     );
   }

@@ -29,15 +29,6 @@ class _ReservationListState extends State<ReservationList> {
     );
   }
 
- 
-
-  
-  Future<String?> _getUsername(int id) async {
-      String? keyValue;
-      keyValue =  await ApiMethods().getUserFullNameById(id);
-      return keyValue;  
-  }
-
   
   @override
   Widget build(BuildContext context) {
@@ -91,8 +82,8 @@ class _ReservationListState extends State<ReservationList> {
                         ),
                       ),
                     );
-                }, icon: Icon(Icons.more_vert),),
-              ],
+                  }, icon: Icon(Icons.more_vert),),
+                ],
               ),
           ),
         // Reservation Table Section : 

@@ -12,15 +12,14 @@ import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-class UserProfile extends StatefulWidget {
-  const UserProfile({ Key? key }) : super(key: key);
+class DoctorProfile extends StatefulWidget {
+  const DoctorProfile({ Key? key }) : super(key: key);
 
   @override
-  State<UserProfile> createState() => _UserProfileState();
+  State<DoctorProfile> createState() => _DoctorProfileState();
 }
 
-class _UserProfileState extends State<UserProfile> {
+class _DoctorProfileState extends State<DoctorProfile> {
 
   /******************************************************************************************************************************* */
   /******************************************************************************************************************************* */
@@ -169,12 +168,12 @@ class _UserProfileState extends State<UserProfile> {
         ],
       );
 
-  Widget buildUpgradeButton() => ButtonWidget(
+  Widget buildUpgradeButton() => SecondButtonWidget(
         text: 'Modifier',
         onClicked: () {},
       );
       
-    Widget buildLogoutButton() => ButtonWidget(
+    Widget buildLogoutButton() => SecondButtonWidget(
         text: 'Deconnecter',
         onClicked: () {
           AuthContext().logoutUser(context);

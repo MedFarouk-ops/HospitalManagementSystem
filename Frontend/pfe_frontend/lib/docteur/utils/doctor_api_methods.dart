@@ -8,10 +8,45 @@ import 'package:async/async.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_data.dart';
 
 class DoctorApiMethods{
+
+
+    // ***************************************************Partie reservation et consultation ************************************************//
+
+      Future<List<Reservation>> getDoctorTodayReservationList(int id) async {
+            List response ;
+            List<Reservation> reservationsList = [];
+            Client client = http.Client();
+            String apiUrl = "";
+            if (kIsWeb) { apiUrl = serverUrl ;}
+            else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+            response = json.decode((await client.get(Uri.parse("${apiUrl}/api/reservations/doctor/$id/"))).body);
+                response.forEach((element) {
+                if(Reservation.fromJson(element).dateRendezvous == DateTime.now().toString().substring(0,10) ){
+                  reservationsList.add(Reservation.fromJson(element));
+                }
+            });
+          return reservationsList ;
+        }
+
+         Future<List<Reservation>> getDoctorReservationList(int id) async {
+            List response ;
+            List<Reservation> reservationsList = [];
+            Client client = http.Client();
+            String apiUrl = "";
+            if (kIsWeb) { apiUrl = serverUrl ;}
+            else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+            response = json.decode((await client.get(Uri.parse("${apiUrl}/api/reservations/doctor/$id/"))).body);
+                response.forEach((element) {
+                  reservationsList.add(Reservation.fromJson(element));
+            });
+          return reservationsList ;
+        }
+
 
     
     // ************************************************* Partie Ordonnances *******************************************************/

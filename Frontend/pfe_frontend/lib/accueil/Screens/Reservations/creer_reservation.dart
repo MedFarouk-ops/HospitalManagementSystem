@@ -67,8 +67,7 @@ class _CreateReservationState extends State<CreateReservation> {
 
   Client client = http.Client();
   
-
-   // Create a global key that uniquely identifies the Form widget
+  // Create a global key that uniquely identifies the Form widget
   // and allows validation of the form.
   //
   TextEditingController dateCtl = TextEditingController();

@@ -45,6 +45,15 @@ def getReservationById(request , pk):
     serializer = ReservationSerializer( res , many = False)
     return Response(serializer.data)
 
+# get doctor reservation by doctor id : 
+
+@api_view([('GET')])
+def getReservationByDoctorId(request , pk):
+    reservations = Reservation.objects.all().filter(docteur_id = pk)
+    serializer = ReservationSerializer(reservations , many = True)
+    return Response(serializer.data)
+
+
 
 @api_view([('DELETE')])
 def deleteReserevation(request , pk):
@@ -208,5 +217,58 @@ def updateAnalyse(request , pk) :
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+
+
+
+# partie gestion des consultations : (docteur ( type = tout))  ******************************************************************************************** #
+
+# @api_view([('GET')])
+# def getAnalyses(request):
+#     analyses = Analyse.objects.all()
+#     serializer = AnalyseSerializer(analyses , many=True)
+#     return Response(serializer.data)
+
+# @api_view([('POST')])
+# def createAnalyses(request) : 
+#     thumbnail = request.FILES.get("image" ,False)
+#     info = json.loads(request.POST.get('data' , False))
+#     patient_id = info['patient']
+#     doctor_id = info['docteur']
+#     patient = User.objects.get(id = patient_id)
+#     doctor = User.objects.get(id = doctor_id)
+#     analyse = Analyse.objects.create(
+#         description = info['description'],
+#         donnee = thumbnail,
+#         patient = patient,
+#         docteur = doctor,
+#     )
+#     serializer = AnalyseSerializer(analyse , many=False)
+#     return Response(serializer.data)
+
+# @api_view([('GET')])
+# def getAnalyseById(request , pk):
+#     analyse = Analyse.objects.get(id = pk)
+#     serializer = AnalyseSerializer(analyse , many = False)
+#     return Response(serializer.data)
+
+
+# @api_view([('DELETE')])
+# def deleteAnalyse(request , pk):
+#     anls = Analyse.objects.get(id = pk)
+#     anls.delete()
+#     return Response("l'analyse a été supprimée avec success")
+
+
+# @api_view([('PUT')])
+# def updateAnalyse(request , pk) : 
+#     data = request.data
+#     als = Analyse.objects.get(id = pk)
+#     serializer = AnalyseSerializer(als , data=request.data)
+#     if serializer.is_valid():
+#         serializer.save()
+#     return Response(serializer.data)
+
+
 
 

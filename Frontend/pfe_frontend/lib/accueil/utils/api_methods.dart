@@ -71,7 +71,7 @@ class ApiMethods {
 
             if (kIsWeb) {
                 response = await http.post(Uri.parse("$serverUrl/api/reservations/create/") , body: {
-                "date" : dateRendezvous.toString().substring(0,9),
+                "date" : dateRendezvous.toString().substring(0,10),
                 "startTime" :starttime,
                 "endTime" :endtime, 
                 "description" :  ' no description for now',
@@ -82,7 +82,7 @@ class ApiMethods {
 
             } else if(Platform.isAndroid) {
             response = await http.post(Uri.parse("$mobileServerUrl/api/reservations/create/") , body: {
-                "date" : dateRendezvous.toString().substring(0,9),
+                "date" : dateRendezvous.toString().substring(0,10),
                 "startTime" :starttime,
                 "endTime" :endtime, 
                 "description" :  ' no description for now',
@@ -112,6 +112,7 @@ class ApiMethods {
             if (kIsWeb) {
               response = json.decode((await client.get(Uri.parse("${serverUrl}/api/reservations/"))).body);
               response.forEach((element) {
+                print(Reservation.fromJson(element).dateRendezvous);
                 reservationsList.add(Reservation.fromJson(element));
               });
             }
@@ -119,6 +120,7 @@ class ApiMethods {
             else if(Platform.isAndroid) {
               response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/reservations/"))).body);
               response.forEach((element) {
+                print(Reservation.fromJson(element).dateRendezvous);
                 reservationsList.add(Reservation.fromJson(element));
               });        
           }

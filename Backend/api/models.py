@@ -61,3 +61,18 @@ class Analyse(models.Model):
     def __str__(self):
         return self.description
 
+
+
+
+# class Consultation(models.Model):
+#     description = models.TextField()
+#     ordonnance =  models.ForeignKey(Ordonnance, on_delete=models.CASCADE ,  related_name="ordonnance_cons")
+#     radiodata =  models.ForeignKey(Ordonnance, on_delete=models.CASCADE ,  related_name="radio_cons")
+#     analysedata =  models.ForeignKey(Ordonnance, on_delete=models.CASCADE ,  related_name="analyse_cons")
+#     patient = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="patient_cons")
+#     docteur = models.ForeignKey(User, on_delete=models.CASCADE , related_name="docteur_cons")
+
+#     def __str__(self):
+#         return self.description
+
+
