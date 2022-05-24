@@ -26,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController  _addressField= TextEditingController();
   TextEditingController  _ageField= TextEditingController();
   TextEditingController  _genreField= TextEditingController();
+  TextEditingController  _mobileField= TextEditingController();
   bool _isLoading = false ;
   User? _user;
   late SharedPreferences s_prefs;
@@ -43,6 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _addressField.dispose();
     _ageField.dispose();
     _genreField.dispose();
+    _mobileField.dispose();
   }
   
 //*************************************************************************************************************************************** */
@@ -61,6 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 password: _passwordField.text,
                 username: _usernameField.text,
                 address: _addressField.text,
+                mobilenumber: _mobileField.text,
                 age: _ageField.text,
                 first_name: _firstnameField.text,
                 genre: _genreField.text,
@@ -431,6 +434,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ],
                             ),
                           ),
+
+                           Container(
+                            margin: EdgeInsets.symmetric(
+                              vertical: 10,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Numero de telephone",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                TextField(
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                  obscureText: false,
+                                  controller: _mobileField,
+                                  decoration: InputDecoration(
+                                    hintText: "Numero de telephone",
+                                    suffixIcon: Icon(
+                                      Icons.text_snippet_outlined,
+                                      color: Colors.black54,
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        15,
+                                      ),
+                                    ),
+                                    fillColor: Color(
+                                      0xfff3f3f4,
+                                    ),
+                                    filled: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
 
 
 

@@ -18,13 +18,14 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'username','first_name' , 'last_name' , 'address','role', 'genre' ,'age','departement','password']
+        fields = ['email', 'username','first_name' , 'last_name' ,'mobilenumber', 'address','role', 'genre' ,'age','departement','password']
 
     def validate(self, attrs):
         email = attrs.get('email', '')
         username = attrs.get('username', '')
         first_name = attrs.get('first_name', '')
         last_name = attrs.get('last_name', '')
+        mobilenumber = attrs.get('mobilenumber', '')
         address = attrs.get('address', '')
         genre = attrs.get('genre', '')
         age = attrs.get('age', '')

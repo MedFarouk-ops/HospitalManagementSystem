@@ -10,6 +10,7 @@ class UserSerializer(ModelSerializer):
                     'username',
                     'first_name' ,
                     'last_name' ,
+                    'mobilenumber',
                     'address',
                     'role',
                     'genre',

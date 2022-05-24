@@ -1,11 +1,12 @@
 import json
 from math import radians
+from pydoc import doc
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from api.models import Reservation,Analyse,Radio,Ordonnance
-from api.serializers import AnalyseSerializer, OrdonnanceSerializer, RadioSerializer, ReservationSerializer
+from api.models import Consultation, Reservation,Analyse,Radio,Ordonnance
+from api.serializers import AnalyseSerializer, ConsultationSerializer, OrdonnanceSerializer, RadioSerializer, ReservationSerializer
 from authapp.models import User
 from adminapp.views import getUser
 
@@ -223,52 +224,45 @@ def updateAnalyse(request , pk) :
 
 # partie gestion des consultations : (docteur ( type = tout))  ******************************************************************************************** #
 
-# @api_view([('GET')])
-# def getAnalyses(request):
-#     analyses = Analyse.objects.all()
-#     serializer = AnalyseSerializer(analyses , many=True)
-#     return Response(serializer.data)
+# partie gestion de reservation : (accueil)  ******************************************************************************************** #
 
-# @api_view([('POST')])
-# def createAnalyses(request) : 
-#     thumbnail = request.FILES.get("image" ,False)
-#     info = json.loads(request.POST.get('data' , False))
-#     patient_id = info['patient']
-#     doctor_id = info['docteur']
-#     patient = User.objects.get(id = patient_id)
-#     doctor = User.objects.get(id = doctor_id)
-#     analyse = Analyse.objects.create(
-#         description = info['description'],
-#         donnee = thumbnail,
-#         patient = patient,
-#         docteur = doctor,
-#     )
-#     serializer = AnalyseSerializer(analyse , many=False)
-#     return Response(serializer.data)
+@api_view([('GET')])
+def getConsultations(request):
+    consultations = Consultation.objects.all()
+    serializer = ConsultationSerializer(consultations , many=True)
+    return Response(serializer.data)
 
-# @api_view([('GET')])
-# def getAnalyseById(request , pk):
-#     analyse = Analyse.objects.get(id = pk)
-#     serializer = AnalyseSerializer(analyse , many = False)
-#     return Response(serializer.data)
+@api_view([('POST')])
+def createConsultation(request) : 
+    data = request.data 
+    # getting the id onf the objects:
 
+    patient_id = data['patient']
+    doctor_id = data['docteur']
+    ordonnance_id = data['ordonnanceData'],
+    radio_data_id = data['radioData'],
+    analyse_data_id = data['analyseData'],
 
-# @api_view([('DELETE')])
-# def deleteAnalyse(request , pk):
-#     anls = Analyse.objects.get(id = pk)
-#     anls.delete()
-#     return Response("l'analyse a été supprimée avec success")
+    # getting object by the id : 
 
+    patient = User.objects.get(id = patient_id)
+    doctor = User.objects.get(id = doctor_id)
+    ordonnance_data = Ordonnance.objects.get(id = ordonnance_id)
+    radio_data = Radio.objects.get(id = radio_data_id)
+    analyse_data = Analyse.objects.get(id = analyse_data_id)
+    consultation = Consultation.objects.create(
+        description = data['description'],
+        ordonnance = ordonnance_data ,
+        radiodata =  radio_data,
+        analysedata = analyse_data, 
+        patient = patient,
+        docteur = doctor,
+    ),
+    serializer = ReservationSerializer(consultation , many=False)
+    return Response(serializer.data)
 
-# @api_view([('PUT')])
-# def updateAnalyse(request , pk) : 
-#     data = request.data
-#     als = Analyse.objects.get(id = pk)
-#     serializer = AnalyseSerializer(als , data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#     return Response(serializer.data)
-
-
-
-
+@api_view([('GET')])
+def getConsultaionById(request , pk):
+    res = Reservation.objects.get(id = pk)
+    serializer = ReservationSerializer( res , many = False)
+    return Response(serializer.data)

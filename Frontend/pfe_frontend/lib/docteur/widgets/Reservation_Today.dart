@@ -8,13 +8,17 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:pfe_frontend/accueil/Screens/Reservations/Reservation_layout.dart';
 import 'package:pfe_frontend/accueil/models/reservation.dart';
+import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
+import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:http/http.dart' as http;
-import 'package:pfe_frontend/docteur/screens/partie_reservations/doctor_reservation_layout.dart';
+import 'package:pfe_frontend/docteur/screens/partie_reservations/all_reservations_list.dart';
+import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 
 class TodayReservationLayout extends StatefulWidget {
+  
   final List<Reservation> reservations;
   const TodayReservationLayout({Key? key , required this.reservations}) : super(key: key);
 
@@ -30,6 +34,7 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    _getReservationList();
   }
 
   @override
@@ -37,13 +42,25 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
     super.dispose();
     _controller.dispose();
   }
+   List<Reservation> doctorReservations = [];  
+  
+    void setStateIfMounted(f) {
+      if (mounted) setState(f);
+    }     
+  
+    _getReservationList() async {
+      User user = await AuthContext().getUserDetails();
+      print(user.first_name);
+      doctorReservations = await DoctorApiMethods().getDoctorReservationList(user.id);
+      setStateIfMounted(() {});
+    }
 
 
   _navigateToReservations(){
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) =>  DoctorReservationLayout()
+        builder: (context) =>  DoctorAllReservationList(reservations: doctorReservations)
         )
     );
   }
@@ -74,7 +91,7 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text( "Rendez vous d'aujourd'hui : " , style: TextStyle(fontWeight: FontWeight.bold , fontSize: 20 ),)
+                      Text( "Rendez-vous d'aujourd'hui : " , style: TextStyle(fontWeight: FontWeight.bold , fontSize: 20 ),)
                     ],
                   ),
                  ),
@@ -86,7 +103,7 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
                         padding: const EdgeInsets.symmetric(vertical:16 ),
                         shrinkWrap: true,
                         children: [
-                          "Voir tous les reservations",
+                          "Voir tous les Rendez-vous",
                         ].map((e) => InkWell(
                           onTap: () {
                             _navigateToReservations();
@@ -105,15 +122,17 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
                 ],
               ),
           ),
-        // Reservation Table Section : 
+        // Reservation Table Section :
+       
       SingleChildScrollView(
       scrollDirection: Axis.vertical,
         child: FittedBox(
-          child:DataTable(
+          child: (widget.reservations.isEmpty) ? Text(" Pas de rendez-vous aujoud'hui" , style: TextStyle(fontSize: 18 , fontWeight: FontWeight.bold, color: AdminColorSix)) :
+          DataTable(
           columns: [
-            DataColumn(label: Text("Patient" , style: TextStyle(fontSize: 18),)),
-            DataColumn(label: Text("debut" , style: TextStyle(fontSize: 18),)),
-            DataColumn(label: Text("fin" , style: TextStyle(fontSize: 18),)),
+            DataColumn(label: Text("Patient" , style: TextStyle(fontSize: 15),)),
+            DataColumn(label: Text("Heure debut" , style: TextStyle(fontSize: 15),)),
+            DataColumn(label: Text("heure fin" , style: TextStyle(fontSize: 15),)),
           ] ,
           rows: [
 
@@ -125,19 +144,19 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
                                 builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                   if (snapshot.hasData) {
                                       if (snapshot.data!.statusCode != 200) {
-                                        return Text('Failed to load the data!' , style: TextStyle(fontSize: 18));
+                                        return Text('Failed to load the data!' , style: TextStyle(fontSize: 15));
                                       } else {
-                                        return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  , style: TextStyle(fontSize: 18));
+                                        return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  , style: TextStyle(fontSize: 15));
                                       }
                                     } else if (snapshot.hasError) {
-                                      return Text('Failed to make a request!' ,style: TextStyle(fontSize: 18));
+                                      return Text('Failed to make a request!' ,style: TextStyle(fontSize: 15));
                                     } else {
-                                      return Text('Chargement ...' , style: TextStyle(fontSize: 18));
+                                      return Text('Chargement ...' , style: TextStyle(fontSize: 15));
                                     }
                                 },
                 ),),
-                DataCell(Text(widget.reservations[i].startTime.substring(0,5) , style: TextStyle(fontSize: 18))),
-                DataCell(Text(widget.reservations[i].endTime.substring(0,5) , style: TextStyle(fontSize: 18) )),
+                DataCell(Text(widget.reservations[i].startTime.substring(0,5) , style: TextStyle(fontSize: 15))),
+                DataCell(Text(widget.reservations[i].endTime.substring(0,5) , style: TextStyle(fontSize: 15) )),
               ],),
 
               if(!(widget.reservations.isEmpty)&&(widget.reservations.length <4))
@@ -149,20 +168,20 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                       if (snapshot.hasData) {
                                           if (snapshot.data!.statusCode != 200) {
-                                            return Text('Failed to load the data!' ,style: TextStyle(fontSize: 18));
+                                            return Text('Failed to load the data!' ,style: TextStyle(fontSize: 15));
                                           } else {
-                                            return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name , style: TextStyle(fontSize: 18) );
+                                            return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name , style: TextStyle(fontSize: 15) );
                                           }
                                         } else if (snapshot.hasError) {
-                                          return Text('Failed to make a request!' , style: TextStyle(fontSize: 18));
+                                          return Text('Failed to make a request!' , style: TextStyle(fontSize: 15));
                                         } else {
-                                          return Text('Chargement ...' ,style: TextStyle(fontSize: 18));
+                                          return Text('Chargement ...' ,style: TextStyle(fontSize: 15));
                                         }
                                     },
                           ),
                       ),
-                    DataCell(Text(widget.reservations[i].startTime.substring(0,5) , style: TextStyle(fontSize: 18))),
-                    DataCell(Text(widget.reservations[i].endTime.substring(0,5) ,  style: TextStyle(fontSize: 18))),
+                    DataCell(Text(widget.reservations[i].startTime.substring(0,5) , style: TextStyle(fontSize: 15))),
+                    DataCell(Text(widget.reservations[i].endTime.substring(0,5) ,  style: TextStyle(fontSize: 15))),
                   ]),
                   
           ],),

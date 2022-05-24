@@ -10,14 +10,14 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
-import 'package:pfe_frontend/docteur/models/doctor_api_data.dart';
+import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 
 class DoctorApiMethods{
 
 
     // ***************************************************Partie reservation et consultation ************************************************//
 
-      Future<List<Reservation>> getDoctorTodayReservationList(int id) async {
+        Future<List<Reservation>> getDoctorTodayReservationList(int id) async {
             List response ;
             List<Reservation> reservationsList = [];
             Client client = http.Client();
@@ -51,8 +51,7 @@ class DoctorApiMethods{
     
     // ************************************************* Partie Ordonnances *******************************************************/
     
-
-        Future<String> creerOrdonnance(File imageFile , String descr ,int patient_id , int docteur_id , ) async {
+      Future<String> creerOrdonnance(File imageFile , String descr ,int patient_id , int docteur_id , ) async {
         
         String apiServerUrl = "";
           if (kIsWeb) {apiServerUrl = serverUrl ; }
@@ -89,10 +88,6 @@ class DoctorApiMethods{
         }
 
  
-
-
-
-
         Future<List<Ordonnance>> getOrdonnanceList() async {
             List response ;
             List<Ordonnance> ordonnancesList = [];
@@ -115,9 +110,6 @@ class DoctorApiMethods{
         }
 
 
-
-
-
       Future<Ordonnance> getOrdonnanceById(int id) async {
         List response ;
         List<Ordonnance> ordonnances = [];
@@ -130,7 +122,6 @@ class DoctorApiMethods{
             });
           }
           // si l'application est lancée sur mobile ( android )
-
           else if(Platform.isAndroid) {
             response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/$id"))).body);
             response.forEach((element) {
@@ -142,23 +133,6 @@ class DoctorApiMethods{
     
     // ************************************************* Partie Analyses *******************************************************/
     
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       
         Future<List<Analyse>> getAnalysesList() async {
             List response ;
@@ -209,21 +183,6 @@ class DoctorApiMethods{
     
     // ************************************************* Partie Radios *******************************************************/
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         Future<List<RadioData>> getRadioList() async {
             List response ; 

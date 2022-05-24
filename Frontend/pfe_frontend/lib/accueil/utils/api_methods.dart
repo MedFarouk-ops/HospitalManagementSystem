@@ -152,27 +152,4 @@ class ApiMethods {
       }
 
 
-    Future<String> getUserFullNameById(int id) async {
-        List response ;
-        User user;
-        Client client = http.Client();
-        // si l'application est lancée dans le web ( navigateur ) : 
-        // if (kIsWeb) {
-        //   response = json.decode((await client.get(Uri.parse("${serverUrl}/adminapp/users/$id"))).body);
-        //   response.forEach((element) {
-        //   users.add(User.fromJson(element));
-        //     });
-        //   }
-          // si l'application est lancée sur mobile ( android )
-
-          // else
-          //  if(Platform.isAndroid) {
-             user = User.fromJson(json.decode((await client.get(Uri.parse("http://10.0.2.2:8000/adminapp/users/$id"))).body));
-
-          // }
-          String fullname = user.first_name + " " + user.last_name ;
-          return fullname;
-      }
-
-
 } 

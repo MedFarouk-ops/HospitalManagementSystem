@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/accueil/models/reservation.dart';
+import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/widget/reservations_list.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
@@ -17,23 +18,22 @@ class DocteurHome extends StatefulWidget {
 }
 
 class _DocteurHomeState extends State<DocteurHome> {
-  
 
-  
-    List<Reservation> todayReservations = [];
+    List<Reservation> todayReservations = [];  
+    List<Reservation> reservations = [];  
   
     void setStateIfMounted(f) {
       if (mounted) setState(f);
-    }
-     
+    }     
+  
     _getReservationList() async {
-    User user = await AuthContext().getUserDetails();
-    print(user.first_name);
-    todayReservations = await DoctorApiMethods().getDoctorTodayReservationList(user.id);
-    print(todayReservations.length);
-    setStateIfMounted(() {});
-  }
-
+      User user = await AuthContext().getUserDetails();
+      print(user.first_name);
+      todayReservations = await DoctorApiMethods().getDoctorTodayReservationList(user.id);
+      reservations = await DoctorApiMethods().getDoctorReservationList(user.id);
+      print(todayReservations.length);
+      setStateIfMounted(() {});
+    }
     @override
     void initState() {
       // TODO: implement initState
@@ -41,20 +41,17 @@ class _DocteurHomeState extends State<DocteurHome> {
       _getReservationList();
     }
 
-
-  
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight = size.height*0.30;
-
-    if(todayReservations.isEmpty){
+    
+    if(reservations.isEmpty){
           return const Scaffold( body : Center(
             child : CircularProgressIndicator()
       ),);
     }
-
 
     return Scaffold(
       backgroundColor: thirdAdminColor,
@@ -85,7 +82,6 @@ class _DocteurHomeState extends State<DocteurHome> {
                           alignment: Alignment.topCenter,
                           height: categoryHeight,
                           child: DoctorCustomListScroller(),
-
                       )),
                       TodayReservationLayout(reservations: todayReservations ),
                       const SizedBox(height: 16),

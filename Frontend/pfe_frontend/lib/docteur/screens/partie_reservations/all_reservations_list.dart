@@ -10,6 +10,8 @@ import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:http/http.dart' as http;
+import 'package:pfe_frontend/docteur/utils/constant.dart';
+import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
 
 
 
@@ -39,81 +41,145 @@ class _DoctorAllReservationListState extends State<DoctorAllReservationList>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-      decoration: BoxDecoration(color : primaryColor , borderRadius: BorderRadius.all(Radius.circular(8.0)) ),
-      padding: const EdgeInsets.symmetric(
-        vertical: 10
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AdminColorSix,
+        centerTitle: true,
+        title: Text(
+              'Liste de Reservations',
+              textAlign: TextAlign.center,
+              style: kTitleStyle2,
+            ),
       ),
-      child : Column(
-        children: [
-          // Header Section : 
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 4,
-              horizontal: 16,
-            ).copyWith(right: 0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                  padding: const EdgeInsets.only(left: 8,),
-                  child : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text( " ----------------------------------------------------------------- " , style: TextStyle(fontWeight: FontWeight.bold,),)
-                    ],
-                  ),
-                 ),
-                ),
-                
-              ],
-              ),
-          ),
-        // Reservation Table Section : 
-        SingleChildScrollView(
-         scrollDirection: Axis.vertical,
-          child: FittedBox(
-            child:DataTable(
-          columns: [
-            DataColumn(label: Text("Patient")),
-            DataColumn(label: Text("Date")),
-            DataColumn(label: Text("heure debut")),
-            DataColumn(label: Text("heure fin")),
-          ] ,
-          rows: [
-              if(!widget.reservations.isEmpty)
-              for( var i = 0 ; i <widget.reservations.length ; i++ ) 
-               DataRow(cells: [
-                DataCell(
-                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}")) ,
-                                builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+      body: Padding(
+        padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: widget.reservations.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin:  EdgeInsets.zero,
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: NetworkImage('https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png'),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[index].patient_id}")) ,
+                                  builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                   if (snapshot.hasData) {
                                       if (snapshot.data!.statusCode != 200) {
                                         return Text('Failed to load the data!');
                                       } else {
-                                        return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name );
+                                        return Text( "   " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name );
                                       }
                                     } else if (snapshot.hasError) {
                                       return Text('Failed to make a request!');
                                     } else {
                                       return Text('Loading');
                                     }
-                                },
-                  )
-                  
-                  ),
-                DataCell(Text(widget.reservations[i].dateRendezvous)),
-                DataCell(Text(widget.reservations[i].startTime.substring(0,5))),
-                DataCell(Text(widget.reservations[i].startTime.substring(0,5))),
-              ]),
-            
-          ],),
-          ),
-          ),
-        ],
+                                  },
+                                )
+                                   ,
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[index].patient_id}")) ,
+                                    builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                    if (snapshot.hasData) {
+                                        if (snapshot.data!.statusCode != 200) {
+                                          return Text('Failed to load the data!' , style : TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                        } else {
+                                          return Text( "    " + User.fromJson(json.decode((snapshot.data!.body))).mobilenumber ,style : TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ), );
+                                        }
+                                      } else if (snapshot.hasError) {
+                                        return Text('Failed to make a request!');
+                                      } else {
+                                        return Text('Loading');
+                                      }
+                                    },
+                                  ),
+
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          DateTimeCard(Date: widget.reservations[index].dateRendezvous, starttime: widget.reservations[index].startTime.substring(0,5), endtime: widget.reservations[index].endTime.substring(0,5)),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style:  ElevatedButton.styleFrom(
+                                          primary: Colors.green,
+                                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
+                                  child: Text('Voir Details'),
+                                  onPressed: () => {},
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+           
+          ],
         ),
-        );
+      ),
+    );
   }
+  
 }
+
+ 
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

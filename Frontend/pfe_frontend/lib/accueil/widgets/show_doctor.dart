@@ -65,8 +65,7 @@ class _PublicDoctorShowState extends State<PublicDoctorShow> {
           Center(
             child:Wrap(
             children: [
-              buildCallButton(),
-              buildUpgradeButton(),
+              buildCallButton(widget.user.mobilenumber),
             ],
           ),
           ),
@@ -92,15 +91,10 @@ class _PublicDoctorShowState extends State<PublicDoctorShow> {
         ],
       );
 
-  Widget buildUpgradeButton() => ButtonWidget(
-        text: 'Modifier',
-        onClicked: () {},
-      );
 
-
-  Widget buildCallButton() => ButtonWidget(
+  Widget buildCallButton(String phone) => ButtonWidget(
         text: 'Appeler',
-        onClicked: () => launch("tel://55706653"),
+        onClicked: () => launch("tel://$phone"),
       );
 
   _returnToDashboard(){

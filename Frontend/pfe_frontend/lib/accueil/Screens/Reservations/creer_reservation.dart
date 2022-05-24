@@ -84,9 +84,19 @@ class _CreateReservationState extends State<CreateReservation> {
   int _patient_id = 0;
   int _docteur_id = 0;
   bool? disponible; 
-
   String? patient_full_name = "";
   String? doctor_full_name = "";
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    dateCtl.dispose();
+    starttimeCtl.dispose();
+    endtimeCtl.dispose();
+    patientCtl.dispose();
+    docteurCtl.dispose();
+  }
 
 
   @override

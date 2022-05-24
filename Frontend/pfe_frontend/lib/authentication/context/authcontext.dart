@@ -19,7 +19,7 @@ class AuthContext {
 
     List<String> authTokens = [];
 
-    User user = User(id:0 ,email: "", first_name: "", last_name: "", address: "", age: "", genre: "", role: "", username: "");
+    User user = User(id:0 ,email: "", first_name: "", last_name: "", address: "", mobilenumber: "0", age: "", genre: "", role: "", username: "");
 
     // final loading = useState(true);
     
@@ -74,6 +74,7 @@ class AuthContext {
                       first_name: payload['nom'],
                       last_name: payload['prenom'], 
                       address: payload['address'], 
+                      mobilenumber: payload['mobilenumber'] ,
                       age: payload['age'], 
                       genre: payload['genre'], 
                       role: payload['role'], 
@@ -106,7 +107,7 @@ class AuthContext {
     Future<User> signUpUser({
       required String email,required String password,
       required String username,required String first_name,
-      required String last_name,required String address,
+      required String last_name,required String address, required String mobilenumber,
       required String age,required String role,
       required String genre,
     }) async { 
@@ -126,6 +127,7 @@ class AuthContext {
             'first_name' : first_name , 
             'last_name' : last_name,
             'address' : address , 
+            'mobilenumber' : mobilenumber , 
             'age' : age , 
             'role' : role ,
             'genre' : genre , 
@@ -144,6 +146,7 @@ class AuthContext {
           'first_name' : first_name , 
           'last_name' : last_name,
           'address' : address , 
+          'mobilenumber' : mobilenumber , 
           'age' : age , 
           'role' : role ,
           'genre' : genre , 
@@ -174,18 +177,25 @@ class AuthContext {
     SharedPreferences s_prefs = await SharedPreferences.getInstance();
     s_prefs = await SharedPreferences.getInstance();
     List<String>? authtokens = s_prefs.getStringList("authTokens");
-    Map<String, dynamic> payload = Jwt.parseJwt(authtokens![0]);  
-    User? currentUser  = User(
+    Map<String, dynamic> payload = Jwt.parseJwt(authtokens![0]); 
+    User currentUser = User(id:0 ,email: "", first_name: "", last_name: "", address: "", mobilenumber: "0", age: "", genre: "", role: "", username: "");
+    try{
+      currentUser  = User(
+        role: payload["role"], 
         id: payload['user_id'],
         email: payload['email'] ,
         first_name: payload['nom'],
         last_name: payload['prenom'], 
         address: payload['address'], 
+        mobilenumber: payload['mobilenumber'] ,
         age: payload['age'], 
         genre: payload['genre'], 
-        role: payload['role'], 
-        username: payload['username']
+        username: payload['username'],
         );
+    }on Exception catch (_) {
+      print('error occured');
+    }
+
     return currentUser;
   }
 

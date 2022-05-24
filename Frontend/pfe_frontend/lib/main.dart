@@ -67,7 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
     s_prefs = await SharedPreferences.getInstance();
     if(s_prefs.getBool("isAuthenticated") == true){
       authtokens = s_prefs.getStringList("authTokens");
+      String access = authtokens![0];
       Map<String, dynamic> payload = Jwt.parseJwt(authtokens![0]);
+      print(payload);
       print(authtokens);
       _user = User(
         id: payload['user_id'],
@@ -75,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
         first_name: payload['nom'],
         last_name: payload['prenom'], 
         address: payload['address'], 
+        mobilenumber: payload['mobilenumber'],
         age: payload['age'], 
         genre: payload['genre'], 
         role: payload['role'], 

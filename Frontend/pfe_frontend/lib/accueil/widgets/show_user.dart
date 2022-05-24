@@ -64,7 +64,7 @@ class _PublicUserShowState extends State<PublicUserShow> {
           Center(
             child:Wrap(
             children: [
-              buildCallButton(),
+              buildCallButton(widget.user.mobilenumber),
               buildUpgradeButton(),
             ],
           ),
@@ -96,11 +96,10 @@ class _PublicUserShowState extends State<PublicUserShow> {
         onClicked: () {},
       );
       
-  Widget buildCallButton() => ButtonWidget(
+  Widget buildCallButton(String mobile) => ButtonWidget(
         text: 'Appeler',
-        onClicked:  () => launch("tel://55706653"),
+        onClicked:  () => launch("tel://$mobile"),
       );
-
 
   _returnToDashboard(){
       Navigator.of(context)
@@ -111,7 +110,6 @@ class _PublicUserShowState extends State<PublicUserShow> {
       );
   }
   
-
   Widget buildAbout(User user) => Container(
         padding: EdgeInsets.symmetric(horizontal: 48),
         child: Column(
@@ -141,7 +139,11 @@ class _PublicUserShowState extends State<PublicUserShow> {
               user.last_name,
               style: TextStyle(fontSize: 16, height: 1.4),
             ),
-            
+            const SizedBox(height: 16),
+            Text( "telephone : " + 
+              user.mobilenumber,
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
             const SizedBox(height: 16),
             Text( "age : " + 
               user.age,

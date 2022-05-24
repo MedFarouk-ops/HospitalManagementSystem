@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
 import 'package:pfe_frontend/accueil/utils/api_methods.dart';
+import 'package:pfe_frontend/accueil/utils/internet_widgets.dart';
 import 'package:pfe_frontend/accueil/widgets/publicDoctorListScreen.dart';
 import 'package:pfe_frontend/accueil/widgets/publicPatientListScreen.dart';
 import 'package:pfe_frontend/admin/utils/StatefulWrapper.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:pfe_frontend/docteur/screens/partie_consultations/consultation_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DoctorCustomListScroller extends StatefulWidget {
@@ -17,7 +19,14 @@ class DoctorCustomListScroller extends StatefulWidget {
 class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
 
     
-  
+  _navigateToConsultationLayout(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const ConsultationLayout()
+        )
+    );
+  }
 
 
   @override
@@ -68,7 +77,9 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
                 ),
               ),),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  _navigateToConsultationLayout();
+                },
                 child:Container(
                 width: miniWidgetWidth,
                 margin: EdgeInsets.only(right: 20),

@@ -183,6 +183,14 @@ class _UserShowState extends State<UserShow> {
               user.age,
               style: TextStyle(fontSize: 16, height: 1.4),
             ),
+
+            const SizedBox(height: 16),
+            Text( "telephone : " + 
+              user.mobilenumber,
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
+
+
             const SizedBox(height: 16),
             Text( "address : " + 
               user.address,

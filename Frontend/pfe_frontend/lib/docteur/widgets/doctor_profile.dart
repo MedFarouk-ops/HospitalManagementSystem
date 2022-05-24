@@ -29,6 +29,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
      first_name: "", 
      last_name: "", 
      address: "", 
+     mobilenumber: "0",
      age: "", 
      genre: "", 
      role: "", 
@@ -165,8 +166,8 @@ class _DoctorProfileState extends State<DoctorProfile> {
             user.email,
             style: TextStyle(color: Colors.grey),
           )
-        ],
-      );
+      ],
+  );
 
   Widget buildUpgradeButton() => SecondButtonWidget(
         text: 'Modifier',

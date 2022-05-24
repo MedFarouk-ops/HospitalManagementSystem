@@ -8,6 +8,7 @@ class User{
   final String first_name ;
   final String last_name;
   final String address;
+  final String mobilenumber;
   final String age; 
   final genre ; 
   final role ; 
@@ -18,6 +19,7 @@ class User{
     required this.first_name,
     required this.last_name,
     required this.address,
+    required this.mobilenumber,
     required this.age,
     required this.genre,
     required this.role,    
@@ -30,6 +32,7 @@ class User{
             'email' : email,
             'first_name' : first_name,
             'last_name' : last_name,
+            'mobilenumber' : mobilenumber,
             'address' : address,
             'age' : age,
             'genre' : genre,
@@ -43,6 +46,7 @@ class User{
       first_name : json['first_name'],
       last_name : json['last_name'],
       address : json['address'],
+      mobilenumber : json['mobilenumber'],
       age : json['age'],
       genre : json['genre'],
       role : json['role'],

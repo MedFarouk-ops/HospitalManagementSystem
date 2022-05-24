@@ -49,13 +49,9 @@ class _AccueilUserListScrollerState extends State<AccueilUserListScroller> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final double categoryHeight = MediaQuery.of(context).size.height * 0.30 - 50;
-
- 
-
+    final double categoryHeight = MediaQuery.of(context).size.height * 0.30 - 50; 
     return Container(
       child:  SingleChildScrollView(
       physics: BouncingScrollPhysics(),
