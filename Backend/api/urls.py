@@ -41,11 +41,11 @@ urlpatterns = [
 
 
     # route api de consultaions : 
-    # path('consultations/',views.getAnalyses),
-    # path('consultations/create/',views.createAnalyses),
-    # path('consultations/delete/<str:pk>/',views.deleteAnalyse),
-    # path('consultations/update/<str:pk>/',views.updateAnalyse),
-    # path('consultations/<int:pk>/',views.getUser),
+    path('consultations/',views.getAnalyses),
+    path('consultations/create/',views.createConsultation),
+    path('consultations/delete/<str:pk>/',views.deleteAnalyse),
+    path('consultations/update/<str:pk>/',views.updateAnalyse),
+    path('consultations/<int:pk>/',views.getUser),
 
 
 ]

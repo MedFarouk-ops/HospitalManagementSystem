@@ -49,11 +49,12 @@ class _DocteurHomeState extends State<DocteurHome> {
     
     if(reservations.isEmpty){
           return const Scaffold( body : Center(
-            child : CircularProgressIndicator()
+            child : CircularProgressIndicator(color: AdminColorSix,)
       ),);
     }
 
     return Scaffold(
+
       backgroundColor: thirdAdminColor,
       body: SafeArea(
         child: Container(
@@ -80,11 +81,17 @@ class _DocteurHomeState extends State<DocteurHome> {
                           duration: const Duration(milliseconds: 200),
                           width: size.width,
                           alignment: Alignment.topCenter,
-                          height: categoryHeight,
-                          child: DoctorCustomListScroller(),
+                          height: categoryHeight*2.4,
+                          child: Column(children: [
+                            DoctorCustomListScroller(),
+                            DoctorSecondListScroller(),
+                            DoctorThirdListScroller(),
+                            DoctorFourthListScroller()
+                          ],) 
                       )),
+                      // const SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       TodayReservationLayout(reservations: todayReservations ),
-                      const SizedBox(height: 16),
                       ],
                     ),
                   ],

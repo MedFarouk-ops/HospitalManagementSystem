@@ -235,30 +235,25 @@ def getConsultations(request):
 @api_view([('POST')])
 def createConsultation(request) : 
     data = request.data 
+    
     # getting the id onf the objects:
 
     patient_id = data['patient']
     doctor_id = data['docteur']
     ordonnance_id = data['ordonnanceData'],
-    radio_data_id = data['radioData'],
-    analyse_data_id = data['analyseData'],
 
     # getting object by the id : 
 
     patient = User.objects.get(id = patient_id)
     doctor = User.objects.get(id = doctor_id)
     ordonnance_data = Ordonnance.objects.get(id = ordonnance_id)
-    radio_data = Radio.objects.get(id = radio_data_id)
-    analyse_data = Analyse.objects.get(id = analyse_data_id)
     consultation = Consultation.objects.create(
         description = data['description'],
         ordonnance = ordonnance_data ,
-        radiodata =  radio_data,
-        analysedata = analyse_data, 
         patient = patient,
         docteur = doctor,
     ),
-    serializer = ReservationSerializer(consultation , many=False)
+    serializer = ConsultationSerializer(consultation , many=False)
     return Response(serializer.data)
 
 @api_view([('GET')])

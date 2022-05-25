@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/accueil/utils/internet_widgets.dart';
+import 'package:pfe_frontend/authentication/context/authcontext.dart';
+import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/screens/partie_consultations/cree_consultation.dart';
+import 'package:pfe_frontend/docteur/screens/partie_consultations/patient_selections/patient_select_type.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
+import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 
 class ConsultationLayout extends StatefulWidget {
   const ConsultationLayout({Key? key}) : super(key: key);
@@ -15,31 +20,43 @@ class ConsultationLayout extends StatefulWidget {
 class _ConsultationLayoutState extends State<ConsultationLayout> {
   FilterStatus status = FilterStatus.Upcoming;
   Alignment _alignment = Alignment.centerLeft;
-
   List<Consultation> consultations = [] ; 
-  Consultation cons = Consultation(id: 1, description: "hello", patient_id: 5, docteur_id: 5, ordonnance_id: 4, analysedata_id: 2, radiodata_id: 2, created: "Date", updated: "updated");
+  List<Reservation> reservations = [];  
+  void setStateIfMounted(f) {
+      if (mounted) setState(f);
+    }     
   
+    _getReservationList() async {
+      User user = await AuthContext().getUserDetails();
+      print(user.first_name);
+      reservations = await DoctorApiMethods().getDoctorReservationList(user.id);
+      setStateIfMounted(() {});
+    }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    consultations.add(cons);
-    setState(() {
-      
-    });
+    _getReservationList();
   }
 
   _navigateToCreateConsultation(){
      Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) =>  const CreerConsultation()
+        builder: (context) =>  SelectionnerPatient(reservations: reservations,)
         )
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    if(reservations.isEmpty){
+          return const Scaffold( body : Center(
+            child : CircularProgressIndicator(color: AdminColorSix,)
+      ),);
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AdminColorSix,
@@ -61,6 +78,11 @@ class _ConsultationLayoutState extends State<ConsultationLayout> {
             SizedBox(
               height: 20,
             ),
+            if(consultations.isEmpty)
+            
+
+
+
             Expanded(
               child: ListView.builder(
                 itemCount: consultations.length,

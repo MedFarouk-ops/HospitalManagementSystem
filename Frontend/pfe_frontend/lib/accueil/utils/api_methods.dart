@@ -133,20 +133,14 @@ class ApiMethods {
         List response ;
         List<User> users = [];
         Client client = http.Client();
-        // si l'application est lancée dans le web ( navigateur ) : 
-        if (kIsWeb) {
-          response = json.decode((await client.get(Uri.parse("${serverUrl}/adminapp/users/$id"))).body);
-          response.forEach((element) {
-          users.add(User.fromJson(element));
-            });
+         // si l'application est lancée dans le web ( navigateur ) : 
+          if (kIsWeb) {
+          users.add(User.fromJson(json.decode((await client.get(Uri.parse("${serverUrl}/adminapp/users/$id"))).body)));
           }
           // si l'application est lancée sur mobile ( android )
 
           else if(Platform.isAndroid) {
-            response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/adminapp/users/$id"))).body);
-            response.forEach((element) {
-              users.add(User.fromJson(element));
-            });
+              users.add(User.fromJson(json.decode((await client.get(Uri.parse("${mobileServerUrl}/adminapp/users/$id"))).body)));
           }
           return users[0];
       }

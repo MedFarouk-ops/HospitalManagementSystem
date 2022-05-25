@@ -44,7 +44,7 @@ class _DoctoMobilerResponiveLayoutState extends State<DoctorMobileResponiveLayou
                tabs: [
                  Tab(text: "Accueil",),
                  Tab(text: "Message",),
-                 Tab(text: "Profile",),
+                 Tab(text: "Presentation",),
                ],
                ),
            ),),
