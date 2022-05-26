@@ -12,9 +12,9 @@ import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 
 class CreerConsultation extends StatefulWidget {
-  // final  List<User> patientslist ;
+  final User patient ;
   const CreerConsultation({Key? key ,
-  // required this.patientslist
+  required this.patient
   }) : super(key: key);
 
   @override
@@ -47,9 +47,6 @@ class _CreerConsultationState extends State<CreerConsultation>
     description_cons.dispose();
     description_ord.dispose();
   }
-  //  _setIds(){
-  //   patient_id = widget.patientslist[widget.patientslist.indexWhere((p) => p.first_name + " " + p.last_name == patient_full_name)].getUserId();
-  // }
   
 
   @override
@@ -83,66 +80,21 @@ class _CreerConsultationState extends State<CreerConsultation>
           const SizedBox(height: 30),
           // Text("Commencer une nouvelle consultation ",maxLines: 20, style: TextStyle(fontSize: 16.0 ,fontWeight:FontWeight.bold,color: Colors.black) , ),
           Divider(),  
-          DropdownSearch<String>(
-                 items: [],
-                // widget.patientslist.map((patient) => patient.first_name +" " + patient.last_name ).toList(),
-                dropdownSearchDecoration: InputDecoration(
-                  labelText: "Selectionner un Patient",
-                  contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
-                  border: OutlineInputBorder(),
-                ),
-                selectedItem: "-",
-                onChanged:(String? data) {
-                    setState(() {
-                    patient_full_name = data;
-                    }
-                  );
-                },
-                popupProps: PopupProps.bottomSheet(
-                  searchFieldProps: TextFieldProps(
-                    padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                      labelText: "Rechercher ...",
-                    ),
-                  ),
-                  title: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColorDark,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Selectionner le patient : ',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  bottomSheetProps: BottomSheetProps(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24),
-                      ),
-                    ),
-                  ),
-                  showSearchBox: true,
-                ),
-              ),
+          
+           Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("Patient : "+ widget.patient!.first_name + " " + widget.patient!.last_name , style: TextStyle(color: AdminColorSix  , fontSize: 20),),
+                Divider(),
+                Text("age : "+ widget.patient!.age +" ans " , style: TextStyle(color: Colors.black  , fontSize: 20),),
+          ],),
+
+
           const SizedBox(height: 30),
         
           TextFormField(
             controller: description_cons,
-            decoration: InputDecoration(labelText: 'Description : '),
+            decoration: InputDecoration(labelText: 'Motif : '),
             validator: (value) {
               if (value!.isEmpty) {
                 return 'ce champ ne peut pas être vide';
@@ -151,11 +103,11 @@ class _CreerConsultationState extends State<CreerConsultation>
             },
           ),
           const SizedBox(height: 30),
-          Text("Ajouter une ordonnance ",maxLines: 20, style: TextStyle(fontSize: 16.0 ,fontWeight:FontWeight.bold,color: Colors.black) , ),
+          Text("Importer une ordonnance ",maxLines: 20, style: TextStyle(fontSize: 16.0 ,fontWeight:FontWeight.bold,color: Colors.black) , ),
         
           TextFormField(
             controller: description_cons,
-            decoration: InputDecoration(labelText: 'Description : '),
+            decoration: InputDecoration(labelText: 'Diagnostic : '),
             validator: (value) {
               if (value!.isEmpty) {
                 return 'ce champ ne peut pas être vide';
@@ -175,9 +127,12 @@ class _CreerConsultationState extends State<CreerConsultation>
               return null;
             },
           ),
+          const SizedBox(height: 30),
+          const SizedBox(height: 30),
           Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: ElevatedButton(
+                   style: ElevatedButton.styleFrom(primary: AdminColorSix),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                     // creer consultation //
@@ -189,8 +144,7 @@ class _CreerConsultationState extends State<CreerConsultation>
                         ),)
                     : const Text('Enregistrer'),),
                   ),
-                ),
-                
+                ),                
             ],           
         ),
       )],),)));

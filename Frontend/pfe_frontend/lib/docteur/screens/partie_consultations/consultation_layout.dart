@@ -62,7 +62,7 @@ class _ConsultationLayoutState extends State<ConsultationLayout> {
         backgroundColor: AdminColorSix,
         centerTitle: true,
         title: Text(
-              'Liste de Consultation',
+              'Liste des Consultations',
               textAlign: TextAlign.center,
               style: kTitleStyle2,
             ),
@@ -78,11 +78,13 @@ class _ConsultationLayoutState extends State<ConsultationLayout> {
             SizedBox(
               height: 20,
             ),
-            if(consultations.isEmpty)
-            
-
-
-
+          if(consultations.isEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("aucune consultation trouvée" , style: TextStyle(color: AdminColorSix ),)
+                 ],),
+                 
             Expanded(
               child: ListView.builder(
                 itemCount: consultations.length,

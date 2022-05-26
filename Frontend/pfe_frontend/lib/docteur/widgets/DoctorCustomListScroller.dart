@@ -9,6 +9,9 @@ import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/screens/partie_consultations/consultation_layout.dart';
+import 'package:pfe_frontend/docteur/screens/partie_ordonnance/ordonnance_layout.dart';
+import 'package:pfe_frontend/docteur/screens/partie_radiologie/clichee_image_radio/clichee_radio_layout.dart';
+import 'package:pfe_frontend/docteur/screens/partie_radiologie/compte_rendue_radio/radio_compte_rendue_layout.dart';
 import 'package:pfe_frontend/docteur/screens/partie_reservations/all_reservations_list.dart';
 import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,6 +55,9 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
         )
     );
   } 
+
+
+
 
   _navigateToResLayout(){
     Navigator.of(context)
@@ -169,6 +175,15 @@ class _DoctorSecondListScrollerState extends State<DoctorSecondListScroller> {
         )
     );
   }
+    _navigateToOrdonnanceLayout(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const OrdonnanceLayout()
+        )
+    );
+
+  }
 
 
   @override
@@ -224,7 +239,7 @@ class _DoctorSecondListScrollerState extends State<DoctorSecondListScroller> {
               ),),
               InkWell(
                 onTap: () {
-                  _navigateToConsultationLayout();
+                  _navigateToOrdonnanceLayout();
                 },
                 child:Container(
                 width: miniWidgetWidth,
@@ -285,6 +300,25 @@ class _DoctorThirdListScrollerState extends State<DoctorThirdListScroller> {
     );
   }
 
+  _navigateToRadioLayout(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => RadioCompteRendueLayout()
+        )
+    );
+  }
+
+   _navigateToRadioClicheeLayout(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => ClicheeRadioLayout()
+        )
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -306,7 +340,7 @@ class _DoctorThirdListScrollerState extends State<DoctorThirdListScroller> {
             children: <Widget>[
                InkWell(
                 onTap: () {
-                  _navigateToConsultationLayout();
+                  _navigateToRadioLayout();
                 },
                 child:Container(
                 width: miniWidgetWidth,
@@ -340,7 +374,7 @@ class _DoctorThirdListScrollerState extends State<DoctorThirdListScroller> {
 
         InkWell(
                 onTap: () {
-                  _navigateToConsultationLayout();
+                    _navigateToRadioClicheeLayout();
                 },
                 child:Container(
                 width: miniWidgetWidth,

@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:pfe_frontend/docteur/screens/partie_consultations/cree_consultation.dart';
 
 class SelectionPatientManuelle extends StatefulWidget {
   final List<User> patientList;
@@ -25,6 +26,15 @@ class _SelectionPatientManuelleState extends State<SelectionPatientManuelle>
     super.initState();
     _controller = AnimationController(vsync: this);
     print(widget.patientList.length);
+  }
+
+  _navigateToCreerConsultation(User usr1){
+     Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) =>  CreerConsultation(patient: usr1,)
+        )
+    );
   }
 
   @override
@@ -103,6 +113,9 @@ class _SelectionPatientManuelleState extends State<SelectionPatientManuelle>
                           title: Text(_foundUsers[index].first_name +" "+ _foundUsers[index].last_name),
                           subtitle: Text(
                               '${_foundUsers[index].age.toString()} years old'),
+                          onTap: () {
+                            _navigateToCreerConsultation(_foundUsers[index]);
+                          },
                         ),
                       ),
                     )
