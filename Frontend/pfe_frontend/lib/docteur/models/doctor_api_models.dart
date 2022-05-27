@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 
+class OrdonnanceData {
+  String description; 
+  int patient_id;
+  int docteur_id;
+  OrdonnanceData(this.description, this.docteur_id , this.patient_id);
+  Map toJson() {
+    return {'description' : description,
+            'patient' : patient_id,
+            'docteur' : docteur_id,};
+  }
+}
+
 class Ordonnance{
   final int id;
   final String description;
@@ -129,8 +141,6 @@ class Consultation{
   final int id;
   final String description;
   final int ordonnance_id;
-  final int radiodata_id;
-  final int analysedata_id;
   final int patient_id;
   final int docteur_id;
   final String updated;
@@ -142,8 +152,6 @@ class Consultation{
     required this.patient_id,
     required this.docteur_id,
     required this.ordonnance_id,
-    required this.analysedata_id,
-    required this.radiodata_id,
     required this.created,
     required this.updated,
   });
@@ -153,17 +161,13 @@ class Consultation{
             'patient' : patient_id,
             'docteur' : docteur_id,
             "ordonnance" : ordonnance_id,
-            "radiodata" : radiodata_id,
-            "analysedata" : analysedata_id
   };
   
  factory Consultation.fromJson(Map<String, dynamic> json) {
     return Consultation(
       id : json['id'],
       description : json['description'],
-      analysedata_id: json['analysedata'] ,
       ordonnance_id: json['ordonnance'],
-      radiodata_id: json['radiodata'],
       patient_id : json['patient'],
       docteur_id : json['docteur'],
       created : json['created'],

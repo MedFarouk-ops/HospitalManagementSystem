@@ -1,4 +1,4 @@
-import 'dart:convert';
+  import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart' ;
@@ -47,12 +47,58 @@ class DoctorApiMethods{
           return reservationsList ;
         }
 
+    // Consultations //
+
+     Future<String> creerConsultation({
+             required String description, required int ordonnance_id,required int patient_id,required int docteur_id,
+          }) async { 
+            String res = "some error occured";
+            late http.Response response;
+            print('creation en cours ......');
+
+            if (kIsWeb) {
+                response = await http.post(Uri.parse("$serverUrl/api/consultations/create/") , body: 
+                jsonEncode(<String, dynamic>{
+                  "description": description,
+                  "patient" :  patient_id , 
+                  "docteur" :  docteur_id ,
+                  "ordonnanceData" : ordonnance_id
+              }) , headers: { 'Content-Type':  "application/json" }
+              ); 
+
+            } else if(Platform.isAndroid) {
+              print("ord id dddddd = " );
+              print(ordonnance_id);
+
+            response = await http.post(Uri.parse("$mobileServerUrl/api/consultations/create/") , body: 
+              jsonEncode(<String, dynamic>{
+                "description": description,
+                "patient" :  patient_id , 
+                "docteur" :  docteur_id ,
+                "ordonnanceData" : ordonnance_id
+              }) , headers: { 'Content-Type':  "application/json" }
+              ); 
+          } 
+        
+          if (response.statusCode == 200) {
+          // If the server did return a 201 CREATED response,
+              res = "success" ; 
+              return res;
+          } 
+          else { 
+            print("erreur .............");
+            return res;
+          }
+        }
+
+
+
 
     
     // ************************************************* Partie Ordonnances *******************************************************/
     
-      Future<String> creerOrdonnance(File imageFile , String descr ,int patient_id , int docteur_id , ) async {
-        
+      Future<Ordonnance> creerOrdonnance(File imageFile , String descr ,int patient_id , int docteur_id , ) async {
+        Ordonnance ord = Ordonnance(id: 0, description: "", donnees: "", patient_id: 0, docteur_id: 0, created: "", updated: "") ; 
         String apiServerUrl = "";
           if (kIsWeb) {apiServerUrl = serverUrl ; }
           else if(Platform.isAndroid) { apiServerUrl = mobileServerUrl ; }
@@ -66,25 +112,31 @@ class DoctorApiMethods{
             // create multipart request
             var request = new http.MultipartRequest("POST", uri);
             // multipart that takes file
-            var multipartFile = new http.MultipartFile('file', stream, length,
+            var multipartFile = new http.MultipartFile("ordonnanceData", stream, length,
                 filename: basename(imageFile.path));
             // add file to multipart
             request.files.add(multipartFile);
-            request.fields["data"] = "{'description': $descr , 'patient': $patient_id , 'docteur' : $docteur_id }";
+
+            OrdonnanceData ordData = OrdonnanceData(descr, docteur_id, patient_id);
+
+            request.fields["data"] = jsonEncode(ordData);
             // send
             var response = await request.send();
             print(response.statusCode);
             //******************************************************************************** */ 
-            if(response.statusCode == 200){ resultat ="success" ;}
-            else { resultat = "some error occured"; }
-
+            if(response.statusCode == 200)
+            {
+              ord = Ordonnance.fromJson(jsonDecode(await response.stream.bytesToString()));
+              resultat = "success" ;}
+            else {
+              resultat = "some error occured";
+             }
             //******************************************************************************** */
-
             // listen for response
-            response.stream.transform(utf8.decoder).listen((value) {
-              print(value);
-            });
-          return resultat;
+            // response.stream.transform(utf8.decoder).listen((value) {
+            //   print(value);
+            // });
+          return ord;
         }
 
  

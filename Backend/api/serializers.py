@@ -31,5 +31,6 @@ class ConsultationSerializer(ModelSerializer):
     class Meta : 
         model = Consultation
         fields = '__all__'
+        
       
 

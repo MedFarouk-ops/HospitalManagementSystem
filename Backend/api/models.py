@@ -23,7 +23,7 @@ class Reservation(models.Model):
 
 class Ordonnance(models.Model):
     description = models.TextField()
-    donnee = models.ImageField(upload_to = "images/ordonnance/" , max_length = 255 , null = True , blank =True)
+    donnee = models.FileField( upload_to = "data/ordonnance-data/ordonnance-files/", null= True ,blank=True, default='')
     patient = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="patient_ord")
     docteur = models.ForeignKey(User, on_delete=models.CASCADE , related_name="docteur_ord")
     updated = models.DateTimeField(auto_now=True)
@@ -38,7 +38,7 @@ class Ordonnance(models.Model):
 
 class Radio(models.Model):
     description = models.TextField()
-    donnee = models.ImageField(upload_to = "images/radios/" , max_length = 255 , null = True , blank =True)
+    donnee = models.FileField( upload_to = "data/radio-data/radio-images/", null= True ,blank=True, default='')
     patient = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="patient_rad")
     docteur = models.ForeignKey(User, on_delete=models.CASCADE , related_name="docteur_rad")
     updated = models.DateTimeField(auto_now=True)
@@ -52,7 +52,7 @@ class Radio(models.Model):
 
 class Analyse(models.Model):
     description = models.TextField()
-    donnee = models.ImageField(upload_to = "images/analyses/" , max_length = 255 , null = True , blank =True)
+    donnee = models.FileField( upload_to = "data/analyse-data/analyse-files/", null= True ,blank=True, default='')
     patient = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="patient_anl")
     docteur = models.ForeignKey(User, on_delete=models.CASCADE , related_name="docteur_anl")
     updated = models.DateTimeField(auto_now=True)
@@ -62,10 +62,8 @@ class Analyse(models.Model):
         return self.description
 
 
-
-
 class Consultation(models.Model):
-    description = models.TextField()
+    consDescription = models.TextField()
     ordonnance =  models.ForeignKey(Ordonnance, on_delete=models.CASCADE ,  related_name="ordonnance_cons")
     patient = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="patient_cons")
     docteur = models.ForeignKey(User, on_delete=models.CASCADE , related_name="docteur_cons")
@@ -73,6 +71,5 @@ class Consultation(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.description
-
+        return self.consDescription
 

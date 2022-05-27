@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from api.models import Consultation, Reservation,Analyse,Radio,Ordonnance
-from api.serializers import AnalyseSerializer, ConsultationSerializer, OrdonnanceSerializer, RadioSerializer, ReservationSerializer
+from api.serializers import AnalyseSerializer, ConsultationSerializer, NewConsultationSerializer, OrdonnanceSerializer, RadioSerializer, ReservationSerializer
 from authapp.models import User
 from adminapp.views import getUser
 
@@ -83,7 +83,7 @@ def getOrdonnances(request):
 
 @api_view([('POST')])
 def createOrdonnance(request) :
-    thumbnail = request.FILES.get("image" ,False)
+    thumbnail = request.FILES.get("ordonnanceData" ,False)
     info = json.loads(request.POST.get('data' , False)) 
     patient_id = info['patient']
     doctor_id = info['docteur']
@@ -181,7 +181,7 @@ def getAnalyses(request):
 
 @api_view([('POST')])
 def createAnalyses(request) : 
-    thumbnail = request.FILES.get("image" ,False)
+    thumbnail = request.FILES.get("analysedata" ,False)
     info = json.loads(request.POST.get('data' , False))
     patient_id = info['patient']
     doctor_id = info['docteur']
@@ -237,10 +237,13 @@ def createConsultation(request) :
     data = request.data 
     
     # getting the id onf the objects:
-
+    description = data['description'] 
     patient_id = data['patient']
     doctor_id = data['docteur']
-    ordonnance_id = data['ordonnanceData'],
+    ordonnance_id_list = data['ordonnanceData'],
+    print(ordonnance_id_list[0])
+    print(description)
+    ordonnance_id = ordonnance_id_list[0]
 
     # getting object by the id : 
 
@@ -248,12 +251,13 @@ def createConsultation(request) :
     doctor = User.objects.get(id = doctor_id)
     ordonnance_data = Ordonnance.objects.get(id = ordonnance_id)
     consultation = Consultation.objects.create(
-        description = data['description'],
         ordonnance = ordonnance_data ,
         patient = patient,
         docteur = doctor,
-    ),
+        consDescription = description 
+    )
     serializer = ConsultationSerializer(consultation , many=False)
+    print(serializer.data)
     return Response(serializer.data)
 
 @api_view([('GET')])
