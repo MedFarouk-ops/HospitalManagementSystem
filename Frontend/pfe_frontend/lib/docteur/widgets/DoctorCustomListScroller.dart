@@ -8,6 +8,7 @@ import 'package:pfe_frontend/admin/utils/StatefulWrapper.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/screens/partie_consultations/consultation_layout.dart';
 import 'package:pfe_frontend/docteur/screens/partie_ordonnance/ordonnance_layout.dart';
 import 'package:pfe_frontend/docteur/screens/partie_radiologie/clichee_image_radio/clichee_radio_layout.dart';
@@ -17,7 +18,9 @@ import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DoctorCustomListScroller extends StatefulWidget {
-  const DoctorCustomListScroller({ Key? key ,   }) : super(key: key);
+  final List<Reservation> doctorReservations;
+
+  const DoctorCustomListScroller({ Key? key , required this.doctorReservations   }) : super(key: key);
 
   @override
   State<DoctorCustomListScroller> createState() => _DoctorCustomListScrollerState();
@@ -27,35 +30,15 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
 
     
   
-  List<Reservation> doctorReservations = [];  
-  
     void setStateIfMounted(f) {
       if (mounted) setState(f);
     }     
   
-    _getReservationList() async {
-      User user = await AuthContext().getUserDetails();
-      print(user.first_name);
-      doctorReservations = await DoctorApiMethods().getDoctorReservationList(user.id);
-      setStateIfMounted(() {});
-    }
 
      @override
     void initState() {
       super.initState();
-      _getReservationList();
     }
-
-
-  _navigateToConsultationLayout(){
-    Navigator.of(context)
-    .push(
-      MaterialPageRoute(
-        builder: (context) => const ConsultationLayout()
-        )
-    );
-  } 
-
 
 
 
@@ -63,7 +46,7 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => DoctorAllReservationList(reservations: doctorReservations,)
+        builder: (context) => DoctorAllReservationList(reservations: widget.doctorReservations,)
         )
     );
   }
@@ -158,7 +141,9 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
 
 
 class DoctorSecondListScroller extends StatefulWidget {
-  const DoctorSecondListScroller({ Key? key ,   }) : super(key: key);
+  final List<Consultation> consList ; 
+  final List<Ordonnance> ordList ; 
+  const DoctorSecondListScroller({ Key? key , required this.consList , required this.ordList }) : super(key: key);
 
   @override
   State<DoctorSecondListScroller> createState() => _DoctorSecondListScrollerState();
@@ -171,7 +156,7 @@ class _DoctorSecondListScrollerState extends State<DoctorSecondListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => const ConsultationLayout()
+        builder: (context) => ConsultationLayout(consultations: widget.consList,)
         )
     );
   }
@@ -179,7 +164,7 @@ class _DoctorSecondListScrollerState extends State<DoctorSecondListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => const OrdonnanceLayout()
+        builder: (context) =>  OrdonnanceLayout(ordonnances: widget.ordList,)
         )
     );
 
@@ -291,14 +276,6 @@ class DoctorThirdListScroller extends StatefulWidget {
 class _DoctorThirdListScrollerState extends State<DoctorThirdListScroller> {
 
     
-  _navigateToConsultationLayout(){
-    Navigator.of(context)
-    .push(
-      MaterialPageRoute(
-        builder: (context) => const ConsultationLayout()
-        )
-    );
-  }
 
   _navigateToRadioLayout(){
     Navigator.of(context)
@@ -428,16 +405,7 @@ class DoctorFourthListScroller extends StatefulWidget {
 
 class _DoctorFourthListScrollerState extends State<DoctorFourthListScroller> {
 
-    
-  _navigateToConsultationLayout(){
-    Navigator.of(context)
-    .push(
-      MaterialPageRoute(
-        builder: (context) => const ConsultationLayout()
-        )
-    );
-  }
-
+  
 
   @override
   Widget build(BuildContext context) {
@@ -458,9 +426,7 @@ class _DoctorFourthListScrollerState extends State<DoctorFourthListScroller> {
           child:Row(
             children: <Widget>[
                InkWell(
-                onTap: () {
-                  _navigateToConsultationLayout();
-                },
+                onTap: () {},
                 child:Container(
                 width: miniWidgetWidth*2+12,
                 margin: EdgeInsets.only(right: 20),

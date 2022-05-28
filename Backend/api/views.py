@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from api.models import Consultation, Reservation,Analyse,Radio,Ordonnance
-from api.serializers import AnalyseSerializer, ConsultationSerializer, NewConsultationSerializer, OrdonnanceSerializer, RadioSerializer, ReservationSerializer
+from api.serializers import AnalyseSerializer, ConsultationSerializer, OrdonnanceSerializer, RadioSerializer, ReservationSerializer
 from authapp.models import User
 from adminapp.views import getUser
 
@@ -51,6 +51,12 @@ def getReservationById(request , pk):
 @api_view([('GET')])
 def getReservationByDoctorId(request , pk):
     reservations = Reservation.objects.all().filter(docteur_id = pk)
+    serializer = ReservationSerializer(reservations , many = True)
+    return Response(serializer.data)
+
+@api_view([('GET')])
+def getReservationByPatientId(request , pk):
+    reservations = Reservation.objects.all().filter(patient_id = pk)
     serializer = ReservationSerializer(reservations , many = True)
     return Response(serializer.data)
 
@@ -119,6 +125,22 @@ def updateOrdonnace(request , pk) :
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+# get doctor reservation by doctor id : 
+
+@api_view([('GET')])
+def getOrdonnanceByDoctorId(request , pk):
+    ordonnances = Ordonnance.objects.all().filter(docteur_id = pk)
+    serializer = OrdonnanceSerializer(ordonnances , many = True)
+    return Response(serializer.data)
+
+@api_view([('GET')])
+def getOrdonnanceByPatientId(request , pk):
+    ordonnances = Ordonnance.objects.all().filter(patient_id = pk)
+    serializer = OrdonnanceSerializer(ordonnances , many = True)
+    return Response(serializer.data)
+
+
 
 
 # partie gestion de radios : (docteur (type = radiologist))   ******************************************************************************************** #
@@ -264,4 +286,19 @@ def createConsultation(request) :
 def getConsultaionById(request , pk):
     res = Reservation.objects.get(id = pk)
     serializer = ReservationSerializer( res , many = False)
+    return Response(serializer.data)
+
+
+
+@api_view([('GET')])
+def getConsultationByDoctorId(request , pk):
+    consultations = Consultation.objects.all().filter(docteur_id = pk)
+    serializer = ConsultationSerializer(consultations , many = True)
+    return Response(serializer.data)
+
+
+@api_view([('GET')])
+def getConsultationByPatientId(request , pk):
+    consultations = Consultation.objects.all().filter(patient_id = pk)
+    serializer = ConsultationSerializer(consultations , many = True)
     return Response(serializer.data)

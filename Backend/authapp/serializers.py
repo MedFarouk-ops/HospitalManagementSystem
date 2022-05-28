@@ -18,7 +18,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'username','first_name' , 'last_name' ,'mobilenumber', 'address','role', 'genre' ,'age','departement','password']
+        fields = ['email', 'username','first_name' , 'last_name' ,'mobilenumber', 'address','role', 'specialite' ,'genre' ,'age','departement','password']
 
     def validate(self, attrs):
         email = attrs.get('email', '')
@@ -30,6 +30,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         genre = attrs.get('genre', '')
         age = attrs.get('age', '')
         role = attrs.get('role', '')
+        specialite = attrs.get('specialite', '')
         departement = attrs.get('departement', '')
         password = attrs.get('password', '')
         if not username.isalnum():

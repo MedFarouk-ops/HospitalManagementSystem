@@ -156,34 +156,42 @@ class _CreerConsultationState extends State<CreerConsultation>
 
           const SizedBox(height: 30),
         
-          TextFormField(
+          SizedBox( // <-- SEE HERE
+            width: 400,
+            height: 100,
+            child:TextFormField(
             controller: description_cons,
-            decoration: InputDecoration(labelText: 'Motif : '),
+            decoration: InputDecoration(labelText: 'Motif : ' , border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
+            maxLines: 2,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'ce champ ne peut pas être vide';
               }
               return null;
             },
-          ),
+          ),),
           const SizedBox(height: 30),
-          Text("Importer une ordonnance ",maxLines: 20, style: TextStyle(fontSize: 16.0 ,fontWeight:FontWeight.bold,color: Colors.black) , ),
-        
-          TextFormField(
+          Text("Ajouter une ordonnance ",maxLines: 20, style: TextStyle(fontSize: 16.0 ,fontWeight:FontWeight.bold,color: Colors.black) , ),
+          const SizedBox(height: 30),
+          SizedBox( // <-- SEE HERE
+            width: 400,
+            height: 100,
+            child:TextFormField(
             controller: description_ord,
-            decoration: InputDecoration(labelText: 'Diagnostic : '),
+            decoration: InputDecoration(labelText: 'Diagnostic : ' , border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)) ),
+            maxLines: 3,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'ce champ ne peut pas être vide';
               }
               return null;
             },
-          ),
+          ),),
           const SizedBox(height: 30),
         
           MaterialButton(
             onPressed: () {
-              if( file == null){ _pickFile(); }
+              _pickFile(); 
             },
             child: Text(
               "Choisir l`ordonnance pdf",
@@ -193,10 +201,15 @@ class _CreerConsultationState extends State<CreerConsultation>
           ),
           
           const SizedBox(height: 30),
-            TextFormField(
-            controller: file_name,
-            decoration: InputDecoration(labelText: 'fichier choisit : '),
-          ),
+            SizedBox( // <-- SEE HERE
+            width: 400,
+            height: 100,
+            child: TextFormField(
+                      enabled: false,
+                      controller: file_name,
+                      decoration: InputDecoration(labelText: 'fichier choisit : ' , border: OutlineInputBorder(borderRadius: BorderRadius.circular(2))),
+                      maxLines: 3,
+          ),),
           const SizedBox(height: 30),
           Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),

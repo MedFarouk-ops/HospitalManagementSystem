@@ -166,7 +166,7 @@ class Consultation{
  factory Consultation.fromJson(Map<String, dynamic> json) {
     return Consultation(
       id : json['id'],
-      description : json['description'],
+      description : json['consDescription'],
       ordonnance_id: json['ordonnance'],
       patient_id : json['patient'],
       docteur_id : json['docteur'],

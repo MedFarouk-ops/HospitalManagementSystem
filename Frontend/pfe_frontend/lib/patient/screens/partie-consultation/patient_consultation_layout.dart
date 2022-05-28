@@ -6,49 +6,63 @@ import 'package:flutter/src/animation/animation_controller.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
+import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
+import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
+import 'package:pfe_frontend/patient/utils/patient_api_methods.dart';
 import 'package:http/http.dart' as http;
 
-class OrdonnanceLayout extends StatefulWidget {
-  final List<Ordonnance> ordonnances ;
-  const OrdonnanceLayout({Key? key ,  required this.ordonnances}) : super(key: key);
+
+class PatientConsultationLayout extends StatefulWidget {
+  final List<Consultation> consultations;
+  const PatientConsultationLayout({Key? key , required this.consultations}) : super(key: key);
 
   @override
-  State<OrdonnanceLayout> createState() => _OrdonnanceLayoutState();
+  State<PatientConsultationLayout> createState() => _PatientConsultationLayoutState();
 }
 
-class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
+class _PatientConsultationLayoutState extends State<PatientConsultationLayout>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
-  List ordonnances = [];
+List<Reservation> reservations = [];  
+  void setStateIfMounted(f) {
+      if (mounted) setState(f);
+    }     
+  
+    _getReservationList() async {
+      User user = await AuthContext().getUserDetails();
+      print(user.first_name);
+      reservations = await PatientApiMethod().getPatientReservationList(user.id);
+      setStateIfMounted(() {});
+    }
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    _controller = AnimationController(vsync: this);
+    _getReservationList();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    if(reservations.isEmpty){
+          return const Scaffold( body : Center(
+            child : CircularProgressIndicator(color: AdminColorSix,)
+      ),);
+    }
 
-   return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: AdminColorSix,
         centerTitle: true,
         title: Text(
-              'Liste des Ordonnances',
+              'Liste des Consultations',
               textAlign: TextAlign.center,
               style: kTitleStyle2,
             ),
@@ -64,15 +78,16 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
             SizedBox(
               height: 20,
             ),
-          (widget.ordonnances.isEmpty) ?
-               Column(
+          if(widget.consultations.isEmpty)
+            Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("aucune ordonnance trouvée" , style: TextStyle(color: AdminColorSix ),)
-                 ],)     
-         : Expanded(
+                Text("aucune consultation trouvée" , style: TextStyle(color: AdminColorSix ),)
+                 ],),
+                 
+            Expanded(
               child: ListView.builder(
-                itemCount: widget.ordonnances.length,
+                itemCount: widget.consultations.length,
                 itemBuilder: (context, index) {
                   return Card(
                     margin:  EdgeInsets.zero,
@@ -92,7 +107,7 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.ordonnances[index].patient_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.consultations[index].docteur_id}")) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -102,7 +117,7 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
                                       fontWeight: FontWeight.w600,
                                     ),);
                                         } else {
-                                          return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
+                                          return Text( "DR : " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
                                       color: Color(MyColors.header01),
                                       fontWeight: FontWeight.w700,
                                     ), );
@@ -125,7 +140,7 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
                                     height: 5,
                                   ),
                                   Text(
-                                    "Diagnostic : " +widget.ordonnances[index].description ?? "",
+                                    "Motif : " +widget.consultations[index].description ?? "",
                                     style: TextStyle(
                                       color: Color(MyColors.grey02),
                                       fontSize: 12,
@@ -139,7 +154,7 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
                           SizedBox(
                             height: 15,
                           ),
-                          OrdonnanceCard(ordonnance: widget.ordonnances[index],),
+                          ConsultationCard(consultation: widget.consultations[index],),
                           SizedBox(
                             height: 15,
                           ),
@@ -164,11 +179,12 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
                 },
               ),
             ),
-
            
           ],
         ),
       ),
+       
     );
   }
 }
+

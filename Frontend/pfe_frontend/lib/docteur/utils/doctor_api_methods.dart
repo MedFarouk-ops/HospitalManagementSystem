@@ -14,7 +14,6 @@ import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 
 class DoctorApiMethods{
 
-
     // ***************************************************Partie reservation et consultation ************************************************//
 
         Future<List<Reservation>> getDoctorTodayReservationList(int id) async {
@@ -93,6 +92,31 @@ class DoctorApiMethods{
 
 
 
+        //***************************  Get doctor's consultation ******************************//
+
+        Future<List<Consultation>> getDoctorConsList(int id) async {
+            List response ;
+            List<Consultation> consList = [];
+            Client client = http.Client();
+            // si l'application est lancée dans le web ( navigateur ) : 
+            if (kIsWeb) {
+              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/consultations/doctor/$id"))).body);
+              response.forEach((element) {
+                consList.add(Consultation.fromJson(element));
+              });
+            }
+            // si l'application est lancée sur mobile ( android )
+            else if(Platform.isAndroid) {
+              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/consultations/doctor/$id"))).body);
+              response.forEach((element) {
+                consList.add(Consultation.fromJson(element));
+              });        
+          }
+          return consList ;
+        } 
+
+
+
 
     
     // ************************************************* Partie Ordonnances *******************************************************/
@@ -154,6 +178,28 @@ class DoctorApiMethods{
             // si l'application est lancée sur mobile ( android )
             else if(Platform.isAndroid) {
               response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/"))).body);
+              response.forEach((element) {
+                ordonnancesList.add(Ordonnance.fromJson(element));
+              });        
+          }
+          return ordonnancesList ;
+        }
+
+
+        Future<List<Ordonnance>> getDoctorOrdonnanceList(int id) async {
+            List response ;
+            List<Ordonnance> ordonnancesList = [];
+            Client client = http.Client();
+            // si l'application est lancée dans le web ( navigateur ) : 
+            if (kIsWeb) {
+              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/ordonnances/doctor/$id"))).body);
+              response.forEach((element) {
+                ordonnancesList.add(Ordonnance.fromJson(element));
+              });
+            }
+            // si l'application est lancée sur mobile ( android )
+            else if(Platform.isAndroid) {
+              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/doctor/$id"))).body);
               response.forEach((element) {
                 ordonnancesList.add(Ordonnance.fromJson(element));
               });        

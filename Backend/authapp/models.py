@@ -52,6 +52,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         (INFERMIER, 'Infermier'),
         (ACCUEIL, 'Accueil'),
     )
+    
+    cardiologue = 30
+    dentiste  = 31
+    generaliste = 32
+    ophtalmologue = 33
+
+    SPECIALITIES = (
+        (cardiologue, 'cardiologue'),
+        (dentiste, 'dentiste'),
+        (generaliste, 'generaliste'),
+        (ophtalmologue, 'ophtalmologue'),
+    )
 
     MALE = 11 
     FEMALE = 22
@@ -71,6 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     genre = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, blank=True, null=True)
     age = models.CharField(max_length=50, blank=True)
     departement = models.CharField(max_length=50, blank=True)
+    specialite = models.PositiveSmallIntegerField(choices=SPECIALITIES, blank=True, null=True) 
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True)
     is_verified = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)

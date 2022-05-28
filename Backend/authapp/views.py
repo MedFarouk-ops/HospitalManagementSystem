@@ -42,6 +42,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['genre'] = user.genre
         token['age'] = user.age
         token['role'] = user.role
+        token['specialite'] = user.specialite
         # ...   
 
         return token

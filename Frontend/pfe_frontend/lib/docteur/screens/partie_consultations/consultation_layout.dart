@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/accueil/utils/internet_widgets.dart';
+import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
@@ -9,9 +12,13 @@ import 'package:pfe_frontend/docteur/screens/partie_consultations/cree_consultat
 import 'package:pfe_frontend/docteur/screens/partie_consultations/patient_selections/patient_select_type.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
+import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
+import 'package:http/http.dart' as http;
+
 
 class ConsultationLayout extends StatefulWidget {
-  const ConsultationLayout({Key? key}) : super(key: key);
+  final List<Consultation> consultations; 
+  const ConsultationLayout({Key? key ,  required this.consultations}) : super(key: key);
 
   @override
   State<ConsultationLayout> createState() => _ConsultationLayoutState();
@@ -20,7 +27,6 @@ class ConsultationLayout extends StatefulWidget {
 class _ConsultationLayoutState extends State<ConsultationLayout> {
   FilterStatus status = FilterStatus.Upcoming;
   Alignment _alignment = Alignment.centerLeft;
-  List<Consultation> consultations = [] ; 
   List<Reservation> reservations = [];  
   void setStateIfMounted(f) {
       if (mounted) setState(f);
@@ -78,7 +84,7 @@ class _ConsultationLayoutState extends State<ConsultationLayout> {
             SizedBox(
               height: 20,
             ),
-          if(consultations.isEmpty)
+          if(widget.consultations.isEmpty)
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -87,7 +93,7 @@ class _ConsultationLayoutState extends State<ConsultationLayout> {
                  
             Expanded(
               child: ListView.builder(
-                itemCount: consultations.length,
+                itemCount: widget.consultations.length,
                 itemBuilder: (context, index) {
                   return Card(
                     margin:  EdgeInsets.zero,
@@ -107,24 +113,46 @@ class _ConsultationLayoutState extends State<ConsultationLayout> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    consultations[index].docteur_id.toString(),
-                                    style: TextStyle(
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.consultations[index].patient_id}")) ,
+                                    builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                    if (snapshot.hasData) {
+                                        if (snapshot.data!.statusCode != 200) {
+                                          return Text('Failed to load the data!' , style : TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                        } else {
+                                          return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
                                       color: Color(MyColors.header01),
                                       fontWeight: FontWeight.w700,
-                                    ),
+                                    ), );
+                                        }
+                                      } else if (snapshot.hasError) {
+                                        return Text('Failed to make a request!' , style: TextStyle(
+                                      color: Color(MyColors.header01),
+                                      fontWeight: FontWeight.w700,
+                                    ));
+                                      } else {
+                                        return Text('Loading' ,  style: TextStyle(
+                                      color: Color(MyColors.header01),
+                                      fontWeight: FontWeight.w700,
+                                    ));
+                                      }
+                                    },
                                   ),
+
                                   SizedBox(
                                     height: 5,
                                   ),
                                   Text(
-                                    consultations[index].description,
+                                    "Motif : " +widget.consultations[index].description ?? "",
                                     style: TextStyle(
                                       color: Color(MyColors.grey02),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
-                                  ),
+                                  ), 
                                 ],
                               ),
                             ],
@@ -132,6 +160,7 @@ class _ConsultationLayoutState extends State<ConsultationLayout> {
                           SizedBox(
                             height: 15,
                           ),
+                          ConsultationCard(consultation: widget.consultations[index],),
                           SizedBox(
                             height: 15,
                           ),

@@ -5,6 +5,7 @@ import 'package:pfe_frontend/admin/widget/reservations_list.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 import 'package:pfe_frontend/docteur/widgets/DoctorCustomListScroller.dart';
 import 'package:pfe_frontend/docteur/widgets/Reservation_Today.dart';
@@ -21,6 +22,8 @@ class _DocteurHomeState extends State<DocteurHome> {
 
     List<Reservation> todayReservations = [];  
     List<Reservation> reservations = [];  
+    List<Ordonnance> ordonnances = [];
+    List<Consultation> consultations = [];
   
     void setStateIfMounted(f) {
       if (mounted) setState(f);
@@ -28,16 +31,32 @@ class _DocteurHomeState extends State<DocteurHome> {
   
     _getReservationList() async {
       User user = await AuthContext().getUserDetails();
-      print(user.first_name);
-      todayReservations = await DoctorApiMethods().getDoctorTodayReservationList(user.id);
       reservations = await DoctorApiMethods().getDoctorReservationList(user.id);
+      todayReservations = await DoctorApiMethods().getDoctorTodayReservationList(user.id);
       print(todayReservations.length);
       setStateIfMounted(() {});
     }
+
+    _getConsultationList() async {
+      User user = await AuthContext().getUserDetails();
+      consultations = await DoctorApiMethods().getDoctorConsList(user.id);
+      setStateIfMounted(() {});
+    }
+
+    _getOrdonnanceList() async {
+      User user = await AuthContext().getUserDetails();
+      ordonnances = await DoctorApiMethods().getDoctorOrdonnanceList(user.id);
+      setStateIfMounted(() {});
+    }
+
+
+
     @override
     void initState() {
       // TODO: implement initState
       super.initState();
+      _getConsultationList();
+      _getOrdonnanceList();
       _getReservationList();
     }
 
@@ -74,6 +93,8 @@ class _DocteurHomeState extends State<DocteurHome> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                   Column( children: [
+                    const SizedBox(height: 8),
+                    TodayReservationLayout(reservations: todayReservations ),
                     AnimatedOpacity(
                       duration: const Duration(milliseconds: 200),
                       opacity: 1,
@@ -83,15 +104,13 @@ class _DocteurHomeState extends State<DocteurHome> {
                           alignment: Alignment.topCenter,
                           height: categoryHeight*2.4,
                           child: Column(children: [
-                            DoctorCustomListScroller(),
-                            DoctorSecondListScroller(),
+                            DoctorCustomListScroller(doctorReservations: reservations),
+                            DoctorSecondListScroller(consList: consultations , ordList: ordonnances),
                             DoctorThirdListScroller(),
                             DoctorFourthListScroller()
                           ],) 
                       )),
                       // const SizedBox(height: 2),
-                      const SizedBox(height: 2),
-                      TodayReservationLayout(reservations: todayReservations ),
                       ],
                     ),
                   ],

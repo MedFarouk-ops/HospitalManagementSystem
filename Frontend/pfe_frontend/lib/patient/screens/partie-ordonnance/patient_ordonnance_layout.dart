@@ -11,22 +11,22 @@ import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
-import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
 import 'package:http/http.dart' as http;
+import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
 
-class OrdonnanceLayout extends StatefulWidget {
-  final List<Ordonnance> ordonnances ;
-  const OrdonnanceLayout({Key? key ,  required this.ordonnances}) : super(key: key);
+
+class PatientOrdonnanceLayout extends StatefulWidget {
+  final List<Ordonnance> ordonnances ; 
+  const PatientOrdonnanceLayout({Key? key , required this.ordonnances}) : super(key: key);
 
   @override
-  State<OrdonnanceLayout> createState() => _OrdonnanceLayoutState();
+  State<PatientOrdonnanceLayout> createState() => _PatientOrdonnanceLayoutState();
 }
 
-class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
+class _PatientOrdonnanceLayoutState extends State<PatientOrdonnanceLayout>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
-  List ordonnances = [];
+ List ordonnances = [];
 
   @override
   void initState() {
@@ -92,7 +92,7 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.ordonnances[index].patient_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.ordonnances[index].docteur_id}")) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -102,7 +102,7 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
                                       fontWeight: FontWeight.w600,
                                     ),);
                                         } else {
-                                          return Text( User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
+                                          return Text("DR : " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
                                       color: Color(MyColors.header01),
                                       fontWeight: FontWeight.w700,
                                     ), );
