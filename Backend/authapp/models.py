@@ -38,12 +38,14 @@ AUTH_PROVIDERS = {'facebook': 'facebook', 'google': 'google',
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-
+    # variable de role / selection de role:  
     ADMIN = 1
     PATIENT = 2
     DOCTEUR = 3
     INFERMIER = 4
     ACCUEIL = 5
+    RADIOLOGUE = 6
+    ANALYSTE = 7
 
     ROLE_CHOICES = (
         (ADMIN, 'Admin'),
@@ -51,8 +53,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         (DOCTEUR, 'Docteur'),
         (INFERMIER, 'Infermier'),
         (ACCUEIL, 'Accueil'),
+        (RADIOLOGUE, 'RADIOLOGUE'),
+        (ANALYSTE, 'ANALYSTE'),
     )
-    
+    # variables de specialitee pour le medecin : 
     cardiologue = 30
     dentiste  = 31
     generaliste = 32
@@ -65,6 +69,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         (ophtalmologue, 'ophtalmologue'),
     )
 
+    # variables de selection de genre : 
+    
     MALE = 11 
     FEMALE = 22
 

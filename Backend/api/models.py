@@ -47,12 +47,30 @@ class Radio(models.Model):
     def __str__(self):
         return self.description
 
-
+# Hématologie
+# Biochimie
+# Microbiologie
+# Anatomopathologie
 
 
 class Analyse(models.Model):
+
+    # variables de specialitee pour le medecin : 
+    Hemato = 1
+    Bioch  = 2
+    Microb = 3
+    Anatomo = 4
+    AN_Types = (
+        (Hemato, 'Hemato'),
+        (Bioch, 'Bioch'),
+        (Microb, 'Microb'),
+        (Anatomo, 'Anatomo'),
+    )
     description = models.TextField()
+    nomLaboratoire = models.TextField( null=True)
     donnee = models.FileField( upload_to = "data/analyse-data/analyse-files/", null= True ,blank=True, default='')
+    type = models.PositiveSmallIntegerField(choices=AN_Types, blank=True, null=True) 
+    analyste = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="analyste_anl" , null=True)
     patient = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="patient_anl")
     docteur = models.ForeignKey(User, on_delete=models.CASCADE , related_name="docteur_anl")
     updated = models.DateTimeField(auto_now=True)

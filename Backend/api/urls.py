@@ -46,6 +46,4 @@ urlpatterns = [
     path('consultations/doctor/<int:pk>/',views.getConsultationByDoctorId),
     path('consultations/patient/<int:pk>/',views.getConsultationByPatientId),
 
-
-
 ]
