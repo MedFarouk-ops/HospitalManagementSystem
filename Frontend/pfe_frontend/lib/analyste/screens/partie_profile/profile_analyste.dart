@@ -94,11 +94,6 @@ class _AnalysteProfileState extends State<AnalysteProfile>
     break; 
     } 
 
-
-
-
-
-
   }  
 
    _initializeUser() async {
@@ -178,18 +173,17 @@ class _AnalysteProfileState extends State<AnalysteProfile>
       ],
   );
 
-  Widget buildUpgradeButton() => SecondButtonWidget(
+  Widget buildUpgradeButton() => thirdButtonWidget(
         text: 'Modifier',
         onClicked: () {},
       );
       
-    Widget buildLogoutButton() => SecondButtonWidget(
+    Widget buildLogoutButton() => thirdButtonWidget(
         text: 'Deconnecter',
         onClicked: () {
           AuthContext().logoutUser(context);
         },
-      );
-  
+      );  
 
   Widget buildAbout(User user) => Container(
         padding: EdgeInsets.symmetric(horizontal: 70),
@@ -198,7 +192,7 @@ class _AnalysteProfileState extends State<AnalysteProfile>
             Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [Text(
-              'Role :   ' + role,
+              "Membre de laboratoire",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),

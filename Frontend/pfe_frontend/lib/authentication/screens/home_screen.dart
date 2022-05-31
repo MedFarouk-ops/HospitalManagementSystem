@@ -4,6 +4,7 @@ import 'package:pfe_frontend/accueil/Responsive/mobile_responsive_screen.dart';
 import 'package:pfe_frontend/accueil/Screens/AccueilHome.dart';
 import 'package:pfe_frontend/admin/responsive/mobile_screen_layout.dart';
 import 'package:pfe_frontend/admin/screens/adminHome.dart';
+import 'package:pfe_frontend/analyste/responsive/mobile_layout_screen.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,8 @@ import 'package:pfe_frontend/docteur/screens/docteurHome.dart';
 import 'package:pfe_frontend/infermier/screens/infermierHome.dart';
 import 'package:pfe_frontend/patient/responsive/mobile_screen_layout.dart';
 import 'package:pfe_frontend/patient/screens/patientHome.dart';
+import 'package:pfe_frontend/radiologue/responsive/mobile_layout_responsive.dart';
+import 'package:pfe_frontend/radiologue/screens/radiologue_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -77,6 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
       else if( _authuser!.role == 5 ){
         _navigateToAccueil();
       }
+      else if( _authuser!.role == 6 ){
+        _navigateToRadios();
+      }
+      else if( _authuser!.role == 7 ){
+        _navigateToAnalyste();
+      }
 
     }
   }
@@ -121,6 +130,25 @@ class _HomeScreenState extends State<HomeScreen> {
     .push(
       MaterialPageRoute(
         builder: (context) => const AccueilMobileScreenLayout()
+        )
+    );
+  }
+
+  _navigateToRadios(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const RadiologueMobileLayout()
+        )
+    );
+  }
+
+
+  _navigateToAnalyste(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const AnalysteMobileLayout()
         )
     );
   }

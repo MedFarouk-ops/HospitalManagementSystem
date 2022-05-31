@@ -48,3 +48,27 @@ class SecondButtonWidget extends StatelessWidget {
         onPressed: onClicked,
       );
 }
+
+
+class thirdButtonWidget extends StatelessWidget {
+  final String text;
+  final VoidCallback onClicked;
+
+  const thirdButtonWidget({
+    Key? key,
+    required this.text,
+    required this.onClicked,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: StadiumBorder(),
+          onPrimary: Colors.white,
+          primary: AdminColorSeven,
+          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+        ),
+        child: Text(text),
+        onPressed: onClicked,
+      );
+}

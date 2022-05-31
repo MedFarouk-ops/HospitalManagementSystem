@@ -4,14 +4,14 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
 
-class CreerBilanScreen extends StatefulWidget {
-  const CreerBilanScreen({Key? key}) : super(key: key);
+class CreerBilan extends StatefulWidget {
+  const CreerBilan({Key? key}) : super(key: key);
 
   @override
-  State<CreerBilanScreen> createState() => _CreerBilanScreenState();
+  State<CreerBilan> createState() => _CreerBilanState();
 }
 
-class _CreerBilanScreenState extends State<CreerBilanScreen>
+class _CreerBilanState extends State<CreerBilan>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

@@ -38,12 +38,12 @@ class _AnalysteMobileLayoutState extends State<AnalysteMobileLayout>
           appBar:  PreferredSize(
           preferredSize: Size.fromHeight(50.0), // here the desired height
           child: AppBar(
-            backgroundColor:AdminColorFive,
+            backgroundColor:AdminColorSeven,
             //  backgroundColor:thirdAdminColor ,
              automaticallyImplyLeading: false,
              bottom: TabBar(
                tabs: [
-                 Tab(text: "Accueil",),
+                 Tab(text: "Accueil", ),
                  Tab(text: "Message",),
                  Tab(text: "Presentation",),
                ],

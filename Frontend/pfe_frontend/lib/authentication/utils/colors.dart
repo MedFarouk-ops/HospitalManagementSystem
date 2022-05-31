@@ -17,7 +17,7 @@ const fourthAdminColor = Color.fromARGB(255, 24, 90, 131);
 const AdminColorFive = Color.fromARGB(255, 44, 106, 72);
 const AdminColorSix = Color.fromARGB(255, 22, 162, 48);
 const AdminColorEight = Color.fromARGB(86, 8, 125, 29);
-const AdminColorSeven = Colors.yellow;
+const AdminColorSeven = Color.fromARGB(255, 142, 6, 192);
 const activityWidgetColor = Color.fromARGB(223, 29, 29, 29);
 const bgColor = Color(0xFF212332);
 
