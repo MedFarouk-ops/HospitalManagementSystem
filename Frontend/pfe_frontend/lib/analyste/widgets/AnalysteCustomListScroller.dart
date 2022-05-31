@@ -7,6 +7,7 @@ import 'package:pfe_frontend/analyste/screens/partie_anatomo/liste_anatomo.dart'
 import 'package:pfe_frontend/analyste/screens/partie_biochimie/list_biochemie.dart';
 import 'package:pfe_frontend/analyste/screens/partie_hematologie/list_hematologie.dart';
 import 'package:pfe_frontend/analyste/screens/partie_microbiologie/list_microbilogie.dart';
+import 'package:pfe_frontend/analyste/screens/partie_voir_tout/liste_tout_bilan.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 
 class AnalysteCustomListScroller extends StatefulWidget {
@@ -179,6 +180,15 @@ class _AnalysteSecondListScrollerState extends State<AnalysteSecondListScroller>
     );
   }
 
+  _navigateToListeBilan(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => BilansListe()
+        )
+    );
+  }
+
 
   
 
@@ -237,7 +247,9 @@ class _AnalysteSecondListScrollerState extends State<AnalysteSecondListScroller>
               Divider(),
               
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  _navigateToListeBilan();
+                },
                 child: Container(
                 width: miniWidgetWidth,
                 margin: EdgeInsets.only(right: 20 , left: 2),

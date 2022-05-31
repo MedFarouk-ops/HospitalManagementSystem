@@ -1,81 +1,59 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/animation/animation_controller.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/src/widgets/ticker_provider.dart';
-import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
-import 'package:pfe_frontend/analyste/screens/partie_creation_bilan/creer_bilan.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
-import 'package:http/http.dart' as http;
 
-
-class HematologieListLayout extends StatefulWidget {
-  const HematologieListLayout({Key? key}) : super(key: key);
+class BilansListe extends StatefulWidget {
+  const BilansListe({Key? key}) : super(key: key);
 
   @override
-  State<HematologieListLayout> createState() => _HematologieListLayoutState();
+  State<BilansListe> createState() => _BilansListeState();
 }
 
-class _HematologieListLayoutState extends State<HematologieListLayout>
+class _BilansListeState extends State<BilansListe>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   List<Analyse> analyses = [];  
-  List<User> _patients = [];
-  List<User> _docteurs = [];
-  final int _type = 1;
-
-    void setStateIfMounted(f) {
+  void setStateIfMounted(f) {
       if (mounted) setState(f);
-    }
-
-    _setUsers() async {
-      _patients = await ApiMethods().getPatients();
-      _docteurs = await ApiMethods().getDoctors();
-      setStateIfMounted(() {});
-    }
+  }     
+  
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _setUsers();
   }
 
   _navigateToCreateAnalyse(){
-    Navigator.of(context)
-    .push(
-      MaterialPageRoute(
-        builder: (context) => CreerBilan(typeBilan: _type , docteurslist: _docteurs, patientslist: _patients)
-        // builder: (context) => const FormTestWidget()
-        )
-    );
-          setStateIfMounted(() {});
 
   }
   
 
   @override
   Widget build(BuildContext context) {
-    if(_patients.isEmpty){
-           return const Scaffold( body : Center(
-             child : CircularProgressIndicator(color: AdminColorSix,)
-       ),);
-     }
+    // if(reservations.isEmpty){
+    //       return const Scaffold( body : Center(
+    //         child : CircularProgressIndicator(color: AdminColorSix,)
+    //   ),);
+    // }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AdminColorSeven,
         centerTitle: true,
         title: Text(
-              'Liste des bilan Hematologique',
+              'Tout les bilans',
               textAlign: TextAlign.start,
               style: kTitleStyle2,
             ),
@@ -196,26 +174,6 @@ class _HematologieListLayoutState extends State<HematologieListLayout>
           ],
         ),
       ),
-       floatingActionButton : Container(
-              width: MediaQuery.of(context).size.width * 0.70,
-              decoration: BoxDecoration(
-                borderRadius:  BorderRadius.circular(20.0),
-              ),
-              child: FloatingActionButton.extended(
-                backgroundColor: AdminColorSeven,
-                onPressed: (){
-                  _navigateToCreateAnalyse();
-                },
-                elevation: 0,
-                label: Text(
-                  "Ajouter un nouveau bilan",
-                  style: TextStyle(
-                    fontSize: 13.0
-                  ),
-                ),
-              ),
-            ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -94,11 +94,23 @@ class RadioData{
   
 }
 
+    // description 
+    // nomLaboratoire 
+    // donnee 
+    // type  
+    // analyste 
+    // patient 
+    // docteur 
+    // updated 
+    // created 
 
 class Analyse{
   final int id;
   final String description;
+  final String nomLaboratoire;
   final String donnees;
+  final type;
+  final int analyste_id;
   final int patient_id;
   final int docteur_id;
   final String updated;
@@ -107,7 +119,10 @@ class Analyse{
   const Analyse({
     required this.id,
     required this.description , 
+    required this.nomLaboratoire,
     required this.donnees,
+    required this.type,
+    required this.analyste_id,
     required this.patient_id,
     required this.docteur_id,
     required this.created,
@@ -125,7 +140,10 @@ class Analyse{
     return Analyse(
       id : json['id'],
       description : json['description'],
+      nomLaboratoire: json['nomLaboratoire'],
       donnees : json['donnee'],
+      type: json['type'],
+      analyste_id: json['analyste'],
       patient_id : json['patient'],
       docteur_id : json['docteur'],
       created : json['created'],

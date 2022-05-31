@@ -57,6 +57,7 @@ class _CreerConsultationState extends State<CreerConsultation>
     _controller.dispose();
     description_cons.dispose();
     description_ord.dispose();
+    file_name.dispose();
   }
 
  void setStateIfMounted(f) {

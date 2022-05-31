@@ -91,3 +91,14 @@ class Consultation(models.Model):
     def __str__(self):
         return self.consDescription
 
+
+class RapportMedical(models.Model):
+    descriptionRapport = models.TextField(default="pas de description")
+    patient = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="patient_Med_rapport")
+    docteur = models.ForeignKey(User, on_delete=models.CASCADE , related_name="docteur_Med_rapport")
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.descriptionRapport
+    

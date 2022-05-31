@@ -1,4 +1,4 @@
-from api.models import  Consultation, Reservation , Ordonnance ,Analyse ,Radio 
+from api.models import  Consultation, Reservation , Ordonnance ,Analyse ,Radio , RapportMedical
 from rest_framework.serializers import ModelSerializer
 
 
@@ -34,3 +34,8 @@ class ConsultationSerializer(ModelSerializer):
         
       
 
+class RapportMedical(ModelSerializer):
+    class Meta : 
+        model = RapportMedical
+        fields = '__all__'
+        
