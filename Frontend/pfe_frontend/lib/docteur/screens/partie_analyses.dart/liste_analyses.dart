@@ -6,37 +6,33 @@ import 'package:flutter/src/animation/animation_controller.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
+import 'package:http/http.dart' as http;
 import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
-import 'package:pfe_frontend/analyste/screens/partie_creation_bilan/creer_bilan.dart';
 import 'package:pfe_frontend/analyste/utils/analyste_api_methods.dart';
+import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
-import 'package:http/http.dart' as http;
 
-
-class MicrobiologieListLayout extends StatefulWidget {
-  const MicrobiologieListLayout({Key? key}) : super(key: key);
+class DoctorAnalysesListe extends StatefulWidget {
+  const DoctorAnalysesListe({Key? key}) : super(key: key);
 
   @override
-  State<MicrobiologieListLayout> createState() => _MicrobiologiListeLayoutState();
+  State<DoctorAnalysesListe> createState() => _DoctorAnalysesListeState();
 }
 
-class _MicrobiologiListeLayoutState extends State<MicrobiologieListLayout>
+class _DoctorAnalysesListeState extends State<DoctorAnalysesListe>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+
 
   List<Analyse> analyses = [];  
   List<User> _patients = [];
   List<User> _docteurs = [];
 
-  // Hemato = 1
-  // Bioch  = 2
-  // Microb = 3
-  // Anatomo = 4
-  final int _type = 4; // Anatomo
+
 
     void setStateIfMounted(f) {
       if (mounted) setState(f);
@@ -49,7 +45,8 @@ class _MicrobiologiListeLayoutState extends State<MicrobiologieListLayout>
     }
 
     _getAnalyses() async {
-      analyses = await AnalysteApiMethods().getAnalysesByType(_type);
+      User currentuser = await AuthContext().getUserDetails();
+      analyses = await AnalysteApiMethods().getAnalysesByDoctorId(currentuser.id);
     } 
 
   @override
@@ -60,33 +57,20 @@ class _MicrobiologiListeLayoutState extends State<MicrobiologieListLayout>
     _getAnalyses();
   }
 
-  _navigateToCreateAnalyse(){
-    Navigator.of(context)
-    .push(
-      MaterialPageRoute(
-        builder: (context) => CreerBilan(typeBilan: _type , docteurslist: _docteurs, patientslist: _patients)
-        // builder: (context) => const FormTestWidget()
-        )
-    );
-          setStateIfMounted(() {});
-
-  }
-  
 
   @override
   Widget build(BuildContext context) {
     if(_patients.isEmpty){
           return const Scaffold( body : Center(
-            child : CircularProgressIndicator(color: AdminColorSeven,)
+            child : CircularProgressIndicator(color: AdminColorSix,)
       ),);
     }
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AdminColorSeven,
+        backgroundColor: AdminColorSix,
         centerTitle: true,
         title: Text(
-              'Liste des bilan Microbioloique',
+              'Tout les bilans',
               textAlign: TextAlign.start,
               style: kTitleStyle2,
             ),
@@ -160,21 +144,55 @@ class _MicrobiologiListeLayoutState extends State<MicrobiologieListLayout>
                                     },
                                   ),
 
-                                   SizedBox(
+                                  SizedBox(
                                     height: 5,
                                   ),
                                   Text(
-                                    "  description : " +analyses[index].description ?? "",
+                                    "Description : " +analyses[index].description ?? "",
                                     style: TextStyle(
                                       color: Color(MyColors.grey02),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ), 
-
                                   SizedBox(
                                     height: 5,
                                   ),
+                                  (analyses[index].type == 1) ? Text(
+                                    "Type : " +  "Hematologie",
+                                    style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ) :
+                                  (analyses[index].type == 2) ? Text(
+                                    "Type : " +  "Biochimie",
+                                    style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ) :
+                                  (analyses[index].type == 3) ? Text(
+                                    "Type : " +  "Microbiologie",
+                                    style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ) : 
+                                  Text(
+                                    "Type : " +  "Anatomopathologie",
+                                    style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+
+                            
+
                                    FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].docteur_id}")) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
@@ -185,60 +203,24 @@ class _MicrobiologiListeLayoutState extends State<MicrobiologieListLayout>
                                       fontWeight: FontWeight.w600,
                                     ),);
                                         } else {
-                                          return Text( "  medecin : " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
+                                          return Text( "medecin : " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
                                       color: Color(MyColors.grey02),
-                                      fontSize: 12,
                                       fontWeight: FontWeight.w500,
                                     ), );
                                         }
                                       } else if (snapshot.hasError) {
                                         return Text('Failed to make a request!' , style: TextStyle(
-                                      color: Color(MyColors.header01),
-                                      fontWeight: FontWeight.w600,
-                                    ));
-                                      } else {
-                                        return Text('Loading' ,  style: TextStyle(
                                       color: Color(MyColors.grey02),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),);
-                                      }
-                                    },
-                                  ),
-                                   SizedBox(
-                                    height: 5,
-                                  ),
-                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].analyste_id}")) ,
-                                    builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
-                                    if (snapshot.hasData) {
-                                        if (snapshot.data!.statusCode != 200) {
-                                          return Text('Failed to load the data!' , style : TextStyle(
-                                      color: Color(MyColors.grey02),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),);
-                                        } else {
-                                          return Text( "  analyste : " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
-                                      color: Color(MyColors.grey02),
-                                      fontSize: 12,
                                       fontWeight: FontWeight.w500,
-                                    ), );
-                                        }
-                                      } else if (snapshot.hasError) {
-                                        return Text('Failed to make a request!' , style: TextStyle(
-                                      color: Color(MyColors.header01),
-                                      fontWeight: FontWeight.w600,
                                     ));
                                       } else {
                                         return Text('Loading' ,  style: TextStyle(
                                       color: Color(MyColors.grey02),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),);
+                                      fontWeight: FontWeight.w500,
+                                    ));
                                       }
                                     },
-                                  ),
-                                  
+                                  ), 
                                 ],
                               ),
                             ],
@@ -256,7 +238,7 @@ class _MicrobiologiListeLayoutState extends State<MicrobiologieListLayout>
                               Expanded(
                                 child: ElevatedButton(
                                   style:  ElevatedButton.styleFrom(
-                                          primary: AdminColorSeven,
+                                          primary: AdminColorSix,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Voir plus de details'),
                                   onPressed: () => {},
@@ -275,26 +257,6 @@ class _MicrobiologiListeLayoutState extends State<MicrobiologieListLayout>
           ],
         ),
       ),
-       floatingActionButton : Container(
-              width: MediaQuery.of(context).size.width * 0.70,
-              decoration: BoxDecoration(
-                borderRadius:  BorderRadius.circular(20.0),
-              ),
-              child: FloatingActionButton.extended(
-                backgroundColor: AdminColorSeven,
-                onPressed: (){
-                  _navigateToCreateAnalyse();
-                },
-                elevation: 0,
-                label: Text(
-                  "Ajouter un nouveau bilan",
-                  style: TextStyle(
-                    fontSize: 13.0
-                  ),
-                ),
-              ),
-            ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

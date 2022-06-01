@@ -9,6 +9,7 @@ import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
+import 'package:pfe_frontend/docteur/screens/partie_analyses.dart/liste_analyses.dart';
 import 'package:pfe_frontend/docteur/screens/partie_consultations/consultation_layout.dart';
 import 'package:pfe_frontend/docteur/screens/partie_ordonnance/ordonnance_layout.dart';
 import 'package:pfe_frontend/docteur/screens/partie_radiologie/clichee_image_radio/clichee_radio_layout.dart';
@@ -47,6 +48,15 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
     .push(
       MaterialPageRoute(
         builder: (context) => DoctorAllReservationList(reservations: widget.doctorReservations,)
+        )
+    );
+  }
+
+    _navigateToAnalyseLayout(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => DoctorAnalysesListe()
         )
     );
   }
@@ -104,7 +114,9 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
               Divider(),
               
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  _navigateToAnalyseLayout();
+                },
                 child: Container(
                 width: miniWidgetWidth,
                 margin: EdgeInsets.only(right: 20 , left: 2),

@@ -9,6 +9,7 @@ import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/analyste/screens/partie_creation_bilan/creer_bilan.dart';
+import 'package:pfe_frontend/analyste/utils/analyste_api_methods.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
@@ -47,11 +48,16 @@ class _HematologieListLayoutState extends State<HematologieListLayout>
       setStateIfMounted(() {});
     }
 
+    _getAnalyses() async {
+      analyses = await AnalysteApiMethods().getAnalysesByType(_type);
+    } 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _setUsers();
+    _getAnalyses();
   }
 
   _navigateToCreateAnalyse(){
@@ -71,7 +77,7 @@ class _HematologieListLayoutState extends State<HematologieListLayout>
   Widget build(BuildContext context) {
     if(_patients.isEmpty){
            return const Scaffold( body : Center(
-             child : CircularProgressIndicator(color: AdminColorSix,)
+             child : CircularProgressIndicator(color: AdminColorSeven,)
        ),);
      }
 
@@ -158,13 +164,81 @@ class _HematologieListLayoutState extends State<HematologieListLayout>
                                     height: 5,
                                   ),
                                   Text(
-                                    "Motif : " +analyses[index].description ?? "",
+                                    "  description : " +analyses[index].description ?? "",
                                     style: TextStyle(
                                       color: Color(MyColors.grey02),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ), 
+
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].docteur_id}")) ,
+                                    builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                    if (snapshot.hasData) {
+                                        if (snapshot.data!.statusCode != 200) {
+                                          return Text('Failed to load the data!' , style : TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                        } else {
+                                          return Text( "  medecin : " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ), );
+                                        }
+                                      } else if (snapshot.hasError) {
+                                        return Text('Failed to make a request!' , style: TextStyle(
+                                      color: Color(MyColors.header01),
+                                      fontWeight: FontWeight.w600,
+                                    ));
+                                      } else {
+                                        return Text('Loading' ,  style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                      }
+                                    },
+                                  ),
+                                   SizedBox(
+                                    height: 5,
+                                  ),
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].analyste_id}")) ,
+                                    builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                    if (snapshot.hasData) {
+                                        if (snapshot.data!.statusCode != 200) {
+                                          return Text('Failed to load the data!' , style : TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                        } else {
+                                          return Text( "  analyste : " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ), );
+                                        }
+                                      } else if (snapshot.hasError) {
+                                        return Text('Failed to make a request!' , style: TextStyle(
+                                      color: Color(MyColors.header01),
+                                      fontWeight: FontWeight.w600,
+                                    ));
+                                      } else {
+                                        return Text('Loading' ,  style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                      }
+                                    },
+                                  ),
+                                  
                                 ],
                               ),
                             ],
@@ -182,9 +256,9 @@ class _HematologieListLayoutState extends State<HematologieListLayout>
                               Expanded(
                                 child: ElevatedButton(
                                   style:  ElevatedButton.styleFrom(
-                                          primary: Colors.green,
+                                          primary: AdminColorSeven,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
-                                  child: Text('Voir Details'),
+                                  child: Text('Voir plus de details'),
                                   onPressed: () => {},
                                 ),
                               )

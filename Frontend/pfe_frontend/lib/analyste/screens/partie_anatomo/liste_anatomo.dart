@@ -6,7 +6,10 @@ import 'package:flutter/src/animation/animation_controller.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
+import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
+import 'package:pfe_frontend/analyste/screens/partie_creation_bilan/creer_bilan.dart';
+import 'package:pfe_frontend/analyste/utils/analyste_api_methods.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
@@ -23,30 +26,58 @@ class AnatomopathListLayout extends StatefulWidget {
 class _AnatomopathListLayoutState extends State<AnatomopathListLayout>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  List<Analyse> analyses = [];  
-  void setStateIfMounted(f) {
+ List<Analyse> analyses = [];  
+  List<User> _patients = [];
+  List<User> _docteurs = [];
+
+  // Hemato = 1
+  // Bioch  = 2
+  // Microb = 3
+  // Anatomo = 4
+  final int _type = 4; // Anatomo
+
+    void setStateIfMounted(f) {
       if (mounted) setState(f);
-  }     
-  
+    }
+
+    _setUsers() async {
+      _patients = await ApiMethods().getPatients();
+      _docteurs = await ApiMethods().getDoctors();
+      setStateIfMounted(() {});
+    }
+
+    _getAnalyses() async {
+      analyses = await AnalysteApiMethods().getAnalysesByType(_type);
+    } 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _setUsers();
+    _getAnalyses();
   }
 
   _navigateToCreateAnalyse(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => CreerBilan(typeBilan: _type , docteurslist: _docteurs, patientslist: _patients)
+        // builder: (context) => const FormTestWidget()
+        )
+    );
+          setStateIfMounted(() {});
 
   }
   
 
   @override
   Widget build(BuildContext context) {
-    // if(reservations.isEmpty){
-    //       return const Scaffold( body : Center(
-    //         child : CircularProgressIndicator(color: AdminColorSix,)
-    //   ),);
-    // }
+    if(_patients.isEmpty){
+          return const Scaffold( body : Center(
+            child : CircularProgressIndicator(color: AdminColorSeven,)
+      ),);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -131,13 +162,81 @@ class _AnatomopathListLayoutState extends State<AnatomopathListLayout>
                                     height: 5,
                                   ),
                                   Text(
-                                    "Motif : " +analyses[index].description ?? "",
+                                    "  description : " +analyses[index].description ?? "",
                                     style: TextStyle(
                                       color: Color(MyColors.grey02),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ), 
+
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].docteur_id}")) ,
+                                    builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                    if (snapshot.hasData) {
+                                        if (snapshot.data!.statusCode != 200) {
+                                          return Text('Failed to load the data!' , style : TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                        } else {
+                                          return Text( "  medecin : " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ), );
+                                        }
+                                      } else if (snapshot.hasError) {
+                                        return Text('Failed to make a request!' , style: TextStyle(
+                                      color: Color(MyColors.header01),
+                                      fontWeight: FontWeight.w600,
+                                    ));
+                                      } else {
+                                        return Text('Loading' ,  style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                      }
+                                    },
+                                  ),
+
+                                   SizedBox(
+                                    height: 5,
+                                  ),
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].analyste_id}")) ,
+                                    builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
+                                    if (snapshot.hasData) {
+                                        if (snapshot.data!.statusCode != 200) {
+                                          return Text('Failed to load the data!' , style : TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                        } else {
+                                          return Text( "  analyste : " + User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                    ), );
+                                        }
+                                      } else if (snapshot.hasError) {
+                                        return Text('Failed to make a request!' , style: TextStyle(
+                                      color: Color(MyColors.header01),
+                                      fontWeight: FontWeight.w600,
+                                    ));
+                                      } else {
+                                        return Text('Loading' ,  style: TextStyle(
+                                      color: Color(MyColors.grey02),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),);
+                                      }
+                                    },
+                                  ),
                                 ],
                               ),
                             ],
@@ -155,9 +254,9 @@ class _AnatomopathListLayoutState extends State<AnatomopathListLayout>
                               Expanded(
                                 child: ElevatedButton(
                                   style:  ElevatedButton.styleFrom(
-                                          primary: Colors.green,
+                                          primary: AdminColorSeven,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
-                                  child: Text('Voir Details'),
+                                  child: Text('Voir plus de details'),
                                   onPressed: () => {},
                                 ),
                               )

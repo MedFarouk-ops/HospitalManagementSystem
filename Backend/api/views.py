@@ -257,6 +257,34 @@ def updateAnalyse(request , pk) :
     return Response(serializer.data)
 
 
+# get analyses by type : 
+@api_view([('GET')])
+def getAnalysesByType(request , type):
+    analyses = Analyse.objects.all().filter(type = type)
+    serializer = AnalyseSerializer(analyses , many = True)
+    return Response(serializer.data)
+
+# get analyses by doctor id : 
+@api_view([('GET')])
+def getAnalysesByDoctorId(request , pk):
+    analyses = Analyse.objects.all().filter(docteur_id = pk)
+    serializer = AnalyseSerializer(analyses , many = True)
+    return Response(serializer.data)
+
+# get analyses by patient id :
+@api_view([('GET')])
+def getAnalysesByPatientId(request , pk):
+    analyses = Analyse.objects.all().filter(patient_id = pk)
+    serializer = AnalyseSerializer(analyses , many = True)
+    return Response(serializer.data)
+
+# get analyses by analyste / laboratoire id : 
+@api_view([('GET')])
+def getAnalysesByAnalysteId(request , pk):
+    analyses = Analyse.objects.all().filter(analyste_id = pk)
+    serializer = AnalyseSerializer(analyses , many = True)
+    return Response(serializer.data)
+
 # partie gestion des consultations : (docteur ( type = tout))  ******************************************************************************************** #
 
 # partie gestion de reservation : (accueil)  ******************************************************************************************** #

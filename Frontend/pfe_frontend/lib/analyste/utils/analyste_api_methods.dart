@@ -5,6 +5,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:async/async.dart';
 import 'package:path/path.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
@@ -13,7 +14,6 @@ import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 
 
 class AnalysteApiMethods{
-
 
     //***************************************************** Creer Bilan ******************************************************* */
 
@@ -62,7 +62,67 @@ class AnalysteApiMethods{
 
 
 
-    //********************************************** Recuperer la liste de bilan  ***********************************************/
+    //******************** Recuperer la liste de bilan selon le type / analyste id / docteur id / patient id ********************************//
+
+    Future<List<Analyse>> getAnalysesByType(int type) async {
+      List response ;
+      List<Analyse> analyses = []; 
+      Client client = http.Client();
+      String apiUrl = "";
+      if (kIsWeb) { apiUrl = serverUrl ;}
+      else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/type/$type/"))).body);
+                response.forEach((element) {
+                  analyses.add(Analyse.fromJson(element));
+      });
+      return analyses;
+    }
+
+     Future<List<Analyse>> getAnalysesByDoctorId(int id) async {
+      List response ;
+      List<Analyse> analyses = []; 
+      Client client = http.Client();
+      String apiUrl = "";
+      if (kIsWeb) { apiUrl = serverUrl ;}
+      else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/doctor/$id/"))).body);
+                response.forEach((element) {
+                  analyses.add(Analyse.fromJson(element));
+      });
+      return analyses;
+    }
+
+     Future<List<Analyse>> getAnalysesByPatientId(int id) async {
+      List response ;
+      List<Analyse> analyses = []; 
+      Client client = http.Client();
+      String apiUrl = "";
+      if (kIsWeb) { apiUrl = serverUrl ;}
+      else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/patient/$id/"))).body);
+                response.forEach((element) {
+                  analyses.add(Analyse.fromJson(element));
+      });
+      return analyses;
+    }
+
+    Future<List<Analyse>> getAnalysesByAnalysteId(int id) async {
+      List response ;
+      List<Analyse> analyses = []; 
+      Client client = http.Client();
+      String apiUrl = "";
+      if (kIsWeb) { apiUrl = serverUrl ;}
+      else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/analyste/$id/"))).body);
+                response.forEach((element) {
+                  analyses.add(Analyse.fromJson(element));
+      });
+      return analyses;
+    }
+
+    //********************************************** Recuperer la liste de tout les bilans ***********************************************//
+
+
 
 
 }
