@@ -26,6 +26,9 @@ class AnalyseData {
   AnalyseData(this.description, this.nomLaboratoire, this.type, this.analyste_id , this.docteur_id , this.patient_id);
   Map toJson() {
     return {'description' : description,
+            'nomLaboratoire' : nomLaboratoire,
+            "type" : type,
+            "analyste" : analyste_id,
             'patient' : patient_id,
             'docteur' : docteur_id,};
   }

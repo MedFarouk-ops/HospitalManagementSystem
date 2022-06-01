@@ -20,7 +20,7 @@ class AnalysteApiMethods{
     Future<String> creerBilan(File pdfFile , String description , String nomLaboratoire ,int type, int analyste_id  ,int patient_id , int docteur_id , ) async {
         
         String result = "not set";
-        
+
         String apiServerUrl = "";
           if (kIsWeb) {apiServerUrl = serverUrl ; }
           else if(Platform.isAndroid) { apiServerUrl = mobileServerUrl ; }
@@ -30,11 +30,11 @@ class AnalysteApiMethods{
             // get file length
             var length = await pdfFile.length();
             // string to uri
-            var uri = Uri.parse("$apiServerUrl/api/ordonnances/create/");
+            var uri = Uri.parse("$apiServerUrl/api/analyses/create/");
             // create multipart request
             var request = new http.MultipartRequest("POST", uri);
             // multipart that takes file
-            var multipartFile = new http.MultipartFile("ordonnanceData", stream, length,
+            var multipartFile = new http.MultipartFile("analysedata", stream, length,
                 filename: basename(pdfFile.path));
             // add file to multipart
             request.files.add(multipartFile);

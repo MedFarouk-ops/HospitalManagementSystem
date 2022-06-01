@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,8 +10,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:pfe_frontend/analyste/utils/analyste_api_methods.dart';
+import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:pfe_frontend/authentication/utils/utils.dart';
 
 class CreerBilan extends StatefulWidget {
 
@@ -25,30 +30,34 @@ class CreerBilan extends StatefulWidget {
 class _CreerBilanState extends State<CreerBilan>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
- bool _isLoading = false ;
-
+    bool _isLoading = false ;
     void setStateIfMounted(f) {
     if (mounted) setState(f);
     }
      void creerBilan() async {
-          // setStateIfMounted(() {
-          //     _isLoading = true;
-          //   });
-          // _setIds();
-          // String result = await ApiMethods().createReservation(dateRendezvous: dateRendezvous,
-          //                                starttime: starttimeCtl.text,
-          //                                endtime: endtimeCtl.text,
-          //                                patient_id: _patient_id,
-          //                                docteur_id: _docteur_id,);
-          //  setStateIfMounted(() {
-          //     _isLoading = false;
-          // });
-          // if(result != "success"){
-          //     showSnackBar("une erreur est survenue , veuillez réessayer !", context);
-          // }
-          // else{
-          //     showSnackBar("reservation creer avec success !", context);
-          // }
+          setStateIfMounted(() {
+              _isLoading = true;
+            });
+          User currentuser = await AuthContext().getUserDetails();
+          _setIds();
+          String result = await AnalysteApiMethods().creerBilan(
+            File(file.path),
+            descriptionController.text, 
+            nomLaboratoireConroller.text, 
+            widget.typeBilan, 
+            currentuser.id, 
+            _patient_id, 
+            _docteur_id);
+            
+           setStateIfMounted(() {
+              _isLoading = false;
+          });
+          if(result != "success"){
+              showSnackBar("une erreur est survenue , veuillez réessayer !", context);
+          }
+          else{
+              showSnackBar("Bilan ajouter avec success !", context);
+          }
           
     }
 
@@ -315,7 +324,7 @@ class _CreerBilanState extends State<CreerBilan>
                     if (_formKey.currentState!.validate()) {
                         print(_patient_id);
                         print(_docteur_id);
-
+                        creerBilan();
                         }
                       },
                     child:  Container(

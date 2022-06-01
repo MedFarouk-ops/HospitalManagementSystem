@@ -30,7 +30,12 @@ class _HematologieListLayoutState extends State<HematologieListLayout>
   List<Analyse> analyses = [];  
   List<User> _patients = [];
   List<User> _docteurs = [];
-  final int _type = 1;
+
+  // Hemato = 1
+  // Bioch  = 2
+  // Microb = 3
+  // Anatomo = 4
+  final int _type = 1; // Hemato
 
     void setStateIfMounted(f) {
       if (mounted) setState(f);
