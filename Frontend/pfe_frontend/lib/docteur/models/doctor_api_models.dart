@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 
+// Class utilisée dans les methodes api de creation des object qui contient des fichier attachée // 
+
 class OrdonnanceData {
   String description; 
   int patient_id;
@@ -12,6 +14,26 @@ class OrdonnanceData {
             'docteur' : docteur_id,};
   }
 }
+
+
+class AnalyseData { 
+  String description; 
+  String nomLaboratoire  ;
+  int type  ;
+  int analyste_id; 
+  int patient_id ;
+  int docteur_id ;
+  AnalyseData(this.description, this.nomLaboratoire, this.type, this.analyste_id , this.docteur_id , this.patient_id);
+  Map toJson() {
+    return {'description' : description,
+            'patient' : patient_id,
+            'docteur' : docteur_id,};
+  }
+}
+
+// *************************************************************************** */
+
+//******* classes utilisée pour la récupération de données a partir de l'api ********/
 
 class Ordonnance{
   final int id;

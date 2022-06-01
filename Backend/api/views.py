@@ -201,17 +201,32 @@ def getAnalyses(request):
     serializer = AnalyseSerializer(analyses , many=True)
     return Response(serializer.data)
 
+
+#  description = models.TextField()
+#     nomLaboratoire = models.TextField( null=True)
+#     donnee = models.FileField( upload_to = "data/analyse-data/analyse-files/", null= True ,blank=True, default='')
+#     type = models.PositiveSmallIntegerField(choices=AN_Types, blank=True, null=True) 
+#     analyste = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="analyste_anl" , null=True)
+#     patient 
+
+
 @api_view([('POST')])
 def createAnalyses(request) : 
     thumbnail = request.FILES.get("analysedata" ,False)
     info = json.loads(request.POST.get('data' , False))
     patient_id = info['patient']
     doctor_id = info['docteur']
+    analyste_id = info['analyste']
+    type = info['type']
     patient = User.objects.get(id = patient_id)
     doctor = User.objects.get(id = doctor_id)
+    analyste = User.objects.get(id = analyste_id)
     analyse = Analyse.objects.create(
         description = info['description'],
+        nomLaboratoire = info['nomLaboratoire'],
         donnee = thumbnail,
+        type = type,
+        analyste = analyste,
         patient = patient,
         docteur = doctor,
     )
@@ -240,8 +255,6 @@ def updateAnalyse(request , pk) :
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
-
-
 
 
 # partie gestion des consultations : (docteur ( type = tout))  ******************************************************************************************** #
