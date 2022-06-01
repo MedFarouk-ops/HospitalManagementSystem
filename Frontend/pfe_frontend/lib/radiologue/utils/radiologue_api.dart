@@ -60,11 +60,48 @@ class RadioApiMethods{
           return resultat;
         }
 
+    //******************** Recuperer la liste de images radio selon :  radiologue id / docteur id / patient id ********************************//
 
+     Future<List<RadioData>> getRadiosByDoctorId(int id) async {
+      List response ;
+      List<RadioData> radios = []; 
+      Client client = http.Client();
+      String apiUrl = "";
+      if (kIsWeb) { apiUrl = serverUrl ;}
+      else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/doctor/$id/"))).body);
+                response.forEach((element) {
+                  radios.add(RadioData.fromJson(element));
+      });
+      return radios;
+    }
 
+     Future<List<RadioData>> getRadiosByPatientId(int id) async {
+      List response ;
+      List<RadioData> radios = []; 
+      Client client = http.Client();
+      String apiUrl = "";
+      if (kIsWeb) { apiUrl = serverUrl ;}
+      else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/patient/$id/"))).body);
+                response.forEach((element) {
+                  radios.add(RadioData.fromJson(element));
+      });
+      return radios;
+    }
 
-
-
-
+    Future<List<RadioData>> getRadiosByRadiologueId(int id) async {
+      List response ;
+      List<RadioData> radios = []; 
+      Client client = http.Client();
+      String apiUrl = "";
+      if (kIsWeb) { apiUrl = serverUrl ;}
+      else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/radiologue/$id/"))).body);
+                response.forEach((element) {
+                  radios.add(RadioData.fromJson(element));
+      });
+      return radios;
+    }
 
 }

@@ -9,11 +9,13 @@ import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
+import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/radiologue/screens/partie_radio/creer_radio.dart';
+import 'package:pfe_frontend/radiologue/utils/radiologue_api.dart';
 
 class RadiologueHomePage extends StatefulWidget {
   const RadiologueHomePage({Key? key}) : super(key: key);
@@ -41,11 +43,17 @@ class _RadiologueHomePageState extends State<RadiologueHomePage>
       setStateIfMounted(() {});
     }
 
+    _getRadios() async {
+      User currentuser = await AuthContext().getUserDetails();
+      radios = await RadioApiMethods().getRadiosByRadiologueId(currentuser.id);
+    } 
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _getRadios();
     _setUsers();
   }
 
@@ -235,7 +243,7 @@ class _RadiologueHomePageState extends State<RadiologueHomePage>
                               Expanded(
                                 child: ElevatedButton(
                                   style:  ElevatedButton.styleFrom(
-                                          primary: AdminColorSeven,
+                                          primary: AdminColorNine,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Voir plus de details'),
                                   onPressed: () => {},

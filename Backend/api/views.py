@@ -151,11 +151,6 @@ def getRadios(request):
     serializer = ReservationSerializer(radios , many=True)
     return Response(serializer.data)
 
-#  description = models.TextField()
-#     nomLaboratoire = models.TextField( null=True)
-#     donnee = models.FileField(upload_to = "data/radio-data/radio-images/", null= True ,blank=True, default='')
-#     radiologue 
-
 
 @api_view([('POST')])
 def createRadio(request) : 
@@ -202,6 +197,28 @@ def updateRadio(request , pk) :
     return Response(serializer.data)
 
 
+# get radios by doctor id : 
+@api_view([('GET')])
+def getRadiosByDoctorId(request , pk):
+    radios = Radio.objects.all().filter(docteur_id = pk)
+    serializer = RadioSerializer(radios , many = True)
+    return Response(serializer.data)
+
+# get radios by patient id :
+@api_view([('GET')])
+def getRadiosByPatientId(request , pk):
+    radios = Radio.objects.all().filter(patient_id = pk)
+    serializer = RadioSerializer(radios , many = True)
+    return Response(serializer.data)
+
+# get radios by radiologue / laboratoire id : 
+@api_view([('GET')])
+def getRadiosByRadiologueId(request , pk):
+    radios = Radio.objects.all().filter(radiologue_id = pk)
+    serializer = RadioSerializer(radios , many = True)
+    return Response(serializer.data)
+
+
 
 # partie gestion des analyses : (docteur ( type = analyste))  ******************************************************************************************** #
 
@@ -210,14 +227,6 @@ def getAnalyses(request):
     analyses = Analyse.objects.all()
     serializer = AnalyseSerializer(analyses , many=True)
     return Response(serializer.data)
-
-
-#  description = models.TextField()
-#     nomLaboratoire = models.TextField( null=True)
-#     donnee = models.FileField( upload_to = "data/analyse-data/analyse-files/", null= True ,blank=True, default='')
-#     type = models.PositiveSmallIntegerField(choices=AN_Types, blank=True, null=True) 
-#     analyste = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="analyste_anl" , null=True)
-#     patient 
 
 
 @api_view([('POST')])

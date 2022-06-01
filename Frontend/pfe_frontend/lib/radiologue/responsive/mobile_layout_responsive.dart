@@ -6,11 +6,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/radiologue/screens/radiologue_home.dart';
+import 'package:pfe_frontend/radiologue/widgets/radiologue_profile.dart';
 
 const radiosMobileScreenItems = [
           RadiologueHomePage(),
-          Text('Message'),
-          Text("Profil"),
+          RadioProfile(),
 ];
 
 
@@ -41,7 +41,7 @@ class _RadiologueMobileLayoutState extends State<RadiologueMobileLayout>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-         length: 3,
+         length: 2,
          child: Scaffold(
           appBar:  PreferredSize(
           preferredSize: Size.fromHeight(50.0), // here the desired height
@@ -52,7 +52,6 @@ class _RadiologueMobileLayoutState extends State<RadiologueMobileLayout>
              bottom: TabBar(
                tabs: [
                  Tab(text: "Accueil", ),
-                 Tab(text: "Message",),
                  Tab(text: "Presentation",),
                ],
                ),

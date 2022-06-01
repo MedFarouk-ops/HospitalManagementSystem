@@ -33,6 +33,10 @@ urlpatterns = [
     path('radios/delete/<str:pk>/',views.deleteRadio),
     # path('radios/update/<str:pk>/',views.updateRadio),
     path('radios/<int:pk>/',views.getRadioById),
+    path('radios/doctor/<int:pk>/',views.getRadiosByDoctorId),
+    path('radios/patient/<int:pk>/',views.getRadiosByPatientId),
+    path('radios/radiologue/<int:pk>/',views.getRadiosByRadiologueId),
+
 
     # route api de la analyses : 
     # ******************************************************************************************************************** #
