@@ -1,8 +1,19 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/animation/animation_controller.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
+import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:pfe_frontend/radiologue/screens/radiologue_home.dart';
+
+const radiosMobileScreenItems = [
+          RadiologueHomePage(),
+          Text('Message'),
+          Text("Profil"),
+];
+
+
 
 class RadiologueMobileLayout extends StatefulWidget {
   const RadiologueMobileLayout({Key? key}) : super(key: key);
@@ -29,6 +40,27 @@ class _RadiologueMobileLayoutState extends State<RadiologueMobileLayout>
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return DefaultTabController(
+         length: 3,
+         child: Scaffold(
+          appBar:  PreferredSize(
+          preferredSize: Size.fromHeight(50.0), // here the desired height
+          child: AppBar(
+            backgroundColor:AdminColorNine,
+            //  backgroundColor:thirdAdminColor ,
+             automaticallyImplyLeading: false,
+             bottom: TabBar(
+               tabs: [
+                 Tab(text: "Accueil", ),
+                 Tab(text: "Message",),
+                 Tab(text: "Presentation",),
+               ],
+               ),
+           ),),
+           body: TabBarView(
+             children: radiosMobileScreenItems,
+           ),
+         ),
+        );
   }
 }

@@ -34,6 +34,25 @@ class AnalyseData {
   }
 }
 
+
+
+
+class ImageRadioData { 
+  String description; 
+  String nomLaboratoire  ;
+  int radiologue_id; 
+  int patient_id ;
+  int docteur_id ;
+  ImageRadioData(this.description, this.nomLaboratoire, this.radiologue_id , this.docteur_id , this.patient_id);
+  Map toJson() {
+    return {'description' : description,
+            'nomLaboratoire' : nomLaboratoire,
+            "radiologue" : radiologue_id,
+            'patient' : patient_id,
+            'docteur' : docteur_id,};
+  }
+}
+
 // *************************************************************************** */
 
 //******* classes utilisée pour la récupération de données a partir de l'api ********/

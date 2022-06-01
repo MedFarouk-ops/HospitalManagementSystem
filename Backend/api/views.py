@@ -151,17 +151,27 @@ def getRadios(request):
     serializer = ReservationSerializer(radios , many=True)
     return Response(serializer.data)
 
+#  description = models.TextField()
+#     nomLaboratoire = models.TextField( null=True)
+#     donnee = models.FileField(upload_to = "data/radio-data/radio-images/", null= True ,blank=True, default='')
+#     radiologue 
+
+
 @api_view([('POST')])
 def createRadio(request) : 
-    thumbnail = request.FILES.get("image" ,False)
+    thumbnail = request.FILES.get("imageradio" ,False)
     info = json.loads(request.POST.get('data' , False)) 
     patient_id = info['patient']
+    radiologue_id = info['radiologue']
     doctor_id = info['docteur']
     patient = User.objects.get(id = patient_id)
     doctor = User.objects.get(id = doctor_id)
+    radiologue = User.objects.get(id = radiologue_id)
     radio = Radio.objects.create(
         description = info['description'],
+        nomLaboratoire = info['nomLaboratoire'],
         donnee = thumbnail,
+        radiologue = radiologue,
         patient = patient,
         docteur = doctor,
     )

@@ -38,7 +38,9 @@ class Ordonnance(models.Model):
 
 class Radio(models.Model):
     description = models.TextField()
-    donnee = models.FileField( upload_to = "data/radio-data/radio-images/", null= True ,blank=True, default='')
+    nomLaboratoire = models.TextField( null=True)
+    donnee = models.FileField(upload_to = "data/radio-data/radio-images/", null= True ,blank=True, default='')
+    radiologue = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="radiologue_rad" , null=True)
     patient = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="patient_rad")
     docteur = models.ForeignKey(User, on_delete=models.CASCADE , related_name="docteur_rad")
     updated = models.DateTimeField(auto_now=True)
