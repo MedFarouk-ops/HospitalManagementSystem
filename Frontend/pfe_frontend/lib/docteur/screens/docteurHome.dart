@@ -9,6 +9,7 @@ import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 import 'package:pfe_frontend/docteur/widgets/DoctorCustomListScroller.dart';
 import 'package:pfe_frontend/docteur/widgets/Reservation_Today.dart';
+import 'package:pfe_frontend/radiologue/utils/radiologue_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DocteurHome extends StatefulWidget {
@@ -24,6 +25,8 @@ class _DocteurHomeState extends State<DocteurHome> {
     List<Reservation> reservations = [];  
     List<Ordonnance> ordonnances = [];
     List<Consultation> consultations = [];
+    List<RadioData> radios = [];  
+
   
     void setStateIfMounted(f) {
       if (mounted) setState(f);
@@ -49,12 +52,17 @@ class _DocteurHomeState extends State<DocteurHome> {
       setStateIfMounted(() {});
     }
 
-
+      _getRadios() async {
+      User currentuser = await AuthContext().getUserDetails();
+      radios = await RadioApiMethods().getRadiosByDoctorId(currentuser.id);
+      print(radios.length);
+    } 
 
     @override
     void initState() {
       // TODO: implement initState
       super.initState();
+      _getRadios();
       _getConsultationList();
       _getOrdonnanceList();
       _getReservationList();
@@ -106,7 +114,7 @@ class _DocteurHomeState extends State<DocteurHome> {
                           child: Column(children: [
                             DoctorCustomListScroller(doctorReservations: reservations),
                             DoctorSecondListScroller(consList: consultations , ordList: ordonnances),
-                            DoctorThirdListScroller(),
+                            DoctorThirdListScroller(radios: radios),
                             DoctorFourthListScroller()
                           ],) 
                       )),

@@ -46,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     ACCUEIL = 5
     RADIOLOGUE = 6
     ANALYSTE = 7
+    PHARMACIEN = 8
 
     ROLE_CHOICES = (
         (ADMIN, 'Admin'),
@@ -55,6 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         (ACCUEIL, 'Accueil'),
         (RADIOLOGUE, 'RADIOLOGUE'),
         (ANALYSTE, 'ANALYSTE'),
+        (PHARMACIEN, 'PHARMACIEN'),
     )
     # variables de specialitee pour le medecin : 
     cardiologue = 30

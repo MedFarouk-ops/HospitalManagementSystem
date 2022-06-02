@@ -15,6 +15,7 @@ import 'package:pfe_frontend/docteur/screens/docteurHome.dart';
 import 'package:pfe_frontend/infermier/screens/infermierHome.dart';
 import 'package:pfe_frontend/patient/responsive/mobile_screen_layout.dart';
 import 'package:pfe_frontend/patient/screens/patientHome.dart';
+import 'package:pfe_frontend/pharmacie/responsive/mobile_layout_screen.dart';
 import 'package:pfe_frontend/radiologue/responsive/mobile_layout_responsive.dart';
 import 'package:pfe_frontend/radiologue/screens/radiologue_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,6 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
       else if( _authuser!.role == 7 ){
         _navigateToAnalyste();
       }
+      else if( _authuser!.role == 8 ){
+        _navigateToPharmacie();
+      }
 
     }
   }
@@ -149,6 +153,14 @@ class _HomeScreenState extends State<HomeScreen> {
     .push(
       MaterialPageRoute(
         builder: (context) => const AnalysteMobileLayout()
+        )
+    );
+  }
+  _navigateToPharmacie(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => const PharmacieMobileLayout()
         )
     );
   }

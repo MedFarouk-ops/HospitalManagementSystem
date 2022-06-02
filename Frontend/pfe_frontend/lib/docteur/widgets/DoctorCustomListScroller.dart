@@ -279,7 +279,8 @@ class _DoctorSecondListScrollerState extends State<DoctorSecondListScroller> {
 
 
 class DoctorThirdListScroller extends StatefulWidget {
-  const DoctorThirdListScroller({ Key? key ,   }) : super(key: key);
+  final  List<RadioData> radios;  
+  const DoctorThirdListScroller({ Key? key , required this.radios  }) : super(key: key);
 
   @override
   State<DoctorThirdListScroller> createState() => _DoctorThirdListScrollerState();
@@ -302,7 +303,7 @@ class _DoctorThirdListScrollerState extends State<DoctorThirdListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => ClicheeRadioLayout()
+        builder: (context) => ClicheeRadioLayout(radios: widget.radios)
         )
     );
   }
