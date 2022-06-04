@@ -27,7 +27,13 @@ class _DocteurHomeState extends State<DocteurHome> {
     List<Consultation> consultations = [];
     List<RadioData> radios = [];  
 
-  
+    String? token; 
+
+    _setAuthToken() async {
+          SharedPreferences s_prefs = await SharedPreferences.getInstance();
+          token = s_prefs.getStringList("authTokens")![0];
+          setStateIfMounted(() {});      
+    }
     void setStateIfMounted(f) {
       if (mounted) setState(f);
     }     
@@ -62,6 +68,7 @@ class _DocteurHomeState extends State<DocteurHome> {
     void initState() {
       // TODO: implement initState
       super.initState();
+      _setAuthToken();
       _getRadios();
       _getConsultationList();
       _getOrdonnanceList();
@@ -102,7 +109,7 @@ class _DocteurHomeState extends State<DocteurHome> {
                     children: <Widget>[
                   Column( children: [
                     const SizedBox(height: 8),
-                    TodayReservationLayout(reservations: todayReservations ),
+                    TodayReservationLayout(reservations: todayReservations , token: token),
                     AnimatedOpacity(
                       duration: const Duration(milliseconds: 200),
                       opacity: 1,
@@ -112,10 +119,10 @@ class _DocteurHomeState extends State<DocteurHome> {
                           alignment: Alignment.topCenter,
                           height: categoryHeight*2.4,
                           child: Column(children: [
-                            DoctorCustomListScroller(doctorReservations: reservations),
-                            DoctorSecondListScroller(consList: consultations , ordList: ordonnances),
-                            DoctorThirdListScroller(radios: radios),
-                            DoctorFourthListScroller()
+                            DoctorCustomListScroller(doctorReservations: reservations , token: token),
+                            DoctorSecondListScroller(consList: consultations , ordList: ordonnances,token: token),
+                            DoctorThirdListScroller(radios: radios , token: token),
+                            DoctorFourthListScroller(token: token,)
                           ],) 
                       )),
                       // const SizedBox(height: 2),

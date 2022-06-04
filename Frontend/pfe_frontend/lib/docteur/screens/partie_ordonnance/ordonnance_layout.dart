@@ -13,10 +13,12 @@ import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrdonnanceLayout extends StatefulWidget {
   final List<Ordonnance> ordonnances ;
-  const OrdonnanceLayout({Key? key ,  required this.ordonnances}) : super(key: key);
+  final String? token ; 
+  const OrdonnanceLayout({Key? key ,  required this.ordonnances , required this.token}) : super(key: key);
 
   @override
   State<OrdonnanceLayout> createState() => _OrdonnanceLayoutState();
@@ -28,8 +30,10 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
 
   List ordonnances = [];
 
+  
+
   @override
-  void initState() {
+  void initState(){
     super.initState();
     _controller = AnimationController(vsync: this);
   }
@@ -92,10 +96,11 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.ordonnances[index].patient_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.ordonnances[index].patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}',}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
+                                          print("tooooooooooooookeeen : " + widget.token.toString());
                                           return Text('Failed to load the data!' , style : TextStyle(
                                       color: Color(MyColors.grey02),
                                       fontSize: 12,

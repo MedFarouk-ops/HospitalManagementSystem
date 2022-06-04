@@ -20,7 +20,8 @@ import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 class TodayReservationLayout extends StatefulWidget {
   
   final List<Reservation> reservations;
-  const TodayReservationLayout({Key? key , required this.reservations}) : super(key: key);
+  final String? token;
+  const TodayReservationLayout({Key? key , required this.reservations , required this.token }) : super(key: key);
 
   @override
   State<TodayReservationLayout> createState() => _TodayReservationLayoutState();
@@ -140,7 +141,7 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
               for( var i = 0 ; i < 4; i++ ) 
                DataRow(cells: [
                 DataCell(
-                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}")) ,
+                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}") ,headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                 builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                   if (snapshot.hasData) {
                                       if (snapshot.data!.statusCode != 200) {
@@ -164,7 +165,7 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
                 for( var i = 0 ; i <widget.reservations.length ; i++ ) 
                 DataRow(cells: [
                     DataCell(
-                    FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}")) ,
+                    FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                       if (snapshot.hasData) {
                                           if (snapshot.data!.statusCode != 200) {

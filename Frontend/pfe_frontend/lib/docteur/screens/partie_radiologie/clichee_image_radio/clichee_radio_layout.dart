@@ -16,7 +16,8 @@ import 'package:pfe_frontend/radiologue/utils/radiologue_api.dart';
 
 class ClicheeRadioLayout extends StatefulWidget {
   final  List<RadioData> radios;  
-  const ClicheeRadioLayout({Key? key , required this.radios}) : super(key: key);
+  final String? token;
+  const ClicheeRadioLayout({Key? key , required this.radios , required this.token}) : super(key: key);
 
   @override
   State<ClicheeRadioLayout> createState() => _ClicheeRadioLayoutState();
@@ -98,7 +99,7 @@ class _ClicheeRadioLayoutState extends State<ClicheeRadioLayout>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.radios[index].patient_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.radios[index].patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {

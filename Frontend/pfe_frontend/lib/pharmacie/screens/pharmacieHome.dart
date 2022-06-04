@@ -14,6 +14,7 @@ import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PharmacieHomeScreen extends StatefulWidget {
   const PharmacieHomeScreen({Key? key}) : super(key: key);
@@ -26,7 +27,13 @@ class _PharmacieHomeScreenState extends State<PharmacieHomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   List ordonnances = [];
-  
+   String? token; 
+
+    _setAuthToken() async {
+          SharedPreferences s_prefs = await SharedPreferences.getInstance();
+          token = s_prefs.getStringList("authTokens")![0];
+          setStateIfMounted(() {});      
+    }
 
      
     void setStateIfMounted(f) {
@@ -44,6 +51,7 @@ class _PharmacieHomeScreenState extends State<PharmacieHomeScreen>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    _setAuthToken();
     _getOrdonnanceList();
   }
 
@@ -111,7 +119,7 @@ class _PharmacieHomeScreenState extends State<PharmacieHomeScreen>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${ordonnances[index].patient_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${ordonnances[index].patient_id}") , headers: {'Authorization': 'Bearer ${token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {

@@ -20,7 +20,8 @@ import 'package:http/http.dart' as http;
 
 class PatientConsultationLayout extends StatefulWidget {
   final List<Consultation> consultations;
-  const PatientConsultationLayout({Key? key , required this.consultations}) : super(key: key);
+  final String? token;
+  const PatientConsultationLayout({Key? key , required this.consultations , required this.token}) : super(key: key);
 
   @override
   State<PatientConsultationLayout> createState() => _PatientConsultationLayoutState();
@@ -107,7 +108,7 @@ List<Reservation> reservations = [];
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.consultations[index].docteur_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.consultations[index].docteur_id}") ,  headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {

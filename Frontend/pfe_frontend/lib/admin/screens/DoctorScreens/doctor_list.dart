@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/screens/Common/user_show.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'dart:io' show Platform;
@@ -39,23 +40,9 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
 //*************************************************************************************************************************************** */
 
   _retrieveDoctors() async {
-    List response ;
-    // si l'application est lancée dans le web ( navigateur ) : 
-    if (kIsWeb) {
-      response = json.decode((await client.get(Uri.parse("${serverUrl}/adminapp/doctors/"))).body);
-      response.forEach((element) {
-        doctors.add(User.fromJson(element));
-      });
-      setStateIfMounted(() {});
-    }
-    // si l'application est lancée sur mobile ( android )
-    else if(Platform.isAndroid) {
-      response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/adminapp/doctors/"))).body);
-      response.forEach((element) {
-        doctors.add(User.fromJson(element));
-      });
-       setStateIfMounted(() {});
-    }
+    
+     doctors = await ApiMethods().getDoctors();
+     setStateIfMounted(() {});
     _initialseDoctorsNumber();
   }
 //*************************************************************************************************************************************** */

@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:pfe_frontend/accueil/models/reservation.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DoctorApiMethods{
 
@@ -20,10 +21,12 @@ class DoctorApiMethods{
             List response ;
             List<Reservation> reservationsList = [];
             Client client = http.Client();
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
             String apiUrl = "";
             if (kIsWeb) { apiUrl = serverUrl ;}
             else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
-            response = json.decode((await client.get(Uri.parse("${apiUrl}/api/reservations/doctor/$id/"))).body);
+            response = json.decode((await client.get(Uri.parse("${apiUrl}/api/reservations/doctor/$id/") ,  headers: {'Authorization': 'Bearer $token',} )).body);
                 response.forEach((element) {
                 if(Reservation.fromJson(element).dateRendezvous == DateTime.now().toString().substring(0,10) ){
                   reservationsList.add(Reservation.fromJson(element));
@@ -36,10 +39,12 @@ class DoctorApiMethods{
             List response ;
             List<Reservation> reservationsList = [];
             Client client = http.Client();
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
             String apiUrl = "";
             if (kIsWeb) { apiUrl = serverUrl ;}
             else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
-            response = json.decode((await client.get(Uri.parse("${apiUrl}/api/reservations/doctor/$id/"))).body);
+            response = json.decode((await client.get(Uri.parse("${apiUrl}/api/reservations/doctor/$id/") ,  headers: {'Authorization': 'Bearer $token',})).body);
                 response.forEach((element) {
                   reservationsList.add(Reservation.fromJson(element));
             });
@@ -51,6 +56,8 @@ class DoctorApiMethods{
      Future<String> creerConsultation({
              required String description, required int ordonnance_id,required int patient_id,required int docteur_id,
           }) async { 
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
             String res = "some error occured";
             late http.Response response;
             print('creation en cours ......');
@@ -62,7 +69,7 @@ class DoctorApiMethods{
                   "patient" :  patient_id , 
                   "docteur" :  docteur_id ,
                   "ordonnanceData" : ordonnance_id
-              }) , headers: { 'Content-Type':  "application/json" }
+              }) , headers: { 'Content-Type':  "application/json" , 'Authorization': 'Bearer $token'}
               ); 
 
             } else if(Platform.isAndroid) {
@@ -75,7 +82,7 @@ class DoctorApiMethods{
                 "patient" :  patient_id , 
                 "docteur" :  docteur_id ,
                 "ordonnanceData" : ordonnance_id
-              }) , headers: { 'Content-Type':  "application/json" }
+              }) , headers: { 'Content-Type':  "application/json" , 'Authorization': 'Bearer $token' }
               ); 
           } 
         
@@ -98,16 +105,18 @@ class DoctorApiMethods{
             List response ;
             List<Consultation> consList = [];
             Client client = http.Client();
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
             // si l'application est lancée dans le web ( navigateur ) : 
             if (kIsWeb) {
-              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/consultations/doctor/$id"))).body);
+              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/consultations/doctor/$id") ,  headers: {'Authorization': 'Bearer $token',} )).body);
               response.forEach((element) {
                 consList.add(Consultation.fromJson(element));
               });
             }
             // si l'application est lancée sur mobile ( android )
             else if(Platform.isAndroid) {
-              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/consultations/doctor/$id"))).body);
+              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/consultations/doctor/$id") ,  headers: {'Authorization': 'Bearer $token',})).body);
               response.forEach((element) {
                 consList.add(Consultation.fromJson(element));
               });        
@@ -124,6 +133,10 @@ class DoctorApiMethods{
       Future<Ordonnance> creerOrdonnance(File imageFile , String descr ,int patient_id , int docteur_id , ) async {
         Ordonnance ord = Ordonnance(id: 0, description: "", donnees: "", patient_id: 0, docteur_id: 0, created: "", updated: "") ; 
         String apiServerUrl = "";
+        SharedPreferences s_prefs = await SharedPreferences.getInstance();
+        String token = s_prefs.getStringList("authTokens")![0];
+ 
+
           if (kIsWeb) {apiServerUrl = serverUrl ; }
           else if(Platform.isAndroid) { apiServerUrl = mobileServerUrl ; }
             String resultat = "error occured ..." ;
@@ -132,7 +145,7 @@ class DoctorApiMethods{
             // get file length
             var length = await imageFile.length();
             // string to uri
-            var uri = Uri.parse("$apiServerUrl/api/ordonnances/create/");
+            var uri = Uri.parse("$apiServerUrl/api/ordonnances/create/" );
             // create multipart request
             var request = new http.MultipartRequest("POST", uri);
             // multipart that takes file
@@ -144,6 +157,8 @@ class DoctorApiMethods{
             OrdonnanceData ordData = OrdonnanceData(descr, docteur_id, patient_id);
 
             request.fields["data"] = jsonEncode(ordData);
+            request.headers['authorization'] = 'Bearer $token';
+
             // send
             var response = await request.send();
             print(response.statusCode);
@@ -168,16 +183,18 @@ class DoctorApiMethods{
             List response ;
             List<Ordonnance> ordonnancesList = [];
             Client client = http.Client();
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
             // si l'application est lancée dans le web ( navigateur ) : 
             if (kIsWeb) {
-              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/ordonnances/"))).body);
+              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/ordonnances/") , headers: {'Authorization': 'Bearer $token',})).body);
               response.forEach((element) {
                 ordonnancesList.add(Ordonnance.fromJson(element));
               });
             }
             // si l'application est lancée sur mobile ( android )
             else if(Platform.isAndroid) {
-              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/"))).body);
+              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/") , headers: {'Authorization': 'Bearer $token',})).body);
               response.forEach((element) {
                 ordonnancesList.add(Ordonnance.fromJson(element));
               });        
@@ -190,16 +207,18 @@ class DoctorApiMethods{
             List response ;
             List<Ordonnance> ordonnancesList = [];
             Client client = http.Client();
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
             // si l'application est lancée dans le web ( navigateur ) : 
             if (kIsWeb) {
-              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/ordonnances/doctor/$id"))).body);
+              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/ordonnances/doctor/$id") , headers: {'Authorization': 'Bearer $token',})).body);
               response.forEach((element) {
                 ordonnancesList.add(Ordonnance.fromJson(element));
               });
             }
             // si l'application est lancée sur mobile ( android )
             else if(Platform.isAndroid) {
-              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/doctor/$id"))).body);
+              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/doctor/$id") ,  headers: {'Authorization': 'Bearer $token',})).body);
               response.forEach((element) {
                 ordonnancesList.add(Ordonnance.fromJson(element));
               });        
@@ -212,16 +231,18 @@ class DoctorApiMethods{
         List response ;
         List<Ordonnance> ordonnances = [];
         Client client = http.Client();
+        SharedPreferences s_prefs = await SharedPreferences.getInstance();
+        String token = s_prefs.getStringList("authTokens")![0];
         // si l'application est lancée dans le web ( navigateur ) : 
         if (kIsWeb) {
-          response = json.decode((await client.get(Uri.parse("${serverUrl}/api/ordonnances/$id"))).body);
+          response = json.decode((await client.get(Uri.parse("${serverUrl}/api/ordonnances/$id") ,headers: {'Authorization': 'Bearer $token',})).body);
           response.forEach((element) {
           ordonnances.add(Ordonnance.fromJson(element));
             });
           }
           // si l'application est lancée sur mobile ( android )
           else if(Platform.isAndroid) {
-            response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/$id"))).body);
+            response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/$id") , headers: {'Authorization': 'Bearer $token',})).body);
             response.forEach((element) {
               ordonnances.add(Ordonnance.fromJson(element));
             });
@@ -236,16 +257,18 @@ class DoctorApiMethods{
             List response ;
             List<Analyse> analyseList = [];
             Client client = http.Client();
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
             // si l'application est lancée dans le web ( navigateur ) : 
             if (kIsWeb) {
-              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/analyses/"))).body);
+              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/analyses/") , headers: {'Authorization': 'Bearer $token',})).body);
               response.forEach((element) {
                 analyseList.add(Analyse.fromJson(element));
               });
             }
             // si l'application est lancée sur mobile ( android )
             else if(Platform.isAndroid) {
-              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/analyses/"))).body);
+              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/analyses/") , headers: {'Authorization': 'Bearer $token',})).body);
               response.forEach((element) {
                 analyseList.add(Analyse.fromJson(element));
               });        
@@ -259,9 +282,11 @@ class DoctorApiMethods{
         List response ;
         List<Analyse> analyses = [];
         Client client = http.Client();
+        SharedPreferences s_prefs = await SharedPreferences.getInstance();
+        String token = s_prefs.getStringList("authTokens")![0];
         // si l'application est lancée dans le web ( navigateur ) : 
         if (kIsWeb) {
-          response = json.decode((await client.get(Uri.parse("${serverUrl}/api/analyses/$id"))).body);
+          response = json.decode((await client.get(Uri.parse("${serverUrl}/api/analyses/$id") , headers: {'Authorization': 'Bearer $token',})).body);
           response.forEach((element) {
           analyses.add(Analyse.fromJson(element));
             });
@@ -269,7 +294,7 @@ class DoctorApiMethods{
           // si l'application est lancée sur mobile ( android )
 
           else if(Platform.isAndroid) {
-            response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/analyses/$id"))).body);
+            response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/analyses/$id"), headers: {'Authorization': 'Bearer $token',})).body);
             response.forEach((element) {
               analyses.add(Analyse.fromJson(element));
             });
@@ -287,10 +312,12 @@ class DoctorApiMethods{
             List<RadioData> radioList = [];
             Client client = http.Client();
             String apiUrl = "";
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
             if (kIsWeb) { apiUrl = serverUrl ; }
             else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
             if(apiUrl != ""){
-              response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/"))).body);
+              response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/") ,  headers: {'Authorization': 'Bearer $token',})).body);
               response.forEach((element) {
                   radioList.add(RadioData.fromJson(element));
               });
@@ -305,11 +332,13 @@ class DoctorApiMethods{
         List response ; 
         List<RadioData> radios = [];
         Client client = http.Client();
+        SharedPreferences s_prefs = await SharedPreferences.getInstance();
+        String token = s_prefs.getStringList("authTokens")![0];
         String apiUrl = "";
         if (kIsWeb) {apiUrl = serverUrl ; }
         else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
         if(apiUrl != ""){
-              response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/$id"))).body);
+              response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/$id") , headers: {'Authorization': 'Bearer $token',})).body);
               response.forEach((element) {
               radios.add(RadioData.fromJson(element));
         });

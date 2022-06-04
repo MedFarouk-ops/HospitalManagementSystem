@@ -25,9 +25,14 @@ class _AccueilHomeState extends State<AccueilHome> {
     List<User> _doctorList = [];
     List<Reservation> reservations = [];
 
+    String? token; 
 
+    _setAuthToken() async {
+        SharedPreferences s_prefs = await SharedPreferences.getInstance();
+        token = s_prefs.getStringList("authTokens")![0];
+        setStateIfMounted(() {});
+    }  
 
-  
     void setStateIfMounted(f) {
       if (mounted) setState(f);
     }
@@ -58,6 +63,7 @@ class _AccueilHomeState extends State<AccueilHome> {
     void initState() {
       // TODO: implement initState
       super.initState();
+      _setAuthToken();
       _setUsers();
       _setUserNumber();
       _getReservationList();
@@ -113,7 +119,7 @@ class _AccueilHomeState extends State<AccueilHome> {
                             patientList: _patientList,
                             )),
                     ),
-                      ReservationList(reservations: reservations ),
+                      ReservationList(reservations: reservations , token: token),
                       const SizedBox(height: 16),
                       ],
                     ),

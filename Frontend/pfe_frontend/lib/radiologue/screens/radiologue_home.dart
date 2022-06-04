@@ -16,6 +16,7 @@ import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/radiologue/screens/partie_radio/creer_radio.dart';
 import 'package:pfe_frontend/radiologue/utils/radiologue_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RadiologueHomePage extends StatefulWidget {
   const RadiologueHomePage({Key? key}) : super(key: key);
@@ -32,6 +33,15 @@ class _RadiologueHomePageState extends State<RadiologueHomePage>
   List<RadioData> radios = [];  
   List<User> _patients = [];
   List<User> _docteurs = [];
+
+     String? token; 
+
+    _setAuthToken() async {
+          SharedPreferences s_prefs = await SharedPreferences.getInstance();
+          token = s_prefs.getStringList("authTokens")![0];
+          setStateIfMounted(() {});      
+    }
+
 
     void setStateIfMounted(f) {
       if (mounted) setState(f);
@@ -53,6 +63,7 @@ class _RadiologueHomePageState extends State<RadiologueHomePage>
   void initState() {
     // TODO: implement initState
     super.initState();
+    _setAuthToken();
     _getRadios();
     _setUsers();
   }
@@ -119,7 +130,7 @@ class _RadiologueHomePageState extends State<RadiologueHomePage>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${radios[index].patient_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${radios[index].patient_id}") , headers: {'Authorization': 'Bearer ${token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -163,7 +174,7 @@ class _RadiologueHomePageState extends State<RadiologueHomePage>
                                   SizedBox(
                                     height: 5,
                                   ),
-                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${radios[index].docteur_id}")) ,
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${radios[index].docteur_id}") , headers: {'Authorization': 'Bearer ${token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {

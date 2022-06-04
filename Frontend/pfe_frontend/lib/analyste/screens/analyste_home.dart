@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:pfe_frontend/analyste/widgets/AnalysteCustomListScroller.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AnalysteHomePage extends StatefulWidget {
   const AnalysteHomePage({Key? key}) : super(key: key);
@@ -17,11 +18,24 @@ class AnalysteHomePage extends StatefulWidget {
 class _AnalysteHomePageState extends State<AnalysteHomePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  String? token; 
+
+  _setAuthToken() async {
+      SharedPreferences s_prefs = await SharedPreferences.getInstance();
+      token = s_prefs.getStringList("authTokens")![0];
+      setStateIfMounted(() {});
+  }   
+  
+  void setStateIfMounted(f) {
+      if (mounted) setState(f);
+  }
+     
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    _setAuthToken();
   }
 
   @override
@@ -67,9 +81,9 @@ class _AnalysteHomePageState extends State<AnalysteHomePage>
                           alignment: Alignment.topCenter,
                           height: categoryHeight*2.4,
                           child: Column(children: [
-                            AnalysteCustomListScroller(),
-                            AnalysteThirdListScroller(),
-                            AnalysteSecondListScroller(),
+                            AnalysteCustomListScroller( token : token),
+                            AnalysteThirdListScroller( token : token),
+                            AnalysteSecondListScroller( token :token ),
                           ],), 
                       )),
                       // const SizedBox(height: 2),

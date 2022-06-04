@@ -20,8 +20,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DoctorCustomListScroller extends StatefulWidget {
   final List<Reservation> doctorReservations;
-
-  const DoctorCustomListScroller({ Key? key , required this.doctorReservations   }) : super(key: key);
+  final String? token ; 
+  const DoctorCustomListScroller({ Key? key , required this.doctorReservations , required this.token }) : super(key: key);
 
   @override
   State<DoctorCustomListScroller> createState() => _DoctorCustomListScrollerState();
@@ -155,7 +155,8 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
 class DoctorSecondListScroller extends StatefulWidget {
   final List<Consultation> consList ; 
   final List<Ordonnance> ordList ; 
-  const DoctorSecondListScroller({ Key? key , required this.consList , required this.ordList }) : super(key: key);
+  final String? token ; 
+  const DoctorSecondListScroller({ Key? key , required this.consList , required this.ordList , required this.token}) : super(key: key);
 
   @override
   State<DoctorSecondListScroller> createState() => _DoctorSecondListScrollerState();
@@ -168,7 +169,7 @@ class _DoctorSecondListScrollerState extends State<DoctorSecondListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => ConsultationLayout(consultations: widget.consList,)
+        builder: (context) => ConsultationLayout(consultations: widget.consList,token: widget.token,)
         )
     );
   }
@@ -176,7 +177,7 @@ class _DoctorSecondListScrollerState extends State<DoctorSecondListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) =>  OrdonnanceLayout(ordonnances: widget.ordList,)
+        builder: (context) =>  OrdonnanceLayout(ordonnances: widget.ordList, token: widget.token,)
         )
     );
 
@@ -280,7 +281,8 @@ class _DoctorSecondListScrollerState extends State<DoctorSecondListScroller> {
 
 class DoctorThirdListScroller extends StatefulWidget {
   final  List<RadioData> radios;  
-  const DoctorThirdListScroller({ Key? key , required this.radios  }) : super(key: key);
+  final String? token ; 
+  const DoctorThirdListScroller({ Key? key , required      this.radios , required this.token  }) : super(key: key);
 
   @override
   State<DoctorThirdListScroller> createState() => _DoctorThirdListScrollerState();
@@ -303,7 +305,7 @@ class _DoctorThirdListScrollerState extends State<DoctorThirdListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => ClicheeRadioLayout(radios: widget.radios)
+        builder: (context) => ClicheeRadioLayout(radios: widget.radios , token: widget.token,)
         )
     );
   }
@@ -410,7 +412,8 @@ class _DoctorThirdListScrollerState extends State<DoctorThirdListScroller> {
 
 
 class DoctorFourthListScroller extends StatefulWidget {
-  const DoctorFourthListScroller({ Key? key ,   }) : super(key: key);
+  final String? token ; 
+  const DoctorFourthListScroller({ Key? key , required this.token  }) : super(key: key);
 
   @override
   State<DoctorFourthListScroller> createState() => _DoctorFourthListScrollerState();

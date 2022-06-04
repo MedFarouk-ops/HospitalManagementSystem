@@ -17,7 +17,8 @@ import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:http/http.dart' as http;
 
 class BiochemieListLayout extends StatefulWidget {
-  const BiochemieListLayout({Key? key}) : super(key: key);
+  final String? token;
+  const BiochemieListLayout({Key? key , required this.token}) : super(key: key);
 
   @override
   State<BiochemieListLayout> createState() => _BiochemieListLayoutState();
@@ -130,7 +131,7 @@ List<Analyse> analyses = [];
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].patient_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -174,7 +175,7 @@ List<Analyse> analyses = [];
                                   SizedBox(
                                     height: 5,
                                   ),
-                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].docteur_id}")) ,
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].docteur_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -207,7 +208,7 @@ List<Analyse> analyses = [];
                                    SizedBox(
                                     height: 5,
                                   ),
-                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].analyste_id}")) ,
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].analyste_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {

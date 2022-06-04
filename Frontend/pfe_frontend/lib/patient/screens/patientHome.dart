@@ -7,6 +7,7 @@ import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/patient/utils/patient_api_methods.dart';
 import 'package:pfe_frontend/patient/widgets/PatientCustomListScroller.dart';
 import 'package:pfe_frontend/patient/widgets/Patient_Today_Reservation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PatientHome extends StatefulWidget {
   const PatientHome({ Key? key }) : super(key: key);
@@ -21,6 +22,14 @@ class _PatientHomeState extends State<PatientHome> {
     List<Reservation> reservations = [];
     List<Ordonnance> ordonnances = [];
     List<Consultation> consultations = [];
+    String? token; 
+
+    _setAuthToken() async {
+          SharedPreferences s_prefs = await SharedPreferences.getInstance();
+          token = s_prefs.getStringList("authTokens")![0];
+          setStateIfMounted(() {});      
+    }
+    
     void setStateIfMounted(f) {
       if (mounted) setState(f);
     }     
@@ -51,6 +60,7 @@ class _PatientHomeState extends State<PatientHome> {
   void initState() {
     // TODO: implement initState
     super.initState();
+      _setAuthToken();
       _getConsultationList();
       _getOrdonnanceList();
       _getReservationList();
@@ -91,7 +101,7 @@ class _PatientHomeState extends State<PatientHome> {
                     children: <Widget>[
                   Column( children: [
                     const SizedBox(height: 8),
-                    PatientTodayReservation(reservations: todayReservations ),
+                    PatientTodayReservation(reservations: todayReservations , token: token, ),
                     AnimatedOpacity(
                       duration: const Duration(milliseconds: 200),
                       opacity: 1,
@@ -102,8 +112,8 @@ class _PatientHomeState extends State<PatientHome> {
                           height: categoryHeight*2.4,
                           child: Column(children: [
                            //***************************** */
-                           PatientCustomListScroller(patientReservations: reservations),
-                           PatientSecondListScroller(consList: consultations, ordList: ordonnances),
+                           PatientCustomListScroller(patientReservations: reservations ,token: token),
+                           PatientSecondListScroller(consList: consultations, ordList: ordonnances , token: token),
                           ],) 
                       )),
                       // const SizedBox(height: 2),

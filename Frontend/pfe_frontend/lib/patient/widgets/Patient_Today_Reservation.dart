@@ -18,7 +18,8 @@ import 'package:http/http.dart' as http;
 
 class PatientTodayReservation extends StatefulWidget {
   final List<Reservation> reservations ;
-  const PatientTodayReservation({Key? key ,  required this.reservations}) : super(key: key);
+  final String? token;
+  const PatientTodayReservation({Key? key ,  required this.reservations , required this.token}) : super(key: key);
 
   @override
   State<PatientTodayReservation> createState() => _PatientTodayReservationState();
@@ -58,7 +59,7 @@ class _PatientTodayReservationState extends State<PatientTodayReservation>
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) =>  PatientReservationLayout(reservations: patientReservations,)
+        builder: (context) =>  PatientReservationLayout(reservations: patientReservations,token: widget.token,)
         )
     );
   }
@@ -139,7 +140,7 @@ class _PatientTodayReservationState extends State<PatientTodayReservation>
               for( var i = 0 ; i < 4; i++ ) 
                DataRow(cells: [
                 DataCell(
-                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}")) ,
+                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                 builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                   if (snapshot.hasData) {
                                       if (snapshot.data!.statusCode != 200) {
@@ -163,7 +164,7 @@ class _PatientTodayReservationState extends State<PatientTodayReservation>
                 for( var i = 0 ; i <widget.reservations.length ; i++ ) 
                 DataRow(cells: [
                     DataCell(
-                    FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}")) ,
+                    FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                       if (snapshot.hasData) {
                                           if (snapshot.data!.statusCode != 200) {

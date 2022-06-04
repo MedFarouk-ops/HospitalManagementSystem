@@ -7,6 +7,7 @@ import 'package:pfe_frontend/admin/utils/userListScroller.dart';
 import 'package:pfe_frontend/admin/widget/reception_activities.dart';
 import 'package:pfe_frontend/admin/widget/reservations_list.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({ Key? key }) : super(key: key);
@@ -63,6 +64,13 @@ class _AdminHomeState extends State<AdminHome> {
   
 
   List<Reservation> reservations = [];
+  String? token; 
+
+  _setAuthToken() async {
+      SharedPreferences s_prefs = await SharedPreferences.getInstance();
+      token = s_prefs.getStringList("authTokens")![0];
+      setStateIfMounted(() {});
+  }   
 
   void setStateIfMounted(f) {
       if (mounted) setState(f);
@@ -77,6 +85,7 @@ class _AdminHomeState extends State<AdminHome> {
   void initState() {
     // TODO: implement initState
     super.initState();
+      _setAuthToken();
       _getReservationList();
 
   }
@@ -118,7 +127,7 @@ class _AdminHomeState extends State<AdminHome> {
                           height: categoryHeight,
                           child: UserListScroller()),
                     ),
-                    ReservationList(reservations: reservations),
+                    ReservationList(reservations: reservations , token: token),
                     const SizedBox(height: 16),
                     ReceptionActivityList(),
                     const SizedBox(height: 16),

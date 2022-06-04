@@ -17,7 +17,8 @@ import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
 
 class PatientOrdonnanceLayout extends StatefulWidget {
   final List<Ordonnance> ordonnances ; 
-  const PatientOrdonnanceLayout({Key? key , required this.ordonnances}) : super(key: key);
+  final String? token;
+  const PatientOrdonnanceLayout({Key? key , required this.ordonnances , required this.token}) : super(key: key);
 
   @override
   State<PatientOrdonnanceLayout> createState() => _PatientOrdonnanceLayoutState();
@@ -92,7 +93,7 @@ class _PatientOrdonnanceLayoutState extends State<PatientOrdonnanceLayout>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.ordonnances[index].docteur_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.ordonnances[index].docteur_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {

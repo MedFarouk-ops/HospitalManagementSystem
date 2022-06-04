@@ -10,8 +10,8 @@ import 'package:pfe_frontend/patient/screens/partie_docteurs/patient_search_doct
 
 class PatientCustomListScroller extends StatefulWidget {
   final List<Reservation> patientReservations;
-
-  const PatientCustomListScroller({ Key? key , required this.patientReservations   }) : super(key: key);
+  final String? token; 
+  const PatientCustomListScroller({ Key? key , required this.patientReservations , required this.token   }) : super(key: key);
 
   @override
   State<PatientCustomListScroller> createState() => _PatientCustomListScrollerState();
@@ -37,7 +37,7 @@ class _PatientCustomListScrollerState extends State<PatientCustomListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => PatientReservationLayout(reservations: widget.patientReservations,)
+        builder: (context) => PatientReservationLayout(reservations: widget.patientReservations, token:  widget.token,)
         )
     );
   }
@@ -144,7 +144,8 @@ class _PatientCustomListScrollerState extends State<PatientCustomListScroller> {
 class PatientSecondListScroller extends StatefulWidget {
   final List<Consultation> consList ; 
   final List<Ordonnance> ordList ; 
-  const PatientSecondListScroller({ Key? key , required this.consList , required this.ordList }) : super(key: key);
+  final String? token;
+  const PatientSecondListScroller({ Key? key , required this.consList , required this.ordList , required this.token  }) : super(key: key);
 
   @override
   State<PatientSecondListScroller> createState() => _PatientSecondListScrollerState();
@@ -157,7 +158,7 @@ class _PatientSecondListScrollerState extends State<PatientSecondListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => PatientConsultationLayout(consultations: widget.consList,)
+        builder: (context) => PatientConsultationLayout(consultations: widget.consList, token: widget.token,)
         )
     );
   }
@@ -165,7 +166,7 @@ class _PatientSecondListScrollerState extends State<PatientSecondListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) =>  PatientOrdonnanceLayout(ordonnances: widget.ordList,)
+        builder: (context) =>  PatientOrdonnanceLayout(ordonnances: widget.ordList, token: widget.token,)
         )
     );
 

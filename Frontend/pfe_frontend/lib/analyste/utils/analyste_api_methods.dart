@@ -9,6 +9,7 @@ import 'package:http/http.dart';
 import 'package:async/async.dart';
 import 'package:path/path.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -69,9 +70,11 @@ class AnalysteApiMethods{
       List<Analyse> analyses = []; 
       Client client = http.Client();
       String apiUrl = "";
+      SharedPreferences s_prefs = await SharedPreferences.getInstance();
+      String token = s_prefs.getStringList("authTokens")![0];
       if (kIsWeb) { apiUrl = serverUrl ;}
       else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
-      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/type/$type/"))).body);
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/type/$type/") , headers: {'Authorization': 'Bearer $token',})).body);
                 response.forEach((element) {
                   analyses.add(Analyse.fromJson(element));
       });
@@ -82,10 +85,12 @@ class AnalysteApiMethods{
       List response ;
       List<Analyse> analyses = []; 
       Client client = http.Client();
+      SharedPreferences s_prefs = await SharedPreferences.getInstance();
+      String token = s_prefs.getStringList("authTokens")![0];
       String apiUrl = "";
       if (kIsWeb) { apiUrl = serverUrl ;}
       else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
-      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/doctor/$id/"))).body);
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/doctor/$id/") , headers: {'Authorization': 'Bearer $token',})).body);
                 response.forEach((element) {
                   analyses.add(Analyse.fromJson(element));
       });
@@ -97,9 +102,11 @@ class AnalysteApiMethods{
       List<Analyse> analyses = []; 
       Client client = http.Client();
       String apiUrl = "";
+      SharedPreferences s_prefs = await SharedPreferences.getInstance();
+      String token = s_prefs.getStringList("authTokens")![0];
       if (kIsWeb) { apiUrl = serverUrl ;}
       else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
-      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/patient/$id/"))).body);
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/patient/$id/") , headers: {'Authorization': 'Bearer $token',})).body);
                 response.forEach((element) {
                   analyses.add(Analyse.fromJson(element));
       });
@@ -110,10 +117,12 @@ class AnalysteApiMethods{
       List response ;
       List<Analyse> analyses = []; 
       Client client = http.Client();
+      SharedPreferences s_prefs = await SharedPreferences.getInstance();
+      String token = s_prefs.getStringList("authTokens")![0];
       String apiUrl = "";
       if (kIsWeb) { apiUrl = serverUrl ;}
       else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
-      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/analyste/$id/"))).body);
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/analyses/analyste/$id/") , headers: {'Authorization': 'Bearer $token',})).body);
                 response.forEach((element) {
                   analyses.add(Analyse.fromJson(element));
       });

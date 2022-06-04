@@ -14,8 +14,9 @@ import 'package:http/http.dart' as http;
 
 
 class AllReservationList extends StatefulWidget {
+  final String? token;
   final List<Reservation> reservations;
-  const AllReservationList({Key? key , required this.reservations}) : super(key: key);
+  const AllReservationList({Key? key , required this.reservations , required this.token}) : super(key: key);
 
   @override
   State<AllReservationList> createState() => _AllReservationListState();
@@ -88,7 +89,7 @@ class _AllReservationListState extends State<AllReservationList>
               for( var i = 0 ; i <widget.reservations.length ; i++ ) 
                DataRow(cells: [
                 DataCell(
-                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}")) ,
+                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].patient_id}") ,  headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                 builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                   if (snapshot.hasData) {
                                       if (snapshot.data!.statusCode != 200) {
@@ -106,7 +107,7 @@ class _AllReservationListState extends State<AllReservationList>
                   
                   ),
                 DataCell(
-                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].docteur_id}")) ,
+                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[i].docteur_id}") , headers: {'Authorization': 'Bearer ${widget.token}'} ) ,
                                 builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                   if (snapshot.hasData) {
                                       if (snapshot.data!.statusCode != 200) {

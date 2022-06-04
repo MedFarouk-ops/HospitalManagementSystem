@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:io' show Platform;
-
 import 'package:flutter/foundation.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +8,7 @@ import 'package:http/http.dart';
 import 'package:async/async.dart';
 import 'package:path/path.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -16,11 +16,11 @@ class RadioApiMethods{
 
   //************************************** Creer Radio ****************************************//
   
-  
     Future<String> creerRadio(File pdfFile , String description , String nomLaboratoire , int radiologue_id  ,int patient_id , int docteur_id , ) async {
-        
-        String result = "not set";
 
+        String result = "not set";
+        SharedPreferences s_prefs = await SharedPreferences.getInstance();
+        String token = s_prefs.getStringList("authTokens")![0];
         String apiServerUrl = "";
           if (kIsWeb) {apiServerUrl = serverUrl ; }
           else if(Platform.isAndroid) { apiServerUrl = mobileServerUrl ; }
@@ -38,10 +38,10 @@ class RadioApiMethods{
                 filename: basename(pdfFile.path));
             // add file to multipart
             request.files.add(multipartFile);
-
             ImageRadioData rdData = ImageRadioData(description, nomLaboratoire, radiologue_id, docteur_id, patient_id);
 
             request.fields["data"] = jsonEncode(rdData);
+            request.headers['authorization'] = 'Bearer $token';
             // send
             var response = await request.send();
             print(response.statusCode);
@@ -67,9 +67,11 @@ class RadioApiMethods{
       List<RadioData> radios = []; 
       Client client = http.Client();
       String apiUrl = "";
+      SharedPreferences s_prefs = await SharedPreferences.getInstance();
+      String token = s_prefs.getStringList("authTokens")![0];
       if (kIsWeb) { apiUrl = serverUrl ;}
       else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
-      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/doctor/$id/"))).body);
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/doctor/$id/") , headers: {'Authorization': 'Bearer $token',})).body);
                 response.forEach((element) {
                   radios.add(RadioData.fromJson(element));
       });
@@ -81,9 +83,11 @@ class RadioApiMethods{
       List<RadioData> radios = []; 
       Client client = http.Client();
       String apiUrl = "";
+      SharedPreferences s_prefs = await SharedPreferences.getInstance();
+      String token = s_prefs.getStringList("authTokens")![0];
       if (kIsWeb) { apiUrl = serverUrl ;}
       else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
-      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/patient/$id/"))).body);
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/patient/$id/") , headers: {'Authorization': 'Bearer $token',})).body);
                 response.forEach((element) {
                   radios.add(RadioData.fromJson(element));
       });
@@ -95,9 +99,11 @@ class RadioApiMethods{
       List<RadioData> radios = []; 
       Client client = http.Client();
       String apiUrl = "";
+      SharedPreferences s_prefs = await SharedPreferences.getInstance();
+      String token = s_prefs.getStringList("authTokens")![0];
       if (kIsWeb) { apiUrl = serverUrl ;}
       else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
-      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/radiologue/$id/"))).body);
+      response = json.decode((await client.get(Uri.parse("${apiUrl}/api/radios/radiologue/$id/") , headers: {'Authorization': 'Bearer $token',})).body);
                 response.forEach((element) {
                   radios.add(RadioData.fromJson(element));
       });

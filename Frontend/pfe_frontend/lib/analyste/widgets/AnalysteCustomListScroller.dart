@@ -11,7 +11,8 @@ import 'package:pfe_frontend/analyste/screens/partie_voir_tout/liste_tout_bilan.
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 
 class AnalysteCustomListScroller extends StatefulWidget {
-  const AnalysteCustomListScroller({Key? key}) : super(key: key);
+  final String? token;
+  const AnalysteCustomListScroller({Key? key , required this.token}) : super(key: key);
 
   @override
   State<AnalysteCustomListScroller> createState() => _AnalysteCustomListScrollerState();
@@ -33,7 +34,7 @@ class _AnalysteCustomListScrollerState extends State<AnalysteCustomListScroller>
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => HematologieListLayout()
+        builder: (context) => HematologieListLayout(token: widget.token,)
         )
     );
   
@@ -44,7 +45,7 @@ class _AnalysteCustomListScrollerState extends State<AnalysteCustomListScroller>
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => BiochemieListLayout()
+        builder: (context) => BiochemieListLayout(token: widget.token,)
         )
     );
   }
@@ -150,7 +151,8 @@ class _AnalysteCustomListScrollerState extends State<AnalysteCustomListScroller>
 
 
 class AnalysteSecondListScroller extends StatefulWidget {
-  const AnalysteSecondListScroller({Key? key}) : super(key: key);
+  final String? token;
+  const AnalysteSecondListScroller({Key? key , required this.token}) : super(key: key);
 
   @override
   State<AnalysteSecondListScroller> createState() => _AnalysteSecondListScrollerState();
@@ -175,7 +177,7 @@ class _AnalysteSecondListScrollerState extends State<AnalysteSecondListScroller>
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => MicrobiologieListLayout()
+        builder: (context) => MicrobiologieListLayout(token: widget.token,)
         )
     );
   }
@@ -184,7 +186,7 @@ class _AnalysteSecondListScrollerState extends State<AnalysteSecondListScroller>
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => BilansListe()
+        builder: (context) => BilansListe(token: widget.token ,)
         )
     );
   }
@@ -289,7 +291,8 @@ class _AnalysteSecondListScrollerState extends State<AnalysteSecondListScroller>
 
 
 class AnalysteThirdListScroller extends StatefulWidget {
-  const AnalysteThirdListScroller({Key? key}) : super(key: key);
+  final String? token;
+  const AnalysteThirdListScroller({Key? key , required this.token}) : super(key: key);
 
   @override
   State<AnalysteThirdListScroller> createState() => _AnalysteThirdListScrollerState();
@@ -314,7 +317,7 @@ class _AnalysteThirdListScrollerState extends State<AnalysteThirdListScroller>
      Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => AnatomopathListLayout()
+        builder: (context) => AnatomopathListLayout(token: widget.token,)
         )
     );
   }

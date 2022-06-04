@@ -1,37 +1,43 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import generics, permissions
+
 from .serializers import UserSerializer
 from .models import User
 # Create your views here.
 
 # Get user list by role : 
 
-@api_view([('GET')])
-def getPatients(request):
-    users = User.objects.all().filter(role=2)
-    serializer = UserSerializer(users , many = True)
-    return Response(serializer.data)
+class getPatientsAPIView(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self,request):
+        users = User.objects.all().filter(role=2)
+        serializer = UserSerializer(users , many = True)
+        return Response(serializer.data)
 
-@api_view([('GET')])
-def getDoctors(request):
-    users = User.objects.all().filter(role=3)
-    serializer = UserSerializer(users , many = True)
-    return Response(serializer.data)
 
-@api_view([('GET')])
-def getNurses(request):
-    users = User.objects.all().filter(role=3)
-    serializer = UserSerializer(users , many = True)
-    return Response(serializer.data)
+class getDoctorsAPIView(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get( self,request):
+        users = User.objects.all().filter(role=3)
+        serializer = UserSerializer(users , many = True)
+        return Response(serializer.data)
+
+class getNursesAPIView(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self,request):
+        users = User.objects.all().filter(role=3)
+        serializer = UserSerializer(users , many = True)
+        return Response(serializer.data)
 
 # get user by id :
-
-@api_view([('GET')])
-def getUser(request , pk):
-    user = User.objects.get(id = pk)
-    serializer1 = UserSerializer( user , many = False)
-    return Response(serializer1.data)
+class getUserAPIView(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self , request , pk):
+        user = User.objects.get(id = pk)
+        serializer1 = UserSerializer( user , many = False)
+        return Response(serializer1.data)
 
 
 @api_view([('PUT')])

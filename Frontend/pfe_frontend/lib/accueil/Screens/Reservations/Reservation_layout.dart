@@ -9,7 +9,8 @@ import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class ReservationLayout extends StatefulWidget {
-  const ReservationLayout({ Key? key }) : super(key: key);
+  final String? token;
+  const ReservationLayout({ Key? key , required this.token }) : super(key: key);
 
   @override
   State<ReservationLayout> createState() => _ReservationLayoutState();
@@ -88,7 +89,7 @@ class _ReservationLayoutState extends State<ReservationLayout> {
             //  SfCalendar(
             //     view : CalendarView.month,allowAppointmentResize: true,
             //   ),
-              AllReservationList(reservations: reservationsList),
+              AllReservationList(reservations: reservationsList , token: widget.token ),
               const SizedBox(height: 30),
               ElevatedButton(
                 style: style,
