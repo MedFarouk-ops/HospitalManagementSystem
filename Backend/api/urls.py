@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 
+
 urlpatterns = [
     
     # route api de la reservations : 
@@ -17,7 +18,8 @@ urlpatterns = [
 
     # route api de la ordonnance : 
     # ******************************************************************************************************************** #
-    path('ordonnances/',views.getOrdonnancesAPIView.as_view()),
+    # path('ordonnances/',views.getOrdonnancesAPIView.as_view()),
+    path('ordonnances/',views.getOrdo),
     path('ordonnances/create/',views.createOrdonnanceAPIView.as_view()),
     path('ordonnances/delete/<str:pk>/',views.deleteOrdonnanceAPIView.as_view()),
     # path('ordonnances/update/<str:pk>/',views.updateOrdonnace),

@@ -90,12 +90,14 @@ class updateReservationAPIView(generics.GenericAPIView):
 
 # partie gestion de ordonnance : (docteur)   ******************************************************************************************** #
 
-class getOrdonnancesAPIView(generics.GenericAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    def get( self , request):
-        ordannaces = Ordonnance.objects.all()
-        serializer = OrdonnanceSerializer(ordannaces , many=True)
-        return Response(serializer.data)
+# class getOrdonnancesAPIView(generics.GenericAPIView):
+#     permission_classes = (permissions.IsAuthenticated,)
+    # def get( self , request):
+@api_view([('GET')])
+def getOrdo(request):
+    ordannaces = Ordonnance.objects.all()
+    serializer = OrdonnanceSerializer(ordannaces , many=True)
+    return Response(serializer.data)
 
 class createOrdonnanceAPIView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)

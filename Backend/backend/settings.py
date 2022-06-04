@@ -171,7 +171,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
@@ -186,4 +185,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1' ,]
 
+MEDIA_ROOT = os.path.join(BASE_DIR, '').replace('\\', '/')
+MEDIA_URL = '/media/'
 
