@@ -17,7 +17,8 @@ import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 
 class DoctorAnalysesListe extends StatefulWidget {
-  const DoctorAnalysesListe({Key? key}) : super(key: key);
+  final String? token;
+  const DoctorAnalysesListe({Key? key , required this.token}) : super(key: key);
 
   @override
   State<DoctorAnalysesListe> createState() => _DoctorAnalysesListeState();
@@ -115,7 +116,7 @@ class _DoctorAnalysesListeState extends State<DoctorAnalysesListe>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].patient_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}',}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -193,7 +194,7 @@ class _DoctorAnalysesListeState extends State<DoctorAnalysesListe>
 
                             
 
-                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].docteur_id}")) ,
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${analyses[index].docteur_id}") , headers: {'Authorization': 'Bearer ${widget.token}',}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {

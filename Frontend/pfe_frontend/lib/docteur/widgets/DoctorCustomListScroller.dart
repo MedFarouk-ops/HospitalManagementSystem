@@ -47,7 +47,7 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => DoctorAllReservationList(reservations: widget.doctorReservations,)
+        builder: (context) => DoctorAllReservationList(reservations: widget.doctorReservations, token: widget.token, )
         )
     );
   }
@@ -56,7 +56,7 @@ class _DoctorCustomListScrollerState extends State<DoctorCustomListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => DoctorAnalysesListe()
+        builder: (context) => DoctorAnalysesListe(token: widget.token,)
         )
     );
   }
@@ -296,7 +296,7 @@ class _DoctorThirdListScrollerState extends State<DoctorThirdListScroller> {
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) => RadioCompteRendueLayout()
+        builder: (context) => RadioCompteRendueLayout(token: widget.token,)
         )
     );
   }

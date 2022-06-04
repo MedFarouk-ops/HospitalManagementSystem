@@ -25,7 +25,7 @@ class getReservationsAPIView(generics.GenericAPIView):
 
 class createReservationAPIView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    def post(request) : 
+    def post(self , request) : 
         data = request.data 
         patient_id = data['patient']
         doctor_id = data['docteur']
@@ -406,8 +406,6 @@ class getConsultationByPatientId(generics.GenericAPIView):
         consultations = Consultation.objects.all().filter(patient_id = pk)
         serializer = ConsultationSerializer(consultations , many = True)
         return Response(serializer.data)
-
-
 
 
 

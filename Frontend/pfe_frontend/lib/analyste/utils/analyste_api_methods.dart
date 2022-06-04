@@ -23,6 +23,9 @@ class AnalysteApiMethods{
         String result = "not set";
 
         String apiServerUrl = "";
+        SharedPreferences s_prefs = await SharedPreferences.getInstance();
+        String token = s_prefs.getStringList("authTokens")![0];
+        
           if (kIsWeb) {apiServerUrl = serverUrl ; }
           else if(Platform.isAndroid) { apiServerUrl = mobileServerUrl ; }
             String resultat = "error occured ..." ;
@@ -43,6 +46,7 @@ class AnalysteApiMethods{
             AnalyseData anlData = AnalyseData(description, nomLaboratoire, type, analyste_id, docteur_id, patient_id);
 
             request.fields["data"] = jsonEncode(anlData);
+            request.headers['authorization'] = 'Bearer $token';
             // send
             var response = await request.send();
             print(response.statusCode);

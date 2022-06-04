@@ -18,7 +18,8 @@ import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
 
 class DoctorAllReservationList extends StatefulWidget {
   final List<Reservation> reservations;
-  const DoctorAllReservationList({Key? key , required this.reservations}) : super(key: key);
+  final String? token ; 
+  const DoctorAllReservationList({Key? key , required this.reservations , required this.token }) : super(key: key);
 
   @override
   State<DoctorAllReservationList> createState() => _DoctorAllReservationListState();
@@ -79,7 +80,7 @@ class _DoctorAllReservationListState extends State<DoctorAllReservationList>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[index].patient_id}")) ,
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[index].patient_id}") ,  headers: {'Authorization': 'Bearer ${widget.token}',}) ,
                                   builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                   if (snapshot.hasData) {
                                       if (snapshot.data!.statusCode != 200) {
@@ -99,7 +100,7 @@ class _DoctorAllReservationListState extends State<DoctorAllReservationList>
                                     height: 5,
                                   ),
                                   
-                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[index].patient_id}")) ,
+                                  FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.reservations[index].patient_id}") ,  headers: {'Authorization': 'Bearer ${widget.token}',}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {

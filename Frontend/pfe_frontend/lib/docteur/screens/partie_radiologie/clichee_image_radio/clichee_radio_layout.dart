@@ -143,7 +143,7 @@ class _ClicheeRadioLayoutState extends State<ClicheeRadioLayout>
                                   SizedBox(
                                     height: 5,
                                   ),
-                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.radios[index].docteur_id}")) ,
+                                   FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.radios[index].docteur_id}") ,  headers: {'Authorization': 'Bearer ${widget.token}',}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {

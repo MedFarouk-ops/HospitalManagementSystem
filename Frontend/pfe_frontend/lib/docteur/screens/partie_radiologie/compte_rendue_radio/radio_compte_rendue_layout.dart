@@ -7,7 +7,9 @@ import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 
 class RadioCompteRendueLayout extends StatefulWidget {
-  const RadioCompteRendueLayout({Key? key}) : super(key: key);
+  final String? token;
+
+  const RadioCompteRendueLayout({Key? key , required this.token}) : super(key: key);
 
   @override
   State<RadioCompteRendueLayout> createState() => _RadioCompteRendueLayoutState();

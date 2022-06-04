@@ -61,7 +61,7 @@ class _TodayReservationLayoutState extends State<TodayReservationLayout>
     Navigator.of(context)
     .push(
       MaterialPageRoute(
-        builder: (context) =>  DoctorAllReservationList(reservations: doctorReservations)
+        builder: (context) =>  DoctorAllReservationList(reservations: doctorReservations , token: widget.token,)
         )
     );
   }
