@@ -62,6 +62,7 @@ class _DocteurHomeState extends State<DocteurHome> {
       User currentuser = await AuthContext().getUserDetails();
       radios = await RadioApiMethods().getRadiosByDoctorId(currentuser.id);
       print(radios.length);
+       setStateIfMounted(() {});
     } 
 
     @override

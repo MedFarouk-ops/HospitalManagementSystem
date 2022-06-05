@@ -9,6 +9,7 @@ import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
+import 'package:pfe_frontend/analyste/screens/partie_details/afficher_pdf.dart';
 import 'package:pfe_frontend/analyste/utils/analyste_api_methods.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
@@ -37,6 +38,21 @@ _loadPdf(String pdfUrl){
       });
     });
 }
+void setStateIfMounted(f) {
+  if (mounted) setState(f);
+}
+_navigateToPDFViex( String pdf){
+  _loadPdf(pdf);
+  if(localPath != ""){
+   Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => VoirPDF(localPath: localPath,)
+        )
+    );
+    setStateIfMounted(() {});
+  }
+}
 
   @override
   void initState() {
@@ -57,11 +73,7 @@ _loadPdf(String pdfUrl){
         title: Text("Details sur le bilan"),
         backgroundColor: AdminColorSix,
       ),
-      body: localPath != ""
-          ? PDFView(
-              filePath: localPath,
-            )
-          :
+      body:
       SingleChildScrollView(
       child: RefreshIndicator(onRefresh: () async{
         //  _setUsers();
@@ -250,7 +262,7 @@ _loadPdf(String pdfUrl){
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Ouvrir le fichier pdf attaché'),
                                   onPressed: () => {
-                                    _loadPdf(widget.bilan.donnees)
+                                    _navigateToPDFViex(widget.bilan.donnees)
                                   },
                                 ),
                               )

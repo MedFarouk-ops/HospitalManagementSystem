@@ -11,6 +11,7 @@ import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:pfe_frontend/docteur/screens/partie_ordonnance/voir_detail_ordonnance.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
@@ -175,7 +176,14 @@ class _PharmacieHomeScreenState extends State<PharmacieHomeScreen>
                                           primary: Colors.green,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Voir Details'),
-                                  onPressed: () => {},
+                                  onPressed: () => {
+                                     Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => VoirDetailsOrdonnance(ordonnance: ordonnances[index], token: token)
+                                        )
+                                    )
+                                  },
                                 ),
                               )
                             ],

@@ -33,7 +33,7 @@ class _AnalysteMobileLayoutState extends State<AnalysteMobileLayout>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-         length: 3,
+         length: 2,
          child: Scaffold(
           appBar:  PreferredSize(
           preferredSize: Size.fromHeight(50.0), // here the desired height
@@ -44,7 +44,6 @@ class _AnalysteMobileLayoutState extends State<AnalysteMobileLayout>
              bottom: TabBar(
                tabs: [
                  Tab(text: "Accueil", ),
-                 Tab(text: "Message",),
                  Tab(text: "Presentation",),
                ],
                ),

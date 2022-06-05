@@ -9,6 +9,7 @@ import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:http/http.dart' as http;
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
+import 'package:pfe_frontend/analyste/screens/partie_details/afficher_pdf.dart';
 import 'package:pfe_frontend/analyste/utils/analyste_api_methods.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
@@ -17,9 +18,9 @@ import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 
 class VoirDetailsRadio extends StatefulWidget {
-  final Ordonnance ordonnance ; 
+  final RadioData radio ; 
   final String? token;
-  const VoirDetailsRadio({Key? key , required this.ordonnance , required this.token}) : super(key: key);
+  const VoirDetailsRadio({Key? key , required this.radio , required this.token}) : super(key: key);
 
   @override
   State<VoirDetailsRadio> createState() => VoirDetailsRadioState();
@@ -43,6 +44,19 @@ _loadPdf(String pdfUrl){
     });
 }
 
+_navigateToPDFViex( String pdf){
+  _loadPdf(pdf);
+  if(localPath != ""){
+   Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => VoirPDF(localPath: localPath,)
+        )
+    );
+    setStateIfMounted(() {});
+  }
+}
+
   @override
   void initState() {
     super.initState();
@@ -59,14 +73,10 @@ _loadPdf(String pdfUrl){
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Details sur l'ordonnance"),
-        backgroundColor: AdminColorSeven,
+        title: Text("Details sur l'image  radio"),
+        backgroundColor: AdminColorSix,
       ),
-      body: localPath != ""
-          ? PDFView(
-              filePath: localPath,
-            )
-          :
+      body: 
       SingleChildScrollView(
       child: RefreshIndicator(onRefresh: () async{
         //  _setUsers();
@@ -82,8 +92,8 @@ _loadPdf(String pdfUrl){
             width: 400,
             height: 60,
             child:Column(children: [
-              Text( "Diagnostic : " , style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,),),
-              Text( widget.ordonnance.description ,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,) )
+              Text( "Description : " , style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,),),
+              Text( widget.radio.description ,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,) )
             ],)
           ),
 
@@ -94,7 +104,7 @@ _loadPdf(String pdfUrl){
             width: 400,
             height: 40,
             child:Column(children: [
-              FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.ordonnance.patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
+              FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.radio.patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -132,7 +142,7 @@ _loadPdf(String pdfUrl){
             width: 400,
             height: 40,
             child:Column(children: [
-              FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.ordonnance.docteur_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
+              FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.radio.docteur_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -171,11 +181,11 @@ _loadPdf(String pdfUrl){
                               Expanded(
                                 child: ElevatedButton(
                                   style:  ElevatedButton.styleFrom(
-                                          primary: AdminColorSeven,
+                                          primary: AdminColorSix,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
-                                  child: Text("Voir l'ordonnance pdf "),
+                                  child: Text("Voir les images pdf "),
                                   onPressed: () => {
-                                    _loadPdf(widget.ordonnance.donnees)
+                                     _navigateToPDFViex(widget.radio.donnees)
                                   },
                                 ),
                               )

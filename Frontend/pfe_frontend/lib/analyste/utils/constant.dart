@@ -8,7 +8,6 @@ import 'package:pfe_frontend/docteur/widgets/doctor_profile.dart';
 
 const analysteMobileScreenItems = [
           AnalysteHomePage(),
-          Text('Message'),
           AnalysteProfile(),
 ];
 

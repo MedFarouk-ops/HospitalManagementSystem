@@ -185,7 +185,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1' ,]
+ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1' ,'a80f-197-15-57-23.ngrok.io' ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '').replace('\\', '/')
 MEDIA_URL = '/media/'
