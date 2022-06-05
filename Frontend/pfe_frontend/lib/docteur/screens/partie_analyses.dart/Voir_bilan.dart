@@ -15,16 +15,16 @@ import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 
-class VoirBilan extends StatefulWidget {
+class VoirBilanDocteur extends StatefulWidget {
   final Analyse bilan ; 
   final String? token;
-  const VoirBilan({Key? key , required this.bilan , required this.token}) : super(key: key);
+  const VoirBilanDocteur({Key? key , required this.bilan , required this.token}) : super(key: key);
 
   @override
-  State<VoirBilan> createState() => VoirBilanState();
+  State<VoirBilanDocteur> createState() => VoirBilanDocteurState();
 }
 
-class VoirBilanState extends State<VoirBilan>
+class VoirBilanDocteurState extends State<VoirBilanDocteur>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   String localPath = "";
@@ -55,7 +55,7 @@ _loadPdf(String pdfUrl){
     return Scaffold(
       appBar: AppBar(
         title: Text("Details sur le bilan"),
-        backgroundColor: AdminColorSeven,
+        backgroundColor: AdminColorSix,
       ),
       body: localPath != ""
           ? PDFView(
@@ -246,7 +246,7 @@ _loadPdf(String pdfUrl){
                               Expanded(
                                 child: ElevatedButton(
                                   style:  ElevatedButton.styleFrom(
-                                          primary: AdminColorSeven,
+                                          primary: AdminColorSix,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Ouvrir le fichier pdf attaché'),
                                   onPressed: () => {

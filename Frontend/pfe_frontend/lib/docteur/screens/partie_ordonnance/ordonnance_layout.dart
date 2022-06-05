@@ -10,6 +10,7 @@ import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
+import 'package:pfe_frontend/docteur/screens/partie_ordonnance/voir_detail_ordonnance.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
 import 'package:http/http.dart' as http;
@@ -157,7 +158,15 @@ class _OrdonnanceLayoutState extends State<OrdonnanceLayout>
                                           primary: Colors.green,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Voir Details'),
-                                  onPressed: () => {},
+                                  onPressed: () => {
+                                    Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => VoirDetailsOrdonnance(ordonnance: widget.ordonnances[index], token: widget.token)
+                                        // builder: (context) => const FormTestWidget()
+                                        )
+                                    ),
+                                  },
                                 ),
                               )
                             ],

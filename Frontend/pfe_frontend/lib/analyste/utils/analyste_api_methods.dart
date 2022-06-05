@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -136,6 +137,19 @@ class AnalysteApiMethods{
     //********************************************** Recuperer la liste de tout les bilans ***********************************************//
 
 
+    //****************************************** Voir les pdf */
+    static Future<String> loadPDF(String pdfUrl) async {
+
+      String apiUrl = "";
+      if (kIsWeb) { apiUrl = serverUrl ;}
+      else if(Platform.isAndroid) { apiUrl = mobileServerUrl ; }
+
+      var response = await http.get(Uri.parse(apiUrl+pdfUrl));
+      var dir = await getApplicationDocumentsDirectory();
+      File file = new File("${dir.path}/data.pdf");
+      file.writeAsBytesSync(response.bodyBytes, flush: true);
+    return file.path;
+  }
 
 
 }

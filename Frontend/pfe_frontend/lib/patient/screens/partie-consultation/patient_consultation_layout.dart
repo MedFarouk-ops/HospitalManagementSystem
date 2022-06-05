@@ -12,6 +12,7 @@ import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
+import 'package:pfe_frontend/docteur/screens/partie_consultations/voir_details_consultation.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
 import 'package:pfe_frontend/patient/utils/patient_api_methods.dart';
@@ -168,7 +169,15 @@ List<Reservation> reservations = [];
                                           primary: Colors.green,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Voir Details'),
-                                  onPressed: () => {},
+                                  onPressed: () => {
+                                    Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => VoirDetailsConsultation(consultation: widget.consultations[index], token: widget.token)
+                                        // builder: (context) => const FormTestWidget()
+                                        )
+                                    ),
+                                  },
                                 ),
                               )
                             ],

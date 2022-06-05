@@ -9,6 +9,7 @@ import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:pfe_frontend/accueil/utils/api_methods.dart';
 import 'package:pfe_frontend/admin/utils/dimensions.dart';
 import 'package:pfe_frontend/analyste/screens/partie_creation_bilan/creer_bilan.dart';
+import 'package:pfe_frontend/analyste/screens/partie_details/bilan_details.dart';
 import 'package:pfe_frontend/analyste/utils/analyste_api_methods.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
@@ -258,7 +259,15 @@ class _AnatomopathListLayoutState extends State<AnatomopathListLayout>
                                           primary: AdminColorSeven,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Voir plus de details'),
-                                  onPressed: () => {},
+                                  onPressed: () => {
+                                     Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => VoirBilan(bilan: analyses[index], token: widget.token)
+                                        // builder: (context) => const FormTestWidget()
+                                        )
+                                    ),
+                                  },
                                 ),
                               )
                             ],

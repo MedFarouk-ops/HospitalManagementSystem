@@ -14,6 +14,7 @@ import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
+import 'package:pfe_frontend/docteur/screens/partie_analyses.dart/Voir_bilan.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 
 class DoctorAnalysesListe extends StatefulWidget {
@@ -242,7 +243,15 @@ class _DoctorAnalysesListeState extends State<DoctorAnalysesListe>
                                           primary: AdminColorSix,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Voir plus de details'),
-                                  onPressed: () => {},
+                                  onPressed: () => {
+                                      Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => VoirBilanDocteur(bilan: analyses[index], token: widget.token)
+                                        // builder: (context) => const FormTestWidget()
+                                        )
+                                    ),
+                                  },
                                 ),
                               )
                             ],

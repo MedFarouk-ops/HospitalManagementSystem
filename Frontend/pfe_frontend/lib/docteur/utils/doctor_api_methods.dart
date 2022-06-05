@@ -235,17 +235,11 @@ class DoctorApiMethods{
         String token = s_prefs.getStringList("authTokens")![0];
         // si l'application est lancée dans le web ( navigateur ) : 
         if (kIsWeb) {
-          response = json.decode((await client.get(Uri.parse("${serverUrl}/api/ordonnances/$id") ,headers: {'Authorization': 'Bearer $token',})).body);
-          response.forEach((element) {
-          ordonnances.add(Ordonnance.fromJson(element));
-            });
+          ordonnances.add(Ordonnance.fromJson(json.decode((await client.get(Uri.parse("${serverUrl}/api/ordonnances/$id") ,headers: {'Authorization': 'Bearer $token',})).body)));
           }
           // si l'application est lancée sur mobile ( android )
           else if(Platform.isAndroid) {
-            response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/$id") , headers: {'Authorization': 'Bearer $token',})).body);
-            response.forEach((element) {
-              ordonnances.add(Ordonnance.fromJson(element));
-            });
+            ordonnances.add(Ordonnance.fromJson(json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/ordonnances/$id") , headers: {'Authorization': 'Bearer $token',})).body)));
           }
           return ordonnances[0];
       }

@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'authapp.apps.AuthappConfig',
     "adminapp.apps.AdminappConfig",
     'rest_framework',
+    # 'cloudinary_storage',
+    # 'cloudinary',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'drf_yasg',
@@ -187,4 +189,12 @@ ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1' ,]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '').replace('\\', '/')
 MEDIA_URL = '/media/'
+# DEFAULT_FILE_STORAGE = "cloudinary-storage.storage.MediaCloudinary"
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME' : "dkfmfp6dr", 
+#     'API_KEY' : "215292675363334", 
+#     'API_SECRET' : "Rza0LBYShuQ6lOkuuy2AXS-W2j4"
+
+# }

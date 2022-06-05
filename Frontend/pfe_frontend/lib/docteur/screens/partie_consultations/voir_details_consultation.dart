@@ -14,20 +14,32 @@ import 'package:pfe_frontend/authentication/models/user.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
+import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 
-class VoirBilan extends StatefulWidget {
-  final Analyse bilan ; 
+class VoirDetailsConsultation extends StatefulWidget {
+  final Consultation consultation ; 
   final String? token;
-  const VoirBilan({Key? key , required this.bilan , required this.token}) : super(key: key);
+  const VoirDetailsConsultation({Key? key , required this.consultation , required this.token}) : super(key: key);
 
   @override
-  State<VoirBilan> createState() => VoirBilanState();
+  State<VoirDetailsConsultation> createState() => VoirDetailsConsultationState();
 }
 
-class VoirBilanState extends State<VoirBilan>
+class VoirDetailsConsultationState extends State<VoirDetailsConsultation>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   String localPath = "";
+  Ordonnance? ord ;
+
+   void setStateIfMounted(f) {
+  if (mounted) setState(f);
+}
+
+
+  _setOrdonnance() async {
+    ord = await DoctorApiMethods().getOrdonnanceById(widget.consultation.ordonnance_id);
+    setStateIfMounted(() {});
+  } 
   
 
 _loadPdf(String pdfUrl){
@@ -42,6 +54,7 @@ _loadPdf(String pdfUrl){
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    _setOrdonnance();
   }
 
   @override
@@ -54,7 +67,7 @@ _loadPdf(String pdfUrl){
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Details sur le bilan"),
+        title: Text("Details sur le consultation"),
         backgroundColor: AdminColorSeven,
       ),
       body: localPath != ""
@@ -77,51 +90,19 @@ _loadPdf(String pdfUrl){
             width: 400,
             height: 60,
             child:Column(children: [
-              Text( "laboratoire : " , style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,),),
-              Text( widget.bilan.nomLaboratoire ,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,) )
+              Text( "Motif : " , style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,),),
+              Text( widget.consultation.description ,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,) )
             ],)
           ),
 
 
-          (widget.bilan.type == 1) ? Text(
-                                    "Type : " +  "Hematologie",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ) :
-                                  (widget.bilan.type == 2) ? Text(
-                                    "Type : " +  "Biochimie",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ) :
-                                  (widget.bilan.type == 3) ? Text(
-                                    "Type : " +  "Microbiologie",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ) : 
-                                  Text(
-                                    "Type : " +  "Anatomopathologie",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
           Divider(),
 
           SizedBox( // <-- SEE HERE
             width: 400,
             height: 40,
             child:Column(children: [
-              FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.bilan.patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
+              FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.consultation.patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -159,7 +140,7 @@ _loadPdf(String pdfUrl){
             width: 400,
             height: 40,
             child:Column(children: [
-              FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.bilan.patient_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
+              FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.consultation.docteur_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
                                     builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
                                     if (snapshot.hasData) {
                                         if (snapshot.data!.statusCode != 200) {
@@ -192,53 +173,16 @@ _loadPdf(String pdfUrl){
             ],)
           ),
 
+
+          (ord != null) ?
           SizedBox( // <-- SEE HERE
             width: 400,
-            height: 40,
+            height: 60,
             child:Column(children: [
-              FutureBuilder(future: http.get(Uri.parse("${mobileServerUrl}/adminapp/users/${widget.bilan.analyste_id}") , headers: {'Authorization': 'Bearer ${widget.token}'}) ,
-                                    builder: (BuildContext context, AsyncSnapshot<http.Response> snapshot){
-                                    if (snapshot.hasData) {
-                                        if (snapshot.data!.statusCode != 200) {
-                                          return Text('Failed to load the data!' , style : TextStyle(
-                                      color: Color(MyColors.grey02),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),);
-                                        } else {
-                                          return Text("Nom Analyste : " +  User.fromJson(json.decode((snapshot.data!.body))).first_name + " " + User.fromJson(json.decode((snapshot.data!.body))).last_name  ,style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20,
-                                    ), );
-                                        }
-                                      } else if (snapshot.hasError) {
-                                        return Text('Failed to make a request!' , style: TextStyle(
-                                      color: Color(MyColors.header01),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20,
-                                    ));
-                                      } else {
-                                        return Text('Loading' ,  style: TextStyle(
-                                      color: Color(MyColors.grey02),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                    ),);
-                                      }
-                                    },
-              ),
-            ],
-            )
-          ),
-            SizedBox( // <-- SEE HERE
-            width: 400,
-            height: 80,
-            child:Column(children: [
-              Text( " Description : " ,  style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,)),
-              Divider(),
-              Text( widget.bilan.description , style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,) )
+              Text( "Diagnostic : " , style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,),),
+              Text( ord!.description ,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,) )
             ],)
-          ),
+          ): Text( "no data" ),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -248,9 +192,9 @@ _loadPdf(String pdfUrl){
                                   style:  ElevatedButton.styleFrom(
                                           primary: AdminColorSeven,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
-                                  child: Text('Ouvrir le fichier pdf attaché'),
+                                  child: Text("Voir l'ordonnance pdf "),
                                   onPressed: () => {
-                                    _loadPdf(widget.bilan.donnees)
+                                    _loadPdf(ord!.donnees)
                                   },
                                 ),
                               )

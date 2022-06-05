@@ -10,6 +10,7 @@ import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/screens/partie_consultations/cree_consultation.dart';
 import 'package:pfe_frontend/docteur/screens/partie_consultations/patient_selections/patient_select_type.dart';
+import 'package:pfe_frontend/docteur/screens/partie_consultations/voir_details_consultation.dart';
 import 'package:pfe_frontend/docteur/utils/constant.dart';
 import 'package:pfe_frontend/docteur/utils/doctor_api_methods.dart';
 import 'package:pfe_frontend/docteur/widgets/datetime_card.dart';
@@ -174,7 +175,15 @@ class _ConsultationLayoutState extends State<ConsultationLayout> {
                                           primary: Colors.green,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text('Voir Details'),
-                                  onPressed: () => {},
+                                  onPressed: () => {
+                                    Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder: (context) => VoirDetailsConsultation(consultation: widget.consultations[index], token: widget.token)
+                                        // builder: (context) => const FormTestWidget()
+                                        )
+                                    ),
+                                  },
                                 ),
                               )
                             ],
