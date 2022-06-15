@@ -340,5 +340,188 @@ class DoctorApiMethods{
           return radios[0];
       }
 
+      /*************************************  Partie gestion de dossier medicale   ***********************************/
+
+      Future<String> creerRapportMedicale(File imageFile , String descr ,int patient_id , int docteur_id , ) async {
+        RapportMedical rap = RapportMedical(id: 0, description: "", patient_id: 0, docteur_id: 0, donnees: "", created: "", updated: "") ; 
+        String apiServerUrl = "";
+        SharedPreferences s_prefs = await SharedPreferences.getInstance();
+        String token = s_prefs.getStringList("authTokens")![0];
+ 
+
+          if (kIsWeb) {apiServerUrl = serverUrl ; }
+          else if(Platform.isAndroid) { apiServerUrl = mobileServerUrl ; }
+            String resultat = "error occured ..." ;
+            // open a bytestream
+            var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+            // get file length
+            var length = await imageFile.length();
+            // string to uri
+            var uri = Uri.parse("$apiServerUrl/api/rapport-medicale/create/" );
+            // create multipart request
+            var request = new http.MultipartRequest("POST", uri);
+            // multipart that takes file
+            var multipartFile = new http.MultipartFile("rapportdata", stream, length,
+                filename: basename(imageFile.path));
+            // add file to multipart
+            request.files.add(multipartFile);
+
+            OrdonnanceData ordData = OrdonnanceData(descr, docteur_id, patient_id);
+
+            request.fields["data"] = jsonEncode(ordData);
+            request.headers['authorization'] = 'Bearer $token';
+
+            // send
+            var response = await request.send();
+            print(response.statusCode);
+            //******************************************************************************** */ 
+            if(response.statusCode == 200)
+            {
+              rap = RapportMedical.fromJson(jsonDecode(await response.stream.bytesToString()));
+              resultat = "success" ;}
+            else {
+              resultat = "some error occured";
+             }
+            //******************************************************************************** */
+            // listen for response
+            // response.stream.transform(utf8.decoder).listen((value) {
+            //   print(value);
+            // });
+          return resultat;
+        }
+
+        // Future<String> updateRapportMedicale(int idRapport , String desc) async {
+
+
+        // }
+      
+      Future<List<RapportMedical>> getDoctorRapportsList(int id) async {
+            List response ;
+            List<RapportMedical> rapList = [];
+            Client client = http.Client();
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
+            // si l'application est lancée dans le web ( navigateur ) : 
+            if (kIsWeb) {
+              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/rapport-medicale/doctor/$id") ,  headers: {'Authorization': 'Bearer $token',} )).body);
+              response.forEach((element) {
+                rapList.add(RapportMedical.fromJson(element));
+              });
+            }
+            // si l'application est lancée sur mobile ( android )
+            else if(Platform.isAndroid) {
+              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/rapport-medicale/doctor/$id") ,  headers: {'Authorization': 'Bearer $token',})).body);
+              response.forEach((element) {
+                rapList.add(RapportMedical.fromJson(element));
+              });        
+          }
+          return rapList ;
+      }
+
+
+      Future<List<RapportMedical>> getPatientRapportsList(int id) async {
+            List response ;
+            List<RapportMedical> rapList = [];
+            Client client = http.Client();
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
+            // si l'application est lancée dans le web ( navigateur ) : 
+            if (kIsWeb) {
+              response = json.decode((await client.get(Uri.parse("${serverUrl}/api/rapport-medicale/patient/$id") ,  headers: {'Authorization': 'Bearer $token',} )).body);
+              response.forEach((element) {
+                rapList.add(RapportMedical.fromJson(element));
+              });
+            }
+            // si l'application est lancée sur mobile ( android )
+            else if(Platform.isAndroid) {
+              response = json.decode((await client.get(Uri.parse("${mobileServerUrl}/api/rapport-medicale/patient/$id") ,  headers: {'Authorization': 'Bearer $token',})).body);
+              response.forEach((element) {
+                rapList.add(RapportMedical.fromJson(element));
+              });        
+          }
+          return rapList ;
+      }
+
+      Future<String> updateRapportMedicale(File imageFile , String descr , int docteur_id , int id ) async {
+        String apiServerUrl = "";
+        SharedPreferences s_prefs = await SharedPreferences.getInstance();
+        String token = s_prefs.getStringList("authTokens")![0];
+
+          if (kIsWeb) {apiServerUrl = serverUrl ; }
+          else if(Platform.isAndroid) { apiServerUrl = mobileServerUrl ; }
+            String resultat = "error occured ..." ;
+            // open a bytestream
+            var stream = new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+            // get file length
+            var length = await imageFile.length();
+            // string to uri
+            var uri = Uri.parse("$apiServerUrl/api/rapport-medicale/update/$id/" );
+            // create multipart request
+            var request = new http.MultipartRequest("PUT", uri);
+            // multipart that takes file
+            var multipartFile = new http.MultipartFile("rapportdata", stream, length,
+                filename: basename(imageFile.path));
+            // add file to multipart
+            request.files.add(multipartFile);
+
+            RapportData ordData = RapportData(descr, docteur_id);
+
+            request.fields["data"] = jsonEncode(ordData);
+            request.headers['authorization'] = 'Bearer $token';
+
+            // send
+            var response = await request.send();
+            print(response.statusCode);
+            //******************************************************************************** */ 
+            if(response.statusCode == 200)
+            {
+              resultat = "success" ;}
+            else {
+              resultat = "some error occured";
+             }
+            //******************************************************************************** */
+            // listen for response
+            response.stream.transform(utf8.decoder).listen((value) {
+              print(value);
+            });
+          return resultat;
+        }
+
+         Future<String> updateWithoutFileRapport(
+            String descr , int docteur_id , int id ,
+          ) async { 
+            SharedPreferences s_prefs = await SharedPreferences.getInstance();
+            String token = s_prefs.getStringList("authTokens")![0];
+            String res = "some error occured";
+            late http.Response response;
+            print('creation en cours ......');
+
+            if (kIsWeb) {
+                response = await http.put(Uri.parse("$serverUrl/api/rapport-medicale/update/$id/") , body: 
+                jsonEncode(<String, dynamic>{
+                  "descriptionRapport": descr,
+              }) , headers: { 'Content-Type':  "application/json" , 'Authorization': 'Bearer $token'}
+              ); 
+
+            } else if(Platform.isAndroid) {
+
+
+            response = await http.put(Uri.parse("$mobileServerUrl/api/rapport-medicale/update/$id/") , body: 
+              jsonEncode(<String, dynamic>{
+                "descriptionRapport": descr,
+              }) , headers: { 'Content-Type':  "application/json" , 'Authorization': 'Bearer $token' }
+              ); 
+          } 
+        
+          if (response.statusCode == 200) {
+          // If the server did return a 201 CREATED response,
+              res = "success" ; 
+              return res;
+          } 
+          else { 
+            print("erreur .............");
+            return res;
+          }
+        }
 
 }

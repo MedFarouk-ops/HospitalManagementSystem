@@ -185,7 +185,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1' ,'a80f-197-15-57-23.ngrok.io' ]
+ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1' ,'54cb-197-25-190-135.ngrok.io'  ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '').replace('\\', '/')
 MEDIA_URL = '/media/'
@@ -198,3 +198,16 @@ MEDIA_URL = '/media/'
 #     'API_SECRET' : "Rza0LBYShuQ6lOkuuy2AXS-W2j4"
 
 # }
+
+
+
+
+# DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+
+# DROPBOX_OAUTH2_TOKEN = 'sl.BJMljJrNcmA4ll-V3hehXuGFjnFAzsimHPRbid3v5A0w3Cz1lhaAvSdGb9PJaXezzJv2JNfudEdeVExr-EzTErhmh-2a7MRS0xzzjHzcJ5lNI2Aoz7CWbkwGE89VLpnshJgS9zk'
+
+# DROPBOX_CONSUMER_KEY = 'pv4nz0tgu6iro9s'
+
+# DROPBOX_CONSUMER_SECRET = 'ebckuatzf36iu8w'
+
+# DROPBOX_ROOT_FOLDER = '/Public'

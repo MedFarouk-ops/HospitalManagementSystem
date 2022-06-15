@@ -96,6 +96,7 @@ class Consultation(models.Model):
 
 class RapportMedical(models.Model):
     descriptionRapport = models.TextField(default="pas de description")
+    donnee = models.FileField( upload_to = "data/rapport-data/rapport-files/", null= True ,blank=True, default='')
     patient = models.ForeignKey(User, on_delete=models.CASCADE ,  related_name="patient_Med_rapport")
     docteur = models.ForeignKey(User, on_delete=models.CASCADE , related_name="docteur_Med_rapport")
     updated = models.DateTimeField(auto_now=True)

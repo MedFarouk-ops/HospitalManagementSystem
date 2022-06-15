@@ -10,6 +10,7 @@ import 'package:pfe_frontend/admin/widget/button_widget.dart';
 import 'package:pfe_frontend/admin/widget/profile_widget.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
+import 'package:pfe_frontend/docteur/screens/parametre_securite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DoctorProfile extends StatefulWidget {
@@ -143,7 +144,8 @@ class _DoctorProfileState extends State<DoctorProfile> {
             child:Wrap(
             children: [
               buildUpgradeButton(),
-              buildLogoutButton()
+              buildLogoutButton(),
+              ParametreSecuriteButton()
             ],
           ),
           ),
@@ -178,6 +180,18 @@ class _DoctorProfileState extends State<DoctorProfile> {
         text: 'Deconnecter',
         onClicked: () {
           AuthContext().logoutUser(context);
+        },
+      );
+
+    Widget ParametreSecuriteButton() => SecondButtonWidget(
+        text: 'Parametre de securité',
+        onClicked: () {
+           Navigator.of(context)
+          .push(
+            MaterialPageRoute(
+              builder: (context) => ParametreSecuritePage()
+              )
+          );
         },
       );
   

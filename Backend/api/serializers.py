@@ -34,7 +34,7 @@ class ConsultationSerializer(ModelSerializer):
         
       
 
-class RapportMedical(ModelSerializer):
+class RapportMedicalSerializer(ModelSerializer):
     class Meta : 
         model = RapportMedical
         fields = '__all__'

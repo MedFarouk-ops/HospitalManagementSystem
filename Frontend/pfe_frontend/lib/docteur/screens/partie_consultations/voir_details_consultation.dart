@@ -83,7 +83,7 @@ _loadPdf(String pdfUrl){
     return Scaffold(
       appBar: AppBar(
         title: Text("Details sur le consultation"),
-        backgroundColor: AdminColorSeven,
+        backgroundColor: AdminColorSix,
       ),
       body: 
       SingleChildScrollView(
@@ -201,7 +201,7 @@ _loadPdf(String pdfUrl){
                               Expanded(
                                 child: ElevatedButton(
                                   style:  ElevatedButton.styleFrom(
-                                          primary: AdminColorSeven,
+                                          primary: AdminColorSix,
                                           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 5),),
                                   child: Text("Voir l'ordonnance pdf "),
                                   onPressed: () => {

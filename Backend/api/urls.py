@@ -63,4 +63,15 @@ urlpatterns = [
     path('consultations/doctor/<int:pk>/',views.getConsultationByDoctorId.as_view()),
     path('consultations/patient/<int:pk>/',views.getConsultationByPatientId.as_view()),
 
+    # route api de gestion de rapport medicale : 
+    # ******************************************************************************************************************** #
+    path('rapport-medicale/',views.getRapportsAPIView.as_view()),
+    path('rapport-medicale/create/',views.createRapportAPIView.as_view()),
+    path('rapport-medicale/delete/<str:pk>/',views.deleteRapport.as_view()),
+    path('rapport-medicale/update/<str:pk>/',views.updateRapport.as_view()),
+    path('rapport-medicale/<int:pk>/',views.getRapportById.as_view()),
+    path('rapport-medicale/doctor/<int:pk>/',views.getRapportByDoctorId.as_view()),
+    path('rapport-medicale/patient/<int:pk>/',views.getRapportByPatientId.as_view()),
+
+
 ]

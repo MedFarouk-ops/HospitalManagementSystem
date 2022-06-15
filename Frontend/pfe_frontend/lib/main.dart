@@ -9,6 +9,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:pfe_frontend/authentication/screens/home_screen.dart';
 import 'package:pfe_frontend/authentication/screens/login_screen.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
+import 'package:pfe_frontend/fingerprint_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,9 +51,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late SharedPreferences s_prefs;
   bool? _isAuth = false ;
+  bool use_fingeprint= false ;
   User? _user ; 
   List<String>? authtokens;
   
+  
+
+
   _checkAuth() async {
     s_prefs = await SharedPreferences.getInstance();
     if(s_prefs.getBool("isAuthenticated") == null){
@@ -61,6 +66,15 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _isAuth = s_prefs.getBool("isAuthenticated");
     });
+
+    if(s_prefs.getBool("use_fingerprint") == null){
+      s_prefs.setBool("use_fingerprint", false); 
+    }
+    setState(() {
+      use_fingeprint = s_prefs.getBool("use_fingerprint") ?? false;
+    });
+
+
   }
 
   _initializeUser() async {
@@ -99,9 +113,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     if(_isAuth ?? !(authtokens!.isEmpty) ){
+      if(use_fingeprint){
+        return Scaffold(
+          body: FingerprintAuth(),
+        );
+      }else{
       return Scaffold(
       body: HomeScreen() ,
-    );
+      );
+      }
     }else{
     return Scaffold(
       body: AuthScreen() ,

@@ -26,6 +26,7 @@ class _DocteurHomeState extends State<DocteurHome> {
     List<Ordonnance> ordonnances = [];
     List<Consultation> consultations = [];
     List<RadioData> radios = [];  
+    List<RapportMedical> rapports = [];  
 
     String? token; 
 
@@ -64,12 +65,19 @@ class _DocteurHomeState extends State<DocteurHome> {
       print(radios.length);
        setStateIfMounted(() {});
     } 
+      _getRapports() async {
+      User currentuser = await AuthContext().getUserDetails();
+      rapports = await DoctorApiMethods().getDoctorRapportsList(currentuser.id);
+      print(rapports.length);
+       setStateIfMounted(() {});
+    } 
 
     @override
     void initState() {
       // TODO: implement initState
       super.initState();
       _setAuthToken();
+      _getRapports();
       _getRadios();
       _getConsultationList();
       _getOrdonnanceList();
@@ -123,7 +131,7 @@ class _DocteurHomeState extends State<DocteurHome> {
                             DoctorCustomListScroller(doctorReservations: reservations , token: token),
                             DoctorSecondListScroller(consList: consultations , ordList: ordonnances,token: token),
                             DoctorThirdListScroller(radios: radios , token: token),
-                            DoctorFourthListScroller(token: token,)
+                            DoctorFourthListScroller(token: token,rapports: rapports,)
                           ],) 
                       )),
                       // const SizedBox(height: 2),

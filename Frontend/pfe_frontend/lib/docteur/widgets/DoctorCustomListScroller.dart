@@ -11,6 +11,7 @@ import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/docteur/models/doctor_api_models.dart';
 import 'package:pfe_frontend/docteur/screens/partie_analyses.dart/liste_analyses.dart';
 import 'package:pfe_frontend/docteur/screens/partie_consultations/consultation_layout.dart';
+import 'package:pfe_frontend/docteur/screens/partie_dossier_medicale/Liste_dossier_medicale.dart';
 import 'package:pfe_frontend/docteur/screens/partie_ordonnance/ordonnance_layout.dart';
 import 'package:pfe_frontend/docteur/screens/partie_radiologie/clichee_image_radio/clichee_radio_layout.dart';
 import 'package:pfe_frontend/docteur/screens/partie_radiologie/compte_rendue_radio/radio_compte_rendue_layout.dart';
@@ -412,8 +413,9 @@ class _DoctorThirdListScrollerState extends State<DoctorThirdListScroller> {
 
 
 class DoctorFourthListScroller extends StatefulWidget {
+  final List<RapportMedical> rapports;
   final String? token ; 
-  const DoctorFourthListScroller({ Key? key , required this.token  }) : super(key: key);
+  const DoctorFourthListScroller({ Key? key , required this.rapports, required this.token  }) : super(key: key);
 
   @override
   State<DoctorFourthListScroller> createState() => _DoctorFourthListScrollerState();
@@ -422,7 +424,14 @@ class DoctorFourthListScroller extends StatefulWidget {
 class _DoctorFourthListScrollerState extends State<DoctorFourthListScroller> {
 
   
-
+_navigateToListRapportLayout(){
+    Navigator.of(context)
+    .push(
+      MaterialPageRoute(
+        builder: (context) => ListeRapportMedicale(rapports: widget.rapports , token: widget.token,)
+        )
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final double categoryHeight = MediaQuery.of(context).size.height * 0.30 - 50;
@@ -442,7 +451,9 @@ class _DoctorFourthListScrollerState extends State<DoctorFourthListScroller> {
           child:Row(
             children: <Widget>[
                InkWell(
-                onTap: () {},
+                onTap: () {
+                  _navigateToListRapportLayout();
+                },
                 child:Container(
                 width: miniWidgetWidth*2+12,
                 margin: EdgeInsets.only(right: 20),

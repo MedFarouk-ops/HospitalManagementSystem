@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import generics, permissions
 
-from api.models import Consultation, Reservation,Analyse,Radio,Ordonnance
-from api.serializers import AnalyseSerializer, ConsultationSerializer, OrdonnanceSerializer, RadioSerializer, ReservationSerializer
+from api.models import Consultation, RapportMedical, Reservation,Analyse,Radio,Ordonnance
+from api.serializers import AnalyseSerializer, ConsultationSerializer, OrdonnanceSerializer, RadioSerializer, RapportMedicalSerializer, ReservationSerializer
 from authapp.models import User
 
 
@@ -416,4 +416,76 @@ class ReservationAPIView(generics.GenericAPIView):
     def get( self , request):
         reservations = Reservation.objects.all()
         serializer = ReservationSerializer(reservations , many=True)
+        return Response(serializer.data)
+
+
+# partie gestion de rapport medicale
+# 
+class getRapportsAPIView(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self , request):
+        rapports = RapportMedical.objects.all()
+        serializer = RapportMedicalSerializer(rapports , many=True)
+        return Response(serializer.data)
+
+
+class createRapportAPIView(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def post( self , request) : 
+        thumbnail = request.FILES.get("rapportdata" ,False)
+        info = json.loads(request.POST.get('data' , False))
+        patient_id = info['patient']
+        doctor_id = info['docteur']
+        patient = User.objects.get(id = patient_id)
+        doctor = User.objects.get(id = doctor_id)
+        rapport = RapportMedical.objects.create(
+            descriptionRapport = info['description'],
+            donnee = thumbnail,
+            patient = patient,
+            docteur = doctor,
+        )
+        serializer = RapportMedicalSerializer(rapport , many=False)
+        return Response(serializer.data)
+
+class getRapportById(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get( self , request , pk):
+        rapport = RapportMedical.objects.get(id = pk)
+        serializer = RapportMedicalSerializer(rapport , many = False)
+        return Response(serializer.data)
+
+class deleteRapport(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def delete( self,request , pk):
+        rapport = RapportMedical.objects.get(id = pk)
+        rapport.delete()
+        return Response("supprimé avec success")
+
+
+class updateRapport(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def put(self , request , pk) : 
+        data = request.data
+        rapport = RapportMedical.objects.get(id = pk)
+        serializer = RapportMedicalSerializer(rapport , data=request.data ,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            print(serializer.data)
+        return Response(serializer.data) 
+
+
+# get analyses by doctor id : 
+class getRapportByDoctorId(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self ,request , pk):
+        rapports = RapportMedical.objects.all().filter(docteur_id = pk)
+        serializer = RapportMedicalSerializer(rapports , many = True)
+        return Response(serializer.data)
+
+# get analyses by patient id :
+class getRapportByPatientId(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    def get(self ,request , pk):
+        rapports = RapportMedical.objects.all().filter(patient_id = pk)
+        serializer = RapportMedicalSerializer(rapports , many = True)
         return Response(serializer.data)

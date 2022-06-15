@@ -16,6 +16,16 @@ class OrdonnanceData {
 }
 
 
+class RapportData {
+  String description; 
+  int docteur_id;
+  RapportData(this.description, this.docteur_id );
+  Map toJson() {
+    return {'description' : description,
+            'docteur' : docteur_id,};
+  }
+}
+
 class AnalyseData { 
   String description; 
   String nomLaboratoire  ;
@@ -230,6 +240,49 @@ class Consultation{
       id : json['id'],
       description : json['consDescription'],
       ordonnance_id: json['ordonnance'],
+      patient_id : json['patient'],
+      docteur_id : json['docteur'],
+      created : json['created'],
+      updated : json['updated'],
+    );
+  }
+
+}
+
+
+
+class RapportMedical{
+
+  final int id;
+  final String description;
+  final String donnees;
+  final int patient_id;
+  final int docteur_id;
+  final String updated;
+  final String created;
+
+  const RapportMedical({
+    required this.id,
+    required this.description , 
+    required this.patient_id,
+    required this.docteur_id,
+    required this.donnees,
+    required this.created,
+    required this.updated,
+  });
+
+  Map<String , dynamic> toJson() => {
+            'description' : description,
+            'donnees' : donnees,
+            'patient' : patient_id,
+            'docteur' : docteur_id,
+  };
+  
+ factory RapportMedical.fromJson(Map<String, dynamic> json) {
+    return RapportMedical(
+      id : json['id'],
+      description : json['descriptionRapport'],
+      donnees : json['donnee'],
       patient_id : json['patient'],
       docteur_id : json['docteur'],
       created : json['created'],

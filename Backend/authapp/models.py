@@ -94,6 +94,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     specialite = models.PositiveSmallIntegerField(choices=SPECIALITIES, blank=True, null=True) 
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True)
     is_verified = models.BooleanField(default=True)
+    use_fingerprint = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
