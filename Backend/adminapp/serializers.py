@@ -15,4 +15,5 @@ class UserSerializer(ModelSerializer):
                     'role',
                     'genre',
                     'age',
+                    'specialite',
                     'departement']

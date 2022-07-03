@@ -10,6 +10,7 @@ import 'package:pfe_frontend/admin/widget/button_widget.dart';
 import 'package:pfe_frontend/admin/widget/profile_widget.dart';
 import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/models/user.dart';
+import 'package:pfe_frontend/docteur/screens/parametre_securite.dart';
 
 class ProfilePharmacien extends StatefulWidget {
   const ProfilePharmacien({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class _ProfilePharmacienState extends State<ProfilePharmacien>
      last_name: "", 
      address: "", 
      mobilenumber: "0",
-     age: "", 
+     age: "", specialite: "",
      genre: "", 
      role: "", 
      username: "");
@@ -111,7 +112,8 @@ class _ProfilePharmacienState extends State<ProfilePharmacien>
             child:Wrap(
             children: [
               buildUpgradeButton(),
-              buildLogoutButton()
+              buildLogoutButton(),
+              ParametreSecuriteButton()
             ],
           ),
           ),
@@ -148,6 +150,18 @@ class _ProfilePharmacienState extends State<ProfilePharmacien>
           AuthContext().logoutUser(context);
         },
       );  
+
+    Widget ParametreSecuriteButton() => SecondButtonWidget(
+        text: 'Parametre de securité',
+        onClicked: () {
+           Navigator.of(context)
+          .push(
+            MaterialPageRoute(
+              builder: (context) => ParametreSecuritePage()
+              )
+          );
+        },
+      );
 
   Widget buildAbout(User user) => Container(
         padding: EdgeInsets.symmetric(horizontal: 70),

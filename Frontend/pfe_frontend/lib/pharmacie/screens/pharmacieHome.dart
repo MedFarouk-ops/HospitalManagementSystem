@@ -195,8 +195,6 @@ class _PharmacieHomeScreenState extends State<PharmacieHomeScreen>
                 },
               ),
             ),
-
-           
           ],
         ),
       ),

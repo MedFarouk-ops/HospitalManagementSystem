@@ -32,6 +32,7 @@ class _UserProfileState extends State<UserProfile> {
      address: "", 
      mobilenumber: "",
      age: "", 
+     specialite: "",
      genre: "", 
      role: "", 
      username: "");

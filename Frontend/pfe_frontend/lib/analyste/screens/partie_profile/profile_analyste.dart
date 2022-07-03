@@ -33,6 +33,7 @@ class _AnalysteProfileState extends State<AnalysteProfile>
      mobilenumber: "0",
      age: "", 
      genre: "", 
+     specialite: "",
      role: "", 
      username: "");
 

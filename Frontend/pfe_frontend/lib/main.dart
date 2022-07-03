@@ -93,6 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
         address: payload['address'], 
         mobilenumber: payload['mobilenumber'],
         age: payload['age'], 
+        specialite: payload['specialite'],
         genre: payload['genre'], 
         role: payload['role'], 
         username: payload['username']

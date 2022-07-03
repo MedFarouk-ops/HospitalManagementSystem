@@ -20,6 +20,29 @@ class _ToggleButtons1State extends State<ToggleButtons1> {
 
   List<bool> isSelected = [false, true,];
 
+  _setUseFingerprint() async {
+     s_prefs = await SharedPreferences.getInstance();
+     bool usingF =  s_prefs.getBool("use_fingerprint") ?? false;
+    setState(() {
+      if(usingF == true){
+      isSelected = [true , false];
+    }else{
+      isSelected = [false , true];
+    }  
+    });
+  
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _setUseFingerprint();
+    super.initState();
+
+  }
+  
+
   @override
   Widget build(BuildContext context) => Container(
         color: Colors.green.withOpacity(0.5),

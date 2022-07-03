@@ -9,6 +9,7 @@ class User{
   final String last_name;
   final String address;
   final String mobilenumber;
+  final String specialite;
   final String age; 
   final genre ; 
   final role ; 
@@ -20,6 +21,7 @@ class User{
     required this.last_name,
     required this.address,
     required this.mobilenumber,
+    required this.specialite,
     required this.age,
     required this.genre,
     required this.role,    
@@ -49,6 +51,7 @@ class User{
       mobilenumber : json['mobilenumber'],
       age : json['age'],
       genre : json['genre'],
+      specialite: json['specialite'],
       role : json['role'],
       email: json['email'],
     );

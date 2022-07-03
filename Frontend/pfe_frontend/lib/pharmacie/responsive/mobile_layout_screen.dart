@@ -6,10 +6,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/ticker_provider.dart';
 import 'package:pfe_frontend/authentication/utils/colors.dart';
 import 'package:pfe_frontend/pharmacie/screens/pharmacieHome.dart';
+import 'package:pfe_frontend/pharmacie/screens/pharmacie_messages.dart';
 import 'package:pfe_frontend/pharmacie/screens/pharmacienProfile.dart';
 
 const pharmacieMobileScreenItems = [
           PharmacieHomeScreen(),
+          PharMessages(),
           ProfilePharmacien(),
 ];
 
@@ -40,7 +42,7 @@ class _PharmacieMobileLayoutState extends State<PharmacieMobileLayout>
   @override
   Widget build(BuildContext context) {
      return DefaultTabController(
-         length: 2,
+         length: 3,
          child: Scaffold(
           appBar:  PreferredSize(
           preferredSize: Size.fromHeight(50.0), // here the desired height
@@ -51,8 +53,9 @@ class _PharmacieMobileLayoutState extends State<PharmacieMobileLayout>
              bottom: TabBar(
                tabs: [
                  Tab(text: "Accueil",),
+                 Tab(text: "Message",),
                  Tab(text: "Presentation",),
-               ],
+                ],
                ),
            ),),
            body: TabBarView(

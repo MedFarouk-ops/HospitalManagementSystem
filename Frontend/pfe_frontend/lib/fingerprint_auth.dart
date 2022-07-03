@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:pfe_frontend/authentication/context/authcontext.dart';
 import 'package:pfe_frontend/authentication/screens/home_screen.dart';
 import 'package:pfe_frontend/authentication/utils/utils.dart';
 
@@ -16,6 +17,13 @@ class _FingerprintAuthState extends State<FingerprintAuth> {
   String authorized = " not authorized";
   bool _canCheckBiometric = false;
   late List<BiometricType> _availableBiometric;
+
+
+  _deconnecter(){
+    AuthContext().logoutUser(context);
+  }
+
+
 
   Future<void> _authenticate() async {
     bool authenticated = false;
@@ -97,16 +105,7 @@ class _FingerprintAuthState extends State<FingerprintAuth> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: Text(
-                "Login",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 48.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+           
             Container(
               margin: EdgeInsets.symmetric(vertical: 50.0),
               child: Column(
@@ -116,7 +115,7 @@ class _FingerprintAuthState extends State<FingerprintAuth> {
                     width: 120.0,
                   ),
                   Text(
-                    "Fingerprint Auth",
+                    "Auth. avec empreintes digitales ",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22.0,
@@ -144,8 +143,30 @@ class _FingerprintAuthState extends State<FingerprintAuth> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24.0, vertical: 14.0),
-                        child: Text(
-                          "Authenticate",
+                        child: 
+                        Text(
+                          "S'identifier",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                   Container(
+                    margin: EdgeInsets.symmetric(vertical: 15.0),
+                    width: double.infinity,
+                    child: RaisedButton(
+                      onPressed: _deconnecter,
+                      elevation: 0.0,
+                      color: Color(0xFF04A5ED),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 14.0),
+                        child: 
+                        Text(
+                          "Déconnexion",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

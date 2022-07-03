@@ -19,7 +19,7 @@ class AuthContext {
 
     List<String> authTokens = [];
 
-    User user = User(id:0 ,email: "", first_name: "", last_name: "", address: "", mobilenumber: "0", age: "", genre: "", role: "", username: "");
+    User user = User(id:0 ,email: "", first_name: "", last_name: "", address: "",specialite: "", mobilenumber: "0", age: "", genre: "", role: "", username: "");
 
     // final loading = useState(true);
     
@@ -74,7 +74,7 @@ class AuthContext {
                       first_name: payload['nom'],
                       last_name: payload['prenom'], 
                       address: payload['address'], 
-                      mobilenumber: payload['mobilenumber'] ,
+                      mobilenumber: payload['mobilenumber'] ,specialite: payload['specialite'],
                       age: payload['age'], 
                       genre: payload['genre'], 
                       role: payload['role'], 
@@ -178,7 +178,7 @@ class AuthContext {
     s_prefs = await SharedPreferences.getInstance();
     List<String>? authtokens = s_prefs.getStringList("authTokens");
     Map<String, dynamic> payload = Jwt.parseJwt(authtokens![0]); 
-    User currentUser = User(id:0 ,email: "", first_name: "", last_name: "", address: "", mobilenumber: "0", age: "", genre: "", role: "", username: "");
+    User currentUser = User(id:0 ,email: "", first_name: "", last_name: "", address: "", mobilenumber: "0",specialite: "", age: "", genre: "", role: "", username: "");
     try{
       currentUser  = User(
         role: payload["role"], 
@@ -188,6 +188,7 @@ class AuthContext {
         last_name: payload['prenom'], 
         address: payload['address'], 
         mobilenumber: payload['mobilenumber'] ,
+        specialite: payload['specialite'],
         age: payload['age'], 
         genre: payload['genre'], 
         username: payload['username'],
@@ -206,6 +207,7 @@ class AuthContext {
     SharedPreferences s_prefs = await SharedPreferences.getInstance();
     s_prefs.remove("authTokens");
     s_prefs.setBool("isAuthenticated", false);
+    s_prefs.setBool("use_fingerprint", false);
     Navigator.of(context)
                   .pushReplacement(
                     MaterialPageRoute(

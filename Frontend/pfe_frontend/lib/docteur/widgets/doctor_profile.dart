@@ -32,6 +32,7 @@ class _DoctorProfileState extends State<DoctorProfile> {
      address: "", 
      mobilenumber: "0",
      age: "", 
+     specialite: "",
      genre: "", 
      role: "", 
      username: "");
