@@ -110,7 +110,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'PFE_DB',
         'CLIENT': {
-            'host': 'mongodb+srv://medfarouk55:xbox121254@cluster0.6wlcu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+            'host': 'mongodb+srv://medfarouk55:password@cluster0.6wlcu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
             'authMechanism' : 'SCRAM-SHA-1'
         }
     }
