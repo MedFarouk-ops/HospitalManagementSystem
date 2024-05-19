@@ -1,4 +1,4 @@
-**SMART-HOSPITAL-PLATFORM**
+**Smart Hospital Management System Plateform (PFE)**
 
 **Description:**
 This repository hosts the end-of-study engineering project, the Smart Hospital Platform, developed using Django REST Framework for the backend and Flutter for the frontend. The Smart Hospital Platform is an application tailored for managing various services at the Military Hospital of Sfax.
